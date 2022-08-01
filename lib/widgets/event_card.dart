@@ -9,7 +9,7 @@ import 'package:basalon/services/my_color.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-// import 'package:flutter_social_content_share/flutter_social_content_share.dart';
+import 'package:flutter_share/flutter_share.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/link.dart';
 
@@ -42,7 +42,7 @@ class EventCardState extends State<EventCard> {
         'EventCard EventCard EventCard EventCard EventCard EventCard EventCard EventCard EventCard ');
   }
 
-  Future share() async {}
+
 
   List<Data> data = <Data>[];
 
@@ -72,14 +72,16 @@ class EventCardState extends State<EventCard> {
   bool isLiked = false;
   bool showShareMenu = false;
 
-  // Future<void> share() async {
-  //   await FlutterShare.share(
-  //       title: 'Example share',
-  //       text: 'Example share text',
-  //       // linkUrl: 'https://basalon.co.il/event/סדנת-חקלאות-בסביבה-הביתית/',
-  //       linkUrl: '${widget.datum.shareLink}',
-  //       chooserTitle: 'Example Chooser Title');
-  // }
+  Future<void> share() async {
+print('object---');
+
+    await FlutterShare.share(
+        title: 'Basalon',
+        text: 'Click to open Event',
+        // linkUrl: 'https://basalon.co.il/event/סדנת-חקלאות-בסביבה-הביתית/',
+        linkUrl: '${widget.datum.shareLink}',
+        chooserTitle: 'Example Chooser Title');
+  }
 
   //
   // Future<void> shareFile() async {
@@ -169,9 +171,11 @@ class EventCardState extends State<EventCard> {
                   (BuildContext context, Future<void> Function()? followLink) =>
                       GestureDetector(
                           onTap: () async {
+                            
+                            share();
                             // try {
                             //   var succeeded = await FacebookShare.shareContent(url: "https://www.facebook.com/sharer/sharer.php?u=${widget.datum.shareLink}", quote: "Dapatkan Promo");
-                            //
+                            
                             //   if (succeeded) {
                             //     succeeded = await FacebookShare.sendMessage(
                             //         urlActionTitle: "Visit",

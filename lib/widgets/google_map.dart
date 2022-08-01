@@ -102,7 +102,7 @@ class MapSampleState extends State<MapSample> {
   updateMarker(data) async {
     BitmapDescriptor customIcon = await BitmapDescriptor.fromAssetImage(
       const ImageConfiguration(size: Size(50, 50), devicePixelRatio: 2.5),
-      'assets/LatestMapMarker5.png',
+      'assets/LatestMapMarker16.png',
     );
     _markers.clear();
     for (int i = 0; i < data.length; i++) {

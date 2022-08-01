@@ -28,7 +28,6 @@ import '../widgets/date_helper.dart';
 import '../widgets/dropDownButton1.dart';
 import '../widgets/side_drawer.dart';
 import 'activity/receiving_activity_screen.dart';
-
 class HomePage extends StatefulWidget {
   var categoryFilter;
   var userIdLocal;
