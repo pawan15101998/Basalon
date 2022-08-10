@@ -251,7 +251,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future getValidationData() async {
     final SharedPreferences sharedPreferences =
-    await SharedPreferences.getInstance();
+        await SharedPreferences.getInstance();
     var obtainedEmail = sharedPreferences.getString('email');
     var obtainedId = sharedPreferences.getInt('loginId');
     var obtainedFacebookImg = sharedPreferences.getString('facebookImage');
@@ -274,7 +274,6 @@ class _HomeScreenState extends State<HomeScreen> {
         application.cardCvvProvider = obtainedCardCvv;
         application.isUserLogin = true;
       });
-
     }
 
     print(
@@ -287,15 +286,19 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     print('home screen home screen home screen');
     getValidationData().whenComplete(() async {
-      print('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk${application.idFromLocalProvider}');
-      print('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk${application.cardNumberProvider}');
-      print('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk${application.cardHolderProvider}');
+      print(
+          'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk${application.idFromLocalProvider}');
+      print(
+          'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk${application.cardNumberProvider}');
+      print(
+          'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk${application.cardHolderProvider}');
       Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                  application.idFromLocalProvider == null ? HomePage() : HomePage()),
-                  (route) => false);
+          context,
+          MaterialPageRoute(
+              builder: (context) => application.idFromLocalProvider == null
+                  ? HomePage()
+                  : HomePage()),
+          (route) => false);
 
       // Navigator.push(
       // context,

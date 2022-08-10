@@ -173,7 +173,7 @@ class _DropButton1State extends State<DropButton1> {
                     .replaceFirst('תאריך מסויים', 'specific_date');
               });
               widget.onChanged(realValue);
-              _fetchEventData.getEventData(
+              _fetchEventData.getEventData( 
                   1, '', realValue, '', '', '','','','',context);
               print("qwerty$realValue");
               print('okokokkokkokkokokokokokokok');

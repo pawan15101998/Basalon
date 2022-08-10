@@ -97,15 +97,14 @@ class LoginRegisterNetwork {
       // print(response['body']['data']['user_id']);
       print('thk haisd');
       var id = await sendUserId(response);
-     print(id.runtimeType);
+      print(id.runtimeType);
       print('thk haia');
       print(id);
       print('thk haiadj');
       SharedPreferences sharedPreferences =
           await SharedPreferences.getInstance();
 
-
-     sharedPreferences.setInt('loginId', id);
+      sharedPreferences.setInt('loginId', id);
       LoginUser.shared?.userId = sharedPreferences.getInt('loginId');
     } catch (e) {
       print('nhi hua fb register');
@@ -113,13 +112,12 @@ class LoginRegisterNetwork {
     }
   }
 
-  sendUserId(response) async{
+  sendUserId(response) async {
     if (response['body']['data'].runtimeType == int) {
       return response['body']['data'];
-    }else if (response['body']['data'].runtimeType == String) {
+    } else if (response['body']['data'].runtimeType == String) {
       return int.parse(response['body']['data']);
-    }
-    else {
+    } else {
       return response['body']['data']['user_id'];
     }
   }

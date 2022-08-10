@@ -12,13 +12,10 @@ import 'package:basalon/widgets/google_map.dart';
 import 'package:basalon/widgets/scroll_to_hide.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:translator/translator.dart';
 import '../blocs/application_bloc.dart';
 import '../constant/login_user.dart';
@@ -28,6 +25,7 @@ import '../widgets/date_helper.dart';
 import '../widgets/dropDownButton1.dart';
 import '../widgets/side_drawer.dart';
 import 'activity/receiving_activity_screen.dart';
+
 class HomePage extends StatefulWidget {
   var categoryFilter;
   var userIdLocal;
@@ -57,16 +55,31 @@ class HomePageState extends State<HomePage> {
   dynamic category;
   bool toggleCheck = false;
 
+  int countCat = 0;
+
   // dynamic filterCategory;
   dynamic filterByTime;
   dynamic filterByAnywhere;
   late final application = Provider.of<ApplicationBloc>(context, listen: false);
+  late final FetchEventData _fetchEventDataFilter = FetchEventData(
+    filterByCategory: application.realValueTime,
+  );
   StreamSubscription? locationSubscription;
   final UpdateAndGetUserProfile _updateAndGetUserProfile =
       UpdateAndGetUserProfile();
 
   PackageNetwork packageNetwork = PackageNetwork();
 
+  List<dynamic> filterData = [
+    'ב-7 ימים הקרובים',
+    'היום',
+    'מחר',
+    'סוף השבוע',
+    'בשבוע הבא',
+    'תאריך מסויים',
+  ];
+
+  String? realvalue;
 
   @override
   void initState() {
@@ -91,14 +104,13 @@ class HomePageState extends State<HomePage> {
         _goToPlace(place);
       }
     });
-  print(application.idFromLocalProvider);
+    print(application.idFromLocalProvider);
     print("TTTTTTTTTTTT");
     print(LoginUser.shared?.userId);
 
-    
     _updateAndGetUserProfile.getProfileData(
-          LoginUser.shared?.userId! ?? application.idFromLocalProvider,
-          context: context) ;
+        LoginUser.shared?.userId! ?? application.idFromLocalProvider,
+        context: context);
 
     // _updateAndGetUserProfile.getProfileData('1863', context: context);
   }
@@ -144,22 +156,21 @@ class HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-
-
-  void _onLoading(){
+  void _onLoading() {
     print("on lading chrla"); // monitor network fetch
-    page += 1;  if(application.filterAnywhereProvider != null) {
+    page += 1;
+    if (application.filterAnywhereProvider != null) {
       _fetchEventData.getEventData(
-        page,
-        context,
-        application.filterTimeProvider ?? filterByTime,
-        context,
-        klatitude ?? geoLoc?.latitude,
-        klongitude ?? geoLoc?.longitude,
-        categorySearchController.text,
-        startDateController.text,
-        endDateController.text,
-        context);
+          page,
+          context,
+          application.filterTimeProvider ?? filterByTime,
+          context,
+          klatitude ?? geoLoc?.latitude,
+          klongitude ?? geoLoc?.longitude,
+          categorySearchController.text,
+          startDateController.text,
+          endDateController.text,
+          context);
     }
     if (mounted) setState(() {});
     _refreshController.loadComplete();
@@ -172,8 +183,8 @@ class HomePageState extends State<HomePage> {
     setState(() {});
     _refreshController.refreshCompleted();
   }
-  Stream streamController() => Stream.fromFuture(
-    _fetchEventData.getEventData(
+
+  Stream streamController() => Stream.fromFuture(_fetchEventData.getEventData(
       page,
       application.filterCategoryProvider,
       application.filterTimeProvider,
@@ -216,13 +227,13 @@ class HomePageState extends State<HomePage> {
     print(geoLoc);
 
     setState(() {
-      if(geoLoc != null){
+      if (geoLoc != null) {
         application.filterAnywhereProvider = 'קרוב אליי';
-      }else{
+      } else {
         application.filterAnywhereProvider = 'בכל מקום';
       }
     });
-    
+
     return geoLoc;
   }
 
@@ -239,6 +250,7 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    print(filterData[0]);
     print('----------------------');
     print('network image');
     print(application.getUserDataProfileProvider?.data?.authorImage);
@@ -252,28 +264,25 @@ class HomePageState extends State<HomePage> {
           packageID: packageNetwork.packageModel?.data?.userActivePackage?.iD,
           profileData: _updateAndGetUserProfile.getUserData,
         ),
-        body:
-         StreamBuilder(
+        body: StreamBuilder(
           initialData:
-          //  application.filterAnywhereProvider != null ?
+              //  application.filterAnywhereProvider != null ?
               _fetchEventData.getEventData(
-              page,
-              application.filterCategoryProvider,
-              application.filterTimeProvider,
-              application.filterAnywhereProvider,
-              klatitude ?? geoLoc?.latitude,
-              klongitude ?? geoLoc?.longitude,
-              categorySearchController.text,
-              startDateController.text,
-              endDateController.text,
-              // ((application.filterAnywhereProvider == 'online') &&
-              //         (application.showOnline == true))
-              //     ? "online"selectedDropItems.length
-              //     : "classic",
-              
-              
-              
-              context),
+                  page,
+                  application.filterCategoryProvider,
+                  application.filterTimeProvider,
+                  application.filterAnywhereProvider,
+                  klatitude ?? geoLoc?.latitude,
+                  klongitude ?? geoLoc?.longitude,
+                  categorySearchController.text,
+                  startDateController.text,
+                  endDateController.text,
+                  // ((application.filterAnywhereProvider == 'online') &&
+                  //         (application.showOnline == true))
+                  //     ? "online"selectedDropItems.length
+                  //     : "classic",
+
+                  context),
           stream: streamController(),
           builder: (context, AsyncSnapshot snapshot) {
             return SmartRefresher(
@@ -435,7 +444,7 @@ class HomePageState extends State<HomePage> {
                                       ),
                                       textDirection: TextDirection.rtl,
                                     ),
-                                   const  SizedBox(height: 10),
+                                    const SizedBox(height: 10),
                                     const Text(
                                       'גלו הרצאות, סדנאות, הופעות',
                                       textAlign: TextAlign.center,
@@ -447,6 +456,15 @@ class HomePageState extends State<HomePage> {
                                       textAlign: TextAlign.center,
                                       style: ktextStyleWhiteLarge,
                                     ),
+
+                                    Wrap(
+                                      children: [
+                                        Container(
+                                          child: Text('hello'),
+                                        ),
+                                      ],
+                                    ),
+
                                     SizedBox(height: 30),
                                     application.filterAnywhereProvider ==
                                             'עיר מסויימת'
@@ -665,11 +683,12 @@ class HomePageState extends State<HomePage> {
                                                           '${selectedDropItems.isNotEmpty ? selectedDropItems.length : ''} ',
                                                       style: ktextStyleWhite),
                                                   TextSpan(
-                                                      text: selectedDropItems
-                                                              .isEmpty
-                                                          ? 'כל החוויות'
-                                                          : 'נבחרו',
-                                                      style: ktextStyleWhite),
+                                                    text: selectedDropItems
+                                                            .isEmpty
+                                                        ? 'כל החוויות'
+                                                        : 'נבחרו',
+                                                    style: ktextStyleWhite,
+                                                  ),
                                                 ],
                                               ),
                                             )
@@ -701,7 +720,7 @@ class HomePageState extends State<HomePage> {
                                     //     // soften the shadow
                                     //     spreadRadius: 0.1,
                                     //     //extend the shadow
-                                    //     offset: Offset(
+                                    ///     offset: Offset(
                                     //       15.0,
                                     //       // Move to right 10  horizontally
                                     //       15.0, // Move to bottom 10 Vertically
@@ -745,7 +764,8 @@ class HomePageState extends State<HomePage> {
                                                     .description;
                                             application.setSelectedLocation(
                                                 application.searchResult![index]
-                                                    .placeId, context);
+                                                    .placeId,
+                                                context);
                                             setState(() {});
                                           },
                                           title: application
@@ -1067,6 +1087,111 @@ class HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
+                  SliverPadding(
+                      padding: EdgeInsets.all(0.0),
+                      sliver: SliverList(
+                        delegate: SliverChildListDelegate([
+                          GridView.builder(
+                            itemCount: filterData.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Container(
+                                alignment: Alignment.center,
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: 0, vertical: 8),
+                                child: Text(
+                                  filterData[index],
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white),
+                                ),
+                                decoration: BoxDecoration(
+                                  color: countCat == index
+                                      ? Colors.blue
+                                      : Colors.amber,
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                // padding: EdgeInsets.symmetric(
+                                //     horizontal: 15, vertical: 5),
+                              );
+                            },
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    crossAxisSpacing: 5,
+                                    // mainAxisSpacing: 5,
+                                    mainAxisExtent: 53,
+                                    childAspectRatio: 1),
+                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            shrinkWrap: true,
+                          )
+                        ]),
+                      )),
+
+                  // SliverList(
+                  //   delegate: SliverChildBuilderDelegate(
+                  //     (BuildContext context, int index) {
+                  //       print('ttttttttttttttttttttttttttttttttttttt');
+                  //       return InkWell(
+                  //           onTap: () {
+                  //             setState(() {
+                  //               application.filterTimeProvider =
+                  //                   filterData[index];
+
+                  //               realvalue = application.filterTimeProvider;
+                  //               realvalue!
+                  //                   .replaceAll('ב-7 ימים הקרובים', 'this_week')
+                  //                   .replaceAll('היום', 'today')
+                  //                   .replaceAll('מחר', 'tomorrow')
+                  //                   .replaceAll('סוף השבוע', 'this_week_end')
+                  //                   .replaceAll('בשבוע הבא', 'next_week')
+                  //                   .replaceFirst(
+                  //                       'תאריך מסויים', 'specific_date');
+                  //               _fetchEventDataFilter.getEventData(1, '',
+                  //                   realvalue, '', '', '', '', '', '', context);
+
+                  //               print("qwerty$realvalue");
+
+                  //               application.filterTimeProvider = realvalue;
+
+                  //               // page = 1;
+                  //             });
+                  //           },
+                  //           child: GridView(
+                  //             gridDelegate:
+                  //                 SliverGridDelegateWithMaxCrossAxisExtent(
+                  //               // crossAxisCount: 2,
+                  //               maxCrossAxisExtent: 150,
+                  //               mainAxisExtent: 50,
+                  //               // crossAxisSpacing: 5,
+                  //               // mainAxisSpacing: 5,
+                  //             ),
+                  //             children: [
+                  //               Container(
+                  //                 // width: 150,
+                  //                 // margin: EdgeInsets.symmetric(
+                  //                 //     horizontal: 10, vertical: 4),
+                  //                 child: Text(
+                  //                   filterData[index],
+                  //                 ),
+                  //                 decoration: BoxDecoration(
+                  //                   color: countCat == index
+                  //                       ? Colors.blue
+                  //                       : Colors.amber,
+                  //                   borderRadius: BorderRadius.circular(12),
+                  //                 ),
+                  //                 padding: EdgeInsets.symmetric(
+                  //                     horizontal: 15, vertical: 5),
+                  //               ),
+                  //             ],
+                  //             // padding: EdgeInsets.all(10),
+                  //             shrinkWrap: true,
+                  //           ));
+                  //     },
+                  //     childCount: filterData.length, // 1000 list items
+                  //   ),
+                  // ),
+
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
@@ -1343,7 +1468,7 @@ class HomePageState extends State<HomePage> {
               child: Column(
                 children: [
                   if (application.filterTimeProvider == 'specific_date')
-                  // application.filterTimeProvider = 'this_week',
+                    // application.filterTimeProvider = 'this_week',
                     Directionality(
                       textDirection: TextDirection.rtl,
                       child: Container(

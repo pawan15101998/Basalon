@@ -74,7 +74,7 @@ class _DropButtonEverywhereState extends State<DropButtonEverywhere> {
       setState(() {
         _permissionGranted = permissionRequestedResult;
         Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) =>  HomeScreen()),
+            MaterialPageRoute(builder: (context) => HomeScreen()),
             (Route<dynamic> route) => false);
       });
     }
@@ -177,7 +177,8 @@ class _DropButtonEverywhereState extends State<DropButtonEverywhere> {
             ].map((item) {
               var backgroundColor =
                   (item == application.val) ? MyColors.topOrange : Colors.white;
-              var textColor = (item == application.val) ? Colors.white : Colors.black;
+              var textColor =
+                  (item == application.val) ? Colors.white : Colors.black;
 
               return DropdownMenuItem<String>(
                 value: item,

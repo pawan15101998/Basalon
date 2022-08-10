@@ -54,7 +54,9 @@ class MyApp extends StatelessWidget {
       create: (context) => ApplicationBloc(),
       child: MaterialApp(
         navigatorKey: navigatorKey,
-        localizationsDelegates: const [GlobalMaterialLocalizations.delegate],
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+        ],
         supportedLocales: const [Locale('en'), Locale('iw')],
         title: 'basalon',
         debugShowCheckedModeBanner: false,

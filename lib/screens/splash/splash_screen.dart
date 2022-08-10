@@ -35,38 +35,36 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
-    FirebaseMessaging.instance.getInitialMessage().then(
-          (message) {
-        print("FirebaseMessaging.instance.getInitialMessage");
-        if (message != null) {
-          print("New Notification");
-          // if (message.data['_id'] != null) {
-          //   Navigator.of(context).push(
-          //     MaterialPageRoute(
-          //       builder: (context) => DemoScreen(
-          //         id: message.data['_id'],
-          //       ),
-          //     ),
-          //   );
-          // }
-        }
+    FirebaseMessaging.instance.getInitialMessage().then((message) {
+      print("FirebaseMessaging.instance.getInitialMessage");
+      if (message != null) {
+        print("New Notification");
+        // if (message.data['_id'] != null) {
+        //   Navigator.of(context).push(
+        //     MaterialPageRoute(
+        //       builder: (context) => DemoScreen(
+        //         id: message.data['_id'],
+        //       ),
+        //     ),
+        //   );
+        // }
       }
-    );
+    });
     //This method only call when App in forground it mean app must be opened
     FirebaseMessaging.onMessage.listen(
-          (message) {
+      (message) {
         print("FirebaseMessaging.onMessage.listen");
         if (message.notification != null) {
           print(message.notification!.title);
           print(message.notification!.body);
           print("message.data11 ${message.data}");
-           LocalNotificationService.createanddisplaynotification(message);
+          LocalNotificationService.createanddisplaynotification(message);
         }
       },
     );
     // 3. This method only call when App in background and not terminated(not closed)
     FirebaseMessaging.onMessageOpenedApp.listen(
-          (message) {
+      (message) {
         print("FirebaseMessaging.onMessageOpenedApp.listen");
         if (message.notification != null) {
           print(message.notification!.title);
@@ -76,23 +74,27 @@ class _SplashScreenState extends State<SplashScreen>
       },
     );
     animation = Tween(begin: 0.0, end: 0.5).animate(_controller);
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       selected = true;
       setState(() {});
     });
     //
 
     getValidationData().whenComplete(() async {
-      print('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk${application.idFromLocalProvider}');
-      print('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk${application.cardNumberProvider}');
-      print('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk${application.cardHolderProvider}');
+      print(
+          'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk${application.idFromLocalProvider}');
+      print(
+          'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk${application.cardNumberProvider}');
+      print(
+          'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk${application.cardHolderProvider}');
       Timer(
           Duration(seconds: 4),
           () => Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
-                  builder: (context) =>
-                  application.idFromLocalProvider == null ? WelcomeScreen() : HomePage()),
+                  builder: (context) => application.idFromLocalProvider == null
+                      ? WelcomeScreen()
+                      : HomePage()),
               (route) => false));
 
       // Navigator.push(
@@ -136,7 +138,6 @@ class _SplashScreenState extends State<SplashScreen>
         application.cardCvvProvider = obtainedCardCvv;
         application.isUserLogin = true;
       });
-
     }
 
     print(
@@ -174,8 +175,7 @@ class _SplashScreenState extends State<SplashScreen>
                   animation: animation,
                   child: Image.asset('assets/images/splash_3x.png',
                       fit: BoxFit.cover,
-                      height: MediaQuery.of(context).size.height)
-                      ),
+                      height: MediaQuery.of(context).size.height)),
               crossFadeState: !_first
                   ? CrossFadeState.showFirst
                   : CrossFadeState.showSecond,
@@ -186,21 +186,20 @@ class _SplashScreenState extends State<SplashScreen>
                 child: Stack(
                   children: [
                     SizedBox(
-                            height: height * 2.3,
-                            child: AnimatedAlign(
-                              duration: const Duration(milliseconds: 1200),
-                              curve: Curves.easeIn,
-                              alignment: selected
-                                  ? Alignment.bottomCenter
-                                  : Alignment.topCenter,
-                              child: Image.asset(
-                                'assets/splash.png',
-                                height: 90,
-                                width: 150,
-                              ),
-                              onEnd: showBackground,
-                            )
-                            ),
+                        height: height * 2.3,
+                        child: AnimatedAlign(
+                          duration: const Duration(milliseconds: 1200),
+                          curve: Curves.easeIn,
+                          alignment: selected
+                              ? Alignment.bottomCenter
+                              : Alignment.topCenter,
+                          child: Image.asset(
+                            'assets/splash.png',
+                            height: 90,
+                            width: 150,
+                          ),
+                          onEnd: showBackground,
+                        )),
                     // Column(
                     //   mainAxisAlignment: MainAxisAlignment.center,
                     //   children: [

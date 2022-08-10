@@ -42,8 +42,6 @@ class EventCardState extends State<EventCard> {
         'EventCard EventCard EventCard EventCard EventCard EventCard EventCard EventCard EventCard ');
   }
 
-
-
   List<Data> data = <Data>[];
 
   var dio = Dio();
@@ -73,7 +71,7 @@ class EventCardState extends State<EventCard> {
   bool showShareMenu = false;
 
   Future<void> share() async {
-print('object---');
+    print('object---');
 
     await FlutterShare.share(
         title: 'Basalon',
@@ -171,11 +169,10 @@ print('object---');
                   (BuildContext context, Future<void> Function()? followLink) =>
                       GestureDetector(
                           onTap: () async {
-                            
                             share();
                             // try {
                             //   var succeeded = await FacebookShare.shareContent(url: "https://www.facebook.com/sharer/sharer.php?u=${widget.datum.shareLink}", quote: "Dapatkan Promo");
-                            
+
                             //   if (succeeded) {
                             //     succeeded = await FacebookShare.sendMessage(
                             //         urlActionTitle: "Visit",
@@ -357,7 +354,7 @@ print('object---');
                 // ),
                 Positioned(
                   left: 20,
-                  bottom: 20,
+                  top: 20,
                   child: InkWell(
                     onTap: () {
                       if (!isLiked) {
@@ -391,7 +388,7 @@ print('object---');
                   ),
                 ),
                 Positioned(
-                  right: 10,
+                  right: 00,
                   bottom: 20,
                   child: Row(
                     children: [
@@ -401,12 +398,15 @@ print('object---');
                         //       i++)
                         Container(
                           decoration: BoxDecoration(
-                              color: Color(int.parse('0xff${item.color}'))
-                                  .withOpacity(1),
-                              borderRadius: BorderRadius.circular(5)),
-                          margin: EdgeInsets.only(left: 5),
-                          padding:
-                              EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                            color: Color(int.parse('0xff${item.color}'))
+                                .withOpacity(1),
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(30),
+                              bottomLeft: Radius.circular(30),
+                            ),
+                          ),
+                          padding: EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 20),
                           child: Text('${item.name}',
                               style:
                                   TextStyle(fontSize: 14, color: Colors.white)),
@@ -415,8 +415,35 @@ print('object---');
                   ),
                 ),
                 Positioned(
-                  left: 65,
+                  left: 00,
                   bottom: 20,
+                  child: Row(
+                    children: [
+                      for (var item in widget.datum.categoryData)
+                        //   for (int i = 0;
+                        //       i < widget.datum.categoryData.length;
+                        //       i++)
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Color(int.parse('0xff${item.color}'))
+                                .withOpacity(1),
+                            borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(30),
+                              bottomRight: Radius.circular(30),
+                            ),
+                          ),
+                          padding: EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 20),
+                          child: Text('${widget.datum.markerPrice}',
+                              style:
+                                  TextStyle(fontSize: 14, color: Colors.white)),
+                        ),
+                    ],
+                  ),
+                ),
+                Positioned(
+                  left: 65,
+                  top: 20,
                   child: InkWell(
                     // onTap: share,
                     onTap: () {
@@ -620,7 +647,10 @@ print('object---');
                                                                       null &&
                                                                   widget.datum
                                                                           .distance !=
-                                                                      0 && application.filterAnywhereProvider != 'עיר מסויימת') 
+                                                                      0 &&
+                                                                  application
+                                                                          .filterAnywhereProvider !=
+                                                                      'עיר מסויימת')
                                                               ? 'במרחק ${widget.datum.distance < 1 ? (widget.datum.distance * 1000).round() : widget.datum.distance.toStringAsFixed(2)} ${widget.datum.distance < 1 ? 'מטרים' : 'ק"מ'}'
                                                               : '',
                                                           style: TextStyle(
@@ -658,64 +688,66 @@ print('object---');
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                            if( widget.datum.ticketRest != '' && int.parse(widget.datum.ticketRest.replaceAll(new RegExp(r'[^0-9]'), '')) < 10)
-                                  Container(
-                                    height: 35,
-                                    width: 120,
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: MyColors.topOrange,
-                                            width: 2)),
+                                  if (widget.datum.ticketRest != '' &&
+                                      int.parse(widget.datum.ticketRest
+                                              .replaceAll(
+                                                  new RegExp(r'[^0-9]'), '')) <
+                                          10)
+                                    Container(
+                                      height: 35,
+                                      width: 120,
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: MyColors.topOrange,
+                                              width: 2)),
+                                      child: Center(
+                                        child: RichText(
+                                            text: TextSpan(
+                                                style: ktextStyleBoldSmall,
+                                                text: '  נותרו ',
+                                                children: [
+                                              // TextSpan(text: widget.datum.ticketRest),
+                                              // if( widget.datum.ticketRest != '' && int.parse(widget.datum.ticketRest.replaceAll(new RegExp(r'[^0-9]'), '')) < 10)
+                                              TextSpan(
+                                                  text:
+                                                      '${widget.datum.ticketRest.replaceAll(new RegExp(r'[^0-9]'), '')}'),
+                                              TextSpan(text: ' מקומות  '),
+                                            ])),
 
-                                    child: Center(
-                                      child: RichText(
-                                          text: TextSpan(
-                                              style: ktextStyleBoldSmall,
-                                              text: '  נותרו ',
-                                              children: [
-                                            // TextSpan(text: widget.datum.ticketRest),
-                                        // if( widget.datum.ticketRest != '' && int.parse(widget.datum.ticketRest.replaceAll(new RegExp(r'[^0-9]'), '')) < 10)
-                                       TextSpan(
-                                                text:
-                                                    '${widget.datum.ticketRest.replaceAll(new RegExp(r'[^0-9]'), '')}'),
-                                            TextSpan(text: ' מקומות  '),
-                                          ])
-                                          ),
-
-                                      // Text(
-                                      //   'נותרו${widget.datum.noOfTicket[0].numberTotalTicket}מקומות',
-                                      //   style: ktextStyleBoldSmall,
-                                      // ),
-                                    ),
-                                  ),
-                                  //  SizedBox(),
-                                  SizedBox(
-                                    width: 14.0,
-                                  ),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      print('lecture clicked.');
-                                    },
-                                    child: Text(
-                                      widget.datum.markerPrice
-                                          .toString()
-                                          .replaceAll(' ', ''),
-
-                                      // '₪${ widget.datum.noOfTicket[0].priceTicket}',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w500,
+                                        // Text(
+                                        //   'נותרו${widget.datum.noOfTicket[0].numberTotalTicket}מקומות',
+                                        //   style: ktextStyleBoldSmall,
+                                        // ),
                                       ),
                                     ),
-                                    style: ElevatedButton.styleFrom(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.only(
-                                              bottomLeft: Radius.circular(25),
-                                              topLeft: Radius.circular(25)),
-                                        ),
-                                        elevation: 0.0,
-                                        primary: MyColors.topOrange),
-                                  ),
+                                  //  SizedBox(),
+                                  // SizedBox(
+                                  //   width: 14.0,
+                                  // ),
+                                  // ElevatedButton(
+                                  //   onPressed: () {
+                                  //     print('lecture clicked.');
+                                  //   },
+                                  //   child: Text(
+                                  //     widget.datum.markerPrice
+                                  //         .toString()
+                                  //         .replaceAll(' ', ''),
+
+                                  //     // '₪${ widget.datum.noOfTicket[0].priceTicket}',
+                                  //     style: TextStyle(
+                                  //       fontSize: 20,
+                                  //       fontWeight: FontWeight.w500,
+                                  //     ),
+                                  //   ),
+                                  //   style: ElevatedButton.styleFrom(
+                                  //       shape: RoundedRectangleBorder(
+                                  //         borderRadius: BorderRadius.only(
+                                  //             bottomLeft: Radius.circular(25),
+                                  //             topLeft: Radius.circular(25)),
+                                  //       ),
+                                  //       elevation: 0.0,
+                                  //       primary: MyColors.topOrange),
+                                  // ),
                                 ],
                               ),
                             ),

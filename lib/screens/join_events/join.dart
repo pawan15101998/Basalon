@@ -160,7 +160,7 @@ class _BookEventPageState extends State<BookEventPage> {
         SharedPreferences sharedPreferences =
             await SharedPreferences.getInstance();
         sharedPreferences.setInt('loginId', registeredID!);
-       
+
         isUserLogin(true);
         LoginUser.shared?.userId = sharedPreferences.getInt('loginId');
         print('pppppppppppppppppppppppppppppppppppppppppppp');
@@ -210,8 +210,8 @@ class _BookEventPageState extends State<BookEventPage> {
     for (int i = 0; i < widget.noOfTicket!.length; i++) {
       ticketCount.add(0);
       finalPrice.add(0);
-      if(widget.noOfTicket![i].priceTicket != "")
-      price.add(int.parse(widget.noOfTicket![i].priceTicket!));
+      if (widget.noOfTicket![i].priceTicket != "")
+        price.add(int.parse(widget.noOfTicket![i].priceTicket!));
     }
   }
 
@@ -251,9 +251,8 @@ class _BookEventPageState extends State<BookEventPage> {
         centerTitle: true,
         backgroundColor: MyColors.purpleAppbar,
         leading: (isUserLogin(application.isUserLogin) &&
-                                      application.getUserDataProfileProvider
-                                              ?.data?.authorImage !=
-                                          null)
+                application.getUserDataProfileProvider?.data?.authorImage !=
+                    null)
             ? Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: CircleAvatar(
@@ -261,17 +260,15 @@ class _BookEventPageState extends State<BookEventPage> {
                       // AssetImage(
                       //     'assets/images/dummy_user.png'),
 
-                     NetworkImage(
-                                          application.getUserDataProfileProvider
-                                                      ?.data?.authorImage !=
-                                                  ''
-                                              ? application
-                                                  .getUserDataProfileProvider
-                                                  ?.data
-                                                  ?.authorImage
-                                              : application.imageFromFacebook ??
-                                                  'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
-                                        ),
+                      NetworkImage(
+                    application.getUserDataProfileProvider?.data
+                                ?.authorImage !=
+                            ''
+                        ? application
+                            .getUserDataProfileProvider?.data?.authorImage
+                        : application.imageFromFacebook ??
+                            'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
+                  ),
                   backgroundColor: Colors.grey.shade600,
                 ),
               )
@@ -467,7 +464,7 @@ class _BookEventPageState extends State<BookEventPage> {
                               width: 30,
                               // decoration: BoxDecoration(color: Colors.blue),
                               child: Center(
-                                child: Text("${ticketCount[i]}"),
+                                child: Text("${ticketCount[i] + 1}"),
                               )),
                           const VerticalDivider(color: Colors.black, width: 2),
                           InkWell(

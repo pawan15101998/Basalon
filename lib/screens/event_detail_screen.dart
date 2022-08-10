@@ -121,8 +121,8 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
+
     print('print 2');
   }
 
@@ -235,50 +235,55 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                     toolbarHeight: 70,
                                     centerTitle: true,
                                     elevation: 0,
-                                    leading:
-                                        (isUserLogin(application.isUserLogin) &&
-                                      application.getUserDataProfileProvider
-                                              ?.data?.authorImage !=
-                                          null)
-                                            ? Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: CircleAvatar(
-                                                  backgroundImage:
-                                                      // AssetImage(
-                                                      //     'assets/images/dummy_user.png'),
+                                    leading: (isUserLogin(
+                                                application.isUserLogin) &&
+                                            application
+                                                    .getUserDataProfileProvider
+                                                    ?.data
+                                                    ?.authorImage !=
+                                                null)
+                                        ? Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: CircleAvatar(
+                                              backgroundImage:
+                                                  // AssetImage(
+                                                  //     'assets/images/dummy_user.png'),
 
-                                                       NetworkImage(
-                                          application.getUserDataProfileProvider
-                                                      ?.data?.authorImage !=
-                                                  ''
-                                              ? application
-                                                  .getUserDataProfileProvider
-                                                  ?.data
-                                                  ?.authorImage
-                                              : application.imageFromFacebook ??
-                                                  'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
-                                        ),
-                                                  backgroundColor:
-                                                      Colors.grey.shade600,
-                                                ),
-                                              )
-                                            : SizedBox(),
+                                                  NetworkImage(
+                                                application
+                                                            .getUserDataProfileProvider
+                                                            ?.data
+                                                            ?.authorImage !=
+                                                        ''
+                                                    ? application
+                                                        .getUserDataProfileProvider
+                                                        ?.data
+                                                        ?.authorImage
+                                                    : application
+                                                            .imageFromFacebook ??
+                                                        'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
+                                              ),
+                                              backgroundColor:
+                                                  Colors.grey.shade600,
+                                            ),
+                                          )
+                                        : SizedBox(),
                                     backgroundColor: Colors.transparent,
                                     title: Container(
                                       decoration: BoxDecoration(
                                         boxShadow: [
                                           BoxShadow(
-                                              color: Colors.black,
-                                              blurRadius: 100.0,
-                                              // soften the shadow
-                                              spreadRadius: 10.0,
-                                              //extend the shadow
-                                              offset: Offset(
-                                                0.0, // Move to right 10  horizontally
-                                                -30.0, // Move to bottom 10 Vertically
-                                              ),
-                                              blurStyle: BlurStyle.normal),
+                                            color: Colors.black,
+                                            blurRadius: 100.0,
+                                            // soften the shadow
+                                            spreadRadius: 10.0,
+                                            //extend the shadow
+                                            offset: Offset(
+                                              0.0, // Move to right 10  horizontally
+                                              -30.0, // Move to bottom 10 Vertically
+                                            ),
+                                            blurStyle: BlurStyle.normal,
+                                          ),
                                         ],
                                       ),
                                       child: Image.asset(
@@ -586,8 +591,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                                     print('opopopop');
                                                     print(i);
                                                     setState(() {
-                                                      if (_selectedIndex ==
-                                                          i) {
+                                                      if (_selectedIndex == i) {
                                                         _selectedIndex = 0;
                                                       } else {
                                                         _selectedIndex = i;
@@ -600,8 +604,10 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                                               .data!
                                                               .bookingDates![i];
                                                     });
-                                                    print('booking card $isSelected');
-                                                    print('booking card $_selectedIndex');
+                                                    print(
+                                                        'booking card $isSelected');
+                                                    print(
+                                                        'booking card $_selectedIndex');
                                                     print('booking card $i');
                                                   },
                                                   child: Container(
@@ -670,13 +676,26 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                                           .noOfTicket!
                                                           .isNotEmpty &&
                                                       isSelected) {
-                                                        print("hjgdj");
-                                                        print(_fetchEventData.eventData?.data!.id);
-                                                        print(_fetchEventData.eventData?.data!.noOfTicket);
-                                                        print(_fetchEventData.eventData?.data?.thumbnailEvent);
-                                                        print(_fetchEventData.eventData?.data?.title);
-                                                        print(dynamicBookingDate);
-                                                        print(_fetchEventData.eventData?.data?.mapAddress);
+                                                    print("hjgdj");
+                                                    print(_fetchEventData
+                                                        .eventData?.data!.id);
+                                                    print(_fetchEventData
+                                                        .eventData
+                                                        ?.data!
+                                                        .noOfTicket);
+                                                    print(_fetchEventData
+                                                        .eventData
+                                                        ?.data
+                                                        ?.thumbnailEvent);
+                                                    print(_fetchEventData
+                                                        .eventData
+                                                        ?.data
+                                                        ?.title);
+                                                    print(dynamicBookingDate);
+                                                    print(_fetchEventData
+                                                        .eventData
+                                                        ?.data
+                                                        ?.mapAddress);
                                                     Navigator.push(
                                                       context,
                                                       MaterialPageRoute(
@@ -686,7 +705,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                                               .eventData
                                                               ?.data
                                                               ?.id,
-                                                      noOfTicket:
+                                                          noOfTicket:
                                                               _fetchEventData
                                                                   .eventData
                                                                   ?.data
