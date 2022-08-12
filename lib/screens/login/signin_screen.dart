@@ -52,7 +52,10 @@ class _SignInScreenState extends State<SignInScreen> {
       context: context,
       builder: (BuildContext context) => AlertDialog(
         actionsAlignment: MainAxisAlignment.center,
-        content: Text(errorMessage,textDirection: TextDirection.rtl,),
+        content: Text(
+          errorMessage,
+          textDirection: TextDirection.rtl,
+        ),
         actions: <Widget>[
           TextButton(
             onPressed: () {
@@ -119,8 +122,6 @@ class _SignInScreenState extends State<SignInScreen> {
                         final requestData = await FacebookAuth.i.getUserData(
                             fields:
                                 "email, name, picture.height(200).width(200)");
-
-                              
 
                         setState(() {
                           userData = requestData;

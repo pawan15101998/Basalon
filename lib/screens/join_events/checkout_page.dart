@@ -184,7 +184,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
     print(cardValueChange);
     print(cardNumberController.text);
 
-    if(cardNumberController.text != null && cardNumberController.text != "") {
+    if (cardNumberController.text != null && cardNumberController.text != "") {
       cardNumberController.text = cardToStar(temp);
       print("is card change");
       print(cardNumberController.text);
@@ -219,32 +219,39 @@ class _CheckoutPageState extends State<CheckoutPage> {
         toolbarHeight: 70,
         centerTitle: true,
         backgroundColor: MyColors.purpleAppbar,
-        leading: (isUserLogin(application.isUserLogin) &&
-                                      application.getUserDataProfileProvider
-                                              ?.data?.authorImage !=
-                                          null)
-            ? Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: CircleAvatar(
-                  backgroundImage:
-                      // AssetImage(
-                      //     'assets/images/dummy_user.png'),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back_ios_new_outlined,
+            )),
+        // leading: (isUserLogin(application.isUserLogin) &&
+        //                               application.getUserDataProfileProvider
+        //                                       ?.data?.authorImage !=
+        //                                   null)
+        //     ? Padding(
+        //         padding: const EdgeInsets.all(8.0),
+        //         child: CircleAvatar(
+        //           backgroundImage:
+        //               // AssetImage(
+        //               //     'assets/images/dummy_user.png'),
 
-                      NetworkImage(
-                                          application.getUserDataProfileProvider
-                                                      ?.data?.authorImage !=
-                                                  ''
-                                              ? application
-                                                  .getUserDataProfileProvider
-                                                  ?.data
-                                                  ?.authorImage
-                                              : application.imageFromFacebook ??
-                                                  'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
-                                        ),
-                  backgroundColor: Colors.grey.shade600,
-                ),
-              )
-            : SizedBox(),
+        //               NetworkImage(
+        //                                   application.getUserDataProfileProvider
+        //                                               ?.data?.authorImage !=
+        //                                           ''
+        //                                       ? application
+        //                                           .getUserDataProfileProvider
+        //                                           ?.data
+        //                                           ?.authorImage
+        //                                       : application.imageFromFacebook ??
+        //                                           'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
+        //                                 ),
+        //           backgroundColor: Colors.grey.shade600,
+        //         ),
+        //       )
+        //     : SizedBox(),
         title: Container(
           child: Image.asset(
             kLogoImage,
@@ -700,7 +707,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
             child: GestureDetector(
               onTap: () async {
-                await _placeOrderNetwork.placeOrder(context, checkBoxValue,);
+                await _placeOrderNetwork.placeOrder(
+                  context,
+                  checkBoxValue,
+                );
                 final SharedPreferences sharedPreferences =
                     await SharedPreferences.getInstance();
                 print(
@@ -713,7 +723,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     sharedPreferences.setString(
                         'cardHolder', holderController.text);
                     sharedPreferences.setString(
-                        'cardNumber', cardValueChange == false ? temp : cardNumberController.text);
+                        'cardNumber',
+                        cardValueChange == false
+                            ? temp
+                            : cardNumberController.text);
                     sharedPreferences.setString(
                         'cardMonth', startingTime ?? '');
                     sharedPreferences.setString('cardYear', endTime ?? '');
@@ -730,7 +743,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         sharedPreferences.getString('cardCvv');
                   }
                 });
-                
+
                 // facebookAppEvents.logAddToCart(
                 //   id: widget.eventID,
                 //   type: 'event',
@@ -742,7 +755,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 //       .toDouble(),
                 //   currency: 'ILS',
                 // );
-                
               },
               child: InkWell(
                 // onTap: (){

@@ -47,6 +47,9 @@ class HomePageState extends State<HomePage> {
   bool showToolBar = false;
   bool showToolBarRow = false;
 
+  int selectFilter = 0;
+  int selectFilter1 = 0;
+
   bool loading = false;
   int? radiusVal = 0;
   int page = 1;
@@ -72,18 +75,18 @@ class HomePageState extends State<HomePage> {
   PackageNetwork packageNetwork = PackageNetwork();
 
   List<dynamic> filterData = [
-    'ב-7 ימים הקרובים',
-    'היום',
     'מחר',
-    'סוף השבוע',
-    'בשבוע הבא',
+    'היום',
+    'ב-7 ימים הקרובים',
     'תאריך מסויים',
+    'בשבוע הבא',
+    'סוף השבוע',
   ];
   List<dynamic> filterData1 = [
     'בכל מקום',
     'קרוב אליי',
-    'עיר מסויימת',
     'אונליין / זום',
+    'עיר מסויימת',
   ];
 
   String? realvalue;
@@ -730,7 +733,7 @@ class HomePageState extends State<HomePage> {
                                     //     spreadRadius: 0.1,
                                     //     //extend the shadow
                                     ///     offset: Offset(
-                                    //       15.0,
+                                    //       15.icon
                                     //       // Move to right 10  horizontally
                                     //       15.0, // Move to bottom 10 Vertically
                                     //     ),
@@ -978,19 +981,20 @@ class HomePageState extends State<HomePage> {
                                         Directionality(
                                           textDirection: TextDirection.rtl,
                                           child: Align(
-                                              alignment: Alignment.centerRight,
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    right: 30),
-                                                child: ReceivingPaymentFields(
-                                                  controller:
-                                                      categorySearchController,
-                                                  obscureText: false,
-                                                  width: width / 2,
-                                                  hintText: 'חיפוש חופשי',
-                                                  textColor: Colors.grey,
-                                                ),
-                                              )),
+                                            alignment: Alignment.centerRight,
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 30),
+                                              child: ReceivingPaymentFields(
+                                                controller:
+                                                    categorySearchController,
+                                                obscureText: false,
+                                                width: width / 2,
+                                                hintText: 'חיפוש חופשי',
+                                                textColor: Colors.grey,
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                         SizedBox(
                                           height: 10,
@@ -1122,6 +1126,7 @@ class HomePageState extends State<HomePage> {
                               ),
                             ),
                             GridView.builder(
+                                physics: ScrollPhysics(),
                                 itemCount: filterData1.length,
                                 gridDelegate:
                                     SliverGridDelegateWithFixedCrossAxisCount(
@@ -1133,8 +1138,71 @@ class HomePageState extends State<HomePage> {
                                 padding: EdgeInsets.symmetric(horizontal: 8),
                                 shrinkWrap: true,
                                 itemBuilder: (context, index) {
-                                  return FilterCardWidget(
-                                    text: filterData1[index],
+                                  return InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        selectFilter1 = index;
+
+                                        if (application
+                                                .filterAnywhereProvider ==
+                                            'עיר מסויימת') {
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 18),
+                                            child: Directionality(
+                                              textDirection: TextDirection.rtl,
+                                              child: ReceivingPaymentFields(
+                                                isFocus: true,
+                                                textColorPrimary: Colors.white,
+                                                maxLine: 1,
+                                                showRequired: false,
+                                                showLabel: false,
+                                                controller: locationController,
+                                                onChange: (v) {
+                                                  application.searchPlaces(v);
+                                                  print('eeeeeeeeeeeeeeee$v');
+                                                  setState(() {});
+                                                },
+                                                onFieldSubmit: (v) {
+                                                  application.searchPlaces(v);
+                                                  print('eeeeeeeeeeeeeeee$v');
+                                                },
+                                                textColor: Colors.white,
+                                                colors: MyColors.dropdownColor,
+                                                obscureText: false,
+                                                hintText: 'הקלד/י עיר',
+                                                suffixIcon: IconButton(
+                                                  icon: const Icon(
+                                                    Icons.close,
+                                                    color: Colors.white,
+                                                  ),
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      application
+                                                              .filterAnywhereProvider =
+                                                          null;
+                                                      locationController
+                                                          .clear();
+                                                    });
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                        else{
+
+                                          
+
+                                        }
+                                      });
+                                    },
+                                    child: FilterCardWidget(
+                                      text: filterData1[index],
+                                      color: selectFilter1 == index
+                                          ? MyColors.lightRed
+                                          : MyColors.lightBlue,
+                                    ),
                                   );
                                 }),
                             SizedBox(
@@ -1159,6 +1227,7 @@ class HomePageState extends State<HomePage> {
                             // Text(
                             //     "כדאי לדעת: את כל הפעילויות ניתן להזמין גם כאירוע פרטי"),
                             GridView.builder(
+                              physics: ScrollPhysics(),
                               itemCount: filterData.length,
                               itemBuilder: (BuildContext context, int index) {
                                 return InkWell(
@@ -1166,6 +1235,7 @@ class HomePageState extends State<HomePage> {
                                     print(filterData[index]);
                                     print('filterData');
                                     setState(() {
+                                      selectFilter = index;
                                       application.filterTimeProvider =
                                           filterData[index];
 
@@ -1184,8 +1254,10 @@ class HomePageState extends State<HomePage> {
                                           .replaceFirst(
                                               'תאריך מסויים', 'specific_date');
 
-                                      // page = 1;
+                                      page = 1;
                                     });
+
+                                    application.filterTimeProvider = realvalue;
 
                                     _fetchEventDataFilter.getEventData(
                                         1,
@@ -1199,6 +1271,8 @@ class HomePageState extends State<HomePage> {
                                         '',
                                         context);
 
+                                    print(application.filterTimeProvider);
+
                                     print("qwerty$realvalue");
 
                                     // application.filterTimeProvider = realvalue;
@@ -1207,7 +1281,9 @@ class HomePageState extends State<HomePage> {
                                   },
                                   child: FilterCardWidget(
                                     text: filterData[index],
-                                    color: MyColors.lightBlue,
+                                    color: selectFilter == index
+                                        ? MyColors.lightRed
+                                        : MyColors.lightBlue,
                                   ),
                                 );
                               },
@@ -1228,17 +1304,19 @@ class HomePageState extends State<HomePage> {
                               padding:
                                   const EdgeInsets.symmetric(vertical: 15.0),
                               child: Directionality(
-                                  textDirection: TextDirection.rtl,
-                                  child: Text(
-                                    '3. מה בתכנון?',
-                                    style: TextStyle(
-                                      fontFamily: "Helvetica",
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )),
+                                textDirection: TextDirection.rtl,
+                                child: Text(
+                                  '3. מה בתכנון?',
+                                  style: TextStyle(
+                                    fontFamily: "Helvetica",
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
                             ),
                             GridView.builder(
+                                physics: ScrollPhysics(),
                                 itemCount: dropItems.length,
                                 gridDelegate:
                                     SliverGridDelegateWithFixedCrossAxisCount(

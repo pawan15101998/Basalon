@@ -1060,6 +1060,9 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                         SliverList(
                           delegate: SliverChildBuilderDelegate(
                             (BuildContext context, int index) {
+                              print(p?.authorData?.authorImg);
+                              print('hhhhhhhhhhhhhh');
+
                               return p?.authorData != null
                                   ? ProfileCard(
                                       showCircleAvatar: true,
@@ -1085,6 +1088,11 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                               .eventData!.data!.comments !=
                                           null
                                       ? CommentCard(
+                                          image: _fetchEventData
+                                              .eventData!
+                                              .data!
+                                              .comments![index]
+                                              .commentImageAuthor,
                                           commentContent: _fetchEventData
                                               .eventData!
                                               .data!

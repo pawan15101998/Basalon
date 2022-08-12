@@ -1,9 +1,9 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print
 
 import 'package:basalon/services/constant.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:intl/intl.dart';
 
 import '../services/my_color.dart';
 
@@ -12,18 +12,25 @@ class CommentCard extends StatefulWidget {
       {required this.commentContent,
       required this.commentDate,
       required this.commentRating,
-      this.userEmail});
+      this.image,
+      this.userEmail,
+      this.desc});
 
   String commentDate;
   String commentContent;
   dynamic commentRating;
   dynamic userEmail;
+  dynamic image;
+
+  dynamic desc;
 
   @override
   State<CommentCard> createState() => _CommentCardState();
 }
 
 class _CommentCardState extends State<CommentCard> {
+  final now = new DateTime.now();
+
   TextEditingController contentController = TextEditingController();
 
   dynamic rateEvent = 0;
@@ -35,8 +42,6 @@ class _CommentCardState extends State<CommentCard> {
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Text(
               'משתתפים מספרים',
@@ -60,9 +65,10 @@ class _CommentCardState extends State<CommentCard> {
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(color: Colors.grey)),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       RatingBar.builder(
                         initialRating: widget.commentRating + .0,
@@ -81,57 +87,50 @@ class _CommentCardState extends State<CommentCard> {
                         tapOnlyMode: true,
                       ),
                       Container(
-                          height: 30,
-                          width: 30,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
-                              border: Border.all(color: MyColors.topOrange)),
-                          child: Center(
-                            child: Text(
-                              '${widget.commentRating}',
-                              style: TextStyle(color: MyColors.topOrange),
-                            ),
-                          )),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    '${
-                                        // widget.userEmail ??
-                                        'משתמש אנונימי (לא מזוהה)'}'
-                                        .toUpperCase(),
-                                    style: ktextStyleBold,
-                                  ),
-                                ),
-                                CircleAvatar(
-                                  backgroundImage: AssetImage(
-                                      'assets/images/dummy_user.png'),
-                                  backgroundColor: Colors.transparent,
-                                ),
-                              ],
-                            ),
-                            Text(
-                              '${widget.commentDate}',
-                              textAlign: TextAlign.right,
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                            Text(
-                              '${widget.commentContent}',
-                              textAlign: TextAlign.right,
-                              style: ktextStyle,
-                            ),
-                          ],
+                        height: 30,
+                        width: 30,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            border: Border.all(color: MyColors.topOrange)),
+                        child: Center(
+                          child: Text(
+                            '${widget.commentRating}',
+                            style: TextStyle(color: MyColors.topOrange),
+                          ),
                         ),
-                      )
+                      ),
                     ],
                   ),
+                  // Text(
+                  //   '.Your comment is awaiting moderation',
+                  // ),
+
                   Text(
-                    '.Your comment is awaiting moderation',
+                    widget.commentContent.toUpperCase(),
+                    style: ktextStyleBold,
+                  ),
+                  widget.image == null
+                      ? CircleAvatar(
+                          backgroundImage:
+                              AssetImage('assets/images/dummy_user.png'),
+                          backgroundColor: Colors.transparent,
+                        )
+                      : CircleAvatar(
+                          backgroundImage: NetworkImage(
+                            widget.image,
+                          ),
+                          backgroundColor: Colors.transparent,
+                        ),
+
+                  Text(
+                    DateFormat(widget.commentDate).format(now),
+                    textAlign: TextAlign.right,
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                  Text(
+                    '${widget.commentContent}',
+                    textAlign: TextAlign.right,
+                    style: ktextStyle,
                   ),
                 ],
               ),

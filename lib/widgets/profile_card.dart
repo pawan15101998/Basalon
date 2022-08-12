@@ -63,35 +63,37 @@ class _ProfileCardState extends State<ProfileCard> {
                 children: [
                   widget.showCircleAvatar == true
                       ? ClipOval(
-                    child: Image.network(
-                      widget.image,
-                      errorBuilder: (stacktrace, exception, c) {
-                        return Image.asset(
-                          'assets/images/dummy_user.png',
+                          child: Image.network(
+                            widget.image,
+                            errorBuilder: (stacktrace, exception, c) {
+                              return Image.asset(
+                                'assets/images/dummy_user.png',
+                                height: 70,
+                                width: 70,
+                              );
+                            },
+                            height: 70,
+                            width: 70,
+                            fit: BoxFit.fill,
+                          ),
+                        )
+                      : Container(
                           height: 70,
                           width: 70,
-                        );
-                      },
-                      height: 70,
-                      width: 70,
-                      fit: BoxFit.fill,
-                    ),
-                  )
-                      : Container(
-                      height: 70,
-                      width: 70,
-                      decoration: BoxDecoration(
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(50))),
-                      child: application.previewAuthorImagerovider != null
-                          ? Image.file(
-                        application.previewAuthorImagerovider,
-                        fit: BoxFit.fill,
-                        height: 70,
-                        width: 70,
-                      )
-                          : Image.asset('assets/images/dummy_user.png')),
-                  SizedBox(width: 10,),
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(50))),
+                          child: application.previewAuthorImagerovider != null
+                              ? Image.file(
+                                  application.previewAuthorImagerovider,
+                                  fit: BoxFit.fill,
+                                  height: 70,
+                                  width: 70,
+                                )
+                              : Image.asset('assets/images/dummy_user.png')),
+                  SizedBox(
+                    width: 10,
+                  ),
                   Expanded(
                     child: Text(
                       widget.title,
@@ -103,8 +105,6 @@ class _ProfileCardState extends State<ProfileCard> {
                       ),
                     ),
                   ),
-
-
                 ],
               ),
               Divider(

@@ -1,8 +1,6 @@
 import 'dart:async';
-
 import 'package:basalon/widgets/dropdown_anywhere.dart';
 import 'package:basalon/widgets/dropdown_time.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -179,14 +177,16 @@ class MapSampleState extends State<MapSample> {
                   myLocationEnabled: true,
                   initialCameraPosition: CameraPosition(
                     target: LatLng(
-                      widget.lat != null ? widget.lat : 
-                      widget.currentLocation != null
-                          ? widget.currentLocation.latitude
-                          : 32.4390389,
-                          widget.lng != null  ? widget.lng : 
-                      widget.currentLocation != null
-                          ? widget.currentLocation.longitude
-                          : 34.8780611,
+                      widget.lat != null
+                          ? widget.lat
+                          : widget.currentLocation != null
+                              ? widget.currentLocation.latitude
+                              : 32.4390389,
+                      widget.lng != null
+                          ? widget.lng
+                          : widget.currentLocation != null
+                              ? widget.currentLocation.longitude
+                              : 34.8780611,
                     ),
                     zoom: 14,
                   ),
@@ -290,7 +290,6 @@ class MapSampleState extends State<MapSample> {
                                                 categorySearchController.text,
                                                 '',
                                                 '',
-                                                
                                                 context);
                                         updateMarker(data);
                                         setState(() {});
@@ -443,7 +442,6 @@ class MapSampleState extends State<MapSample> {
                             '',
                             '',
                             '',
-                          
                             context);
                         // MarkerUpdates.from(Set.of(_markers), Set.of(_markers));
 
@@ -460,8 +458,9 @@ class MapSampleState extends State<MapSample> {
                     text2: 'כל החוויות',
                     onChanged: (value) async {
                       print('value value value value value value value');
-                      print(
-                          value.toString().replaceAll('אונליין / זום', 'online'));
+                      print(value
+                          .toString()
+                          .replaceAll('אונליין / זום', 'online'));
                       if (value == 'בכל מקום') {
                         print('chli kya condition ??????????/');
                         setState(() {
@@ -488,7 +487,6 @@ class MapSampleState extends State<MapSample> {
                           '',
                           '',
                           '',
-                          
                           context);
                       MarkerUpdates.from(Set.of(_markers), Set.of(_markers));
 
