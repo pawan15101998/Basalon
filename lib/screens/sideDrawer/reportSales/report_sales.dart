@@ -31,7 +31,8 @@ class _ReportSalesScreenState extends State<ReportSalesScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    reportSalesNetwork.getReportSales('7_day',LoginUser.shared?.userId ?? application.idFromLocalProvider);
+    reportSalesNetwork.getReportSales(
+        '7_day', LoginUser.shared?.userId ?? application.idFromLocalProvider);
     endDateController.text = time;
     startDateController.text = time;
     setState(() {});
@@ -53,6 +54,13 @@ class _ReportSalesScreenState extends State<ReportSalesScreen> {
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back_ios_new_outlined,
+            )),
         backgroundColor: Colors.black,
         title: Container(
           margin: EdgeInsets.only(top: 10),
@@ -94,8 +102,10 @@ class _ReportSalesScreenState extends State<ReportSalesScreen> {
                             children: [
                               OutlinedButton(
                                   onPressed: () async {
-                                    await reportSalesNetwork
-                                        .getReportSales('year',LoginUser.shared?.userId ?? application.idFromLocalProvider);
+                                    await reportSalesNetwork.getReportSales(
+                                        'year',
+                                        LoginUser.shared?.userId ??
+                                            application.idFromLocalProvider);
                                     setState(() {
                                       isYear = true;
                                       isMonth = false;
@@ -114,8 +124,10 @@ class _ReportSalesScreenState extends State<ReportSalesScreen> {
                               ),
                               OutlinedButton(
                                   onPressed: () async {
-                                    await reportSalesNetwork
-                                        .getReportSales('7_day',LoginUser.shared?.userId ?? application.idFromLocalProvider);
+                                    await reportSalesNetwork.getReportSales(
+                                        '7_day',
+                                        LoginUser.shared?.userId ??
+                                            application.idFromLocalProvider);
                                     setState(() {
                                       isWeek = true;
                                       isMonth = false;
@@ -125,7 +137,7 @@ class _ReportSalesScreenState extends State<ReportSalesScreen> {
                                   },
                                   child: Text(
                                     'Last 7 days',
-                                    style:isWeek == true
+                                    style: isWeek == true
                                         ? TextStyle(color: MyColors.topOrange)
                                         : ktextStyle,
                                   )),
@@ -134,27 +146,32 @@ class _ReportSalesScreenState extends State<ReportSalesScreen> {
                               ),
                               OutlinedButton(
                                   onPressed: () async {
-                                    await reportSalesNetwork
-                                        .getReportSales('last_month',LoginUser.shared?.userId ?? application.idFromLocalProvider);
+                                    await reportSalesNetwork.getReportSales(
+                                        'last_month',
+                                        LoginUser.shared?.userId ??
+                                            application.idFromLocalProvider);
                                     setState(() {
                                       isLastMonth = true;
                                       isWeek = false;
                                       isMonth = false;
                                       isYear = false;
-                                    });                                  },
+                                    });
+                                  },
                                   child: Text(
                                     'Last Month',
                                     style: isLastMonth == true
                                         ? TextStyle(color: MyColors.topOrange)
-                                        :ktextStyle,
+                                        : ktextStyle,
                                   )),
                               SizedBox(
                                 width: 8,
                               ),
                               OutlinedButton(
                                   onPressed: () async {
-                                    await reportSalesNetwork
-                                        .getReportSales('month',LoginUser.shared?.userId ?? application.idFromLocalProvider);
+                                    await reportSalesNetwork.getReportSales(
+                                        'month',
+                                        LoginUser.shared?.userId ??
+                                            application.idFromLocalProvider);
                                     setState(() {
                                       isMonth = true;
                                       isWeek = false;
@@ -166,7 +183,7 @@ class _ReportSalesScreenState extends State<ReportSalesScreen> {
                                     'This Month',
                                     style: isMonth == true
                                         ? TextStyle(color: MyColors.topOrange)
-                                        :ktextStyle,
+                                        : ktextStyle,
                                   )),
                             ],
                           ),
@@ -229,7 +246,12 @@ class _ReportSalesScreenState extends State<ReportSalesScreen> {
                                           text: 'Go',
                                           onPressed: () async {
                                             await reportSalesNetwork
-                                                .getReportSales('custom',LoginUser.shared?.userId ?? application.idFromLocalProvider);
+                                                .getReportSales(
+                                                    'custom',
+                                                    LoginUser
+                                                            .shared?.userId ??
+                                                        application
+                                                            .idFromLocalProvider);
                                             setState(() {});
                                           }),
                                     ),

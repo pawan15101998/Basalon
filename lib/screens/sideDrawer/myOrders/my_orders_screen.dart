@@ -59,6 +59,13 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
       backgroundColor: Colors.grey.shade200,
       endDrawer: NavDrawer(),
       appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back_ios_new_outlined,
+            )),
         centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.black,

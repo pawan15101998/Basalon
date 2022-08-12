@@ -67,10 +67,22 @@ class _MyFavoritesState extends State<MyFavorites> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(
-                'המועדפים שלי',
-                style: ktextStyleLarge,
-                textDirection: TextDirection.rtl,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: Icon(
+                        Icons.arrow_back_ios_new_outlined,
+                      )),
+                  Text(
+                    'המועדפים שלי',
+                    style: ktextStyleLarge,
+                    textDirection: TextDirection.rtl,
+                  ),
+                ],
               ),
               Divider(),
               Expanded(
@@ -232,7 +244,9 @@ class FavoriteColumn extends StatelessWidget {
                   },
                   child: Text(
                     titleContent,
-                    style: TextStyle(fontSize: 12,),
+                    style: TextStyle(
+                      fontSize: 12,
+                    ),
                   ),
                 ),
             ],

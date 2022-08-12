@@ -235,40 +235,49 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                     toolbarHeight: 70,
                                     centerTitle: true,
                                     elevation: 0,
-                                    leading: (isUserLogin(
-                                                application.isUserLogin) &&
-                                            application
-                                                    .getUserDataProfileProvider
-                                                    ?.data
-                                                    ?.authorImage !=
-                                                null)
-                                        ? Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: CircleAvatar(
-                                              backgroundImage:
-                                                  // AssetImage(
-                                                  //     'assets/images/dummy_user.png'),
+                                    leading: IconButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        icon: Icon(
+                                          Icons.arrow_back_ios_new_outlined,
+                                        )),
 
-                                                  NetworkImage(
-                                                application
-                                                            .getUserDataProfileProvider
-                                                            ?.data
-                                                            ?.authorImage !=
-                                                        ''
-                                                    ? application
-                                                        .getUserDataProfileProvider
-                                                        ?.data
-                                                        ?.authorImage
-                                                    : application
-                                                            .imageFromFacebook ??
-                                                        'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
-                                              ),
-                                              backgroundColor:
-                                                  Colors.grey.shade600,
-                                            ),
-                                          )
-                                        : SizedBox(),
+                                    // (isUserLogin(
+                                    //             application.isUserLogin) &&
+                                    //         application
+                                    //                 .getUserDataProfileProvider
+                                    //                 ?.data
+                                    //                 ?.authorImage !=
+                                    //             null)
+                                    //     ? Padding(
+                                    //         padding: const EdgeInsets.all(8.0),
+                                    //         child: CircleAvatar(
+                                    //           backgroundImage:
+                                    //               // AssetImage(
+                                    //               //     'assets/images/dummy_user.png'),
+
+                                    //               NetworkImage(
+                                    //             application
+                                    //                         .getUserDataProfileProvider
+                                    //                         ?.data
+                                    //                         ?.authorImage !=
+                                    //                     ''
+                                    //                 ? application
+                                    //                     .getUserDataProfileProvider
+                                    //                     ?.data
+                                    //                     ?.authorImage
+                                    //                 : application
+                                    //                         .imageFromFacebook ??
+                                    //                     'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png',
+                                    //           ),
+                                    //           backgroundColor:
+                                    //               Colors.grey.shade600,
+                                    //         ),
+                                    //       )
+                                    //     : SizedBox(),
                                     backgroundColor: Colors.transparent,
+
                                     title: Container(
                                       decoration: BoxDecoration(
                                         boxShadow: [
@@ -291,6 +300,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                         fit: BoxFit.fill,
                                       ),
                                     ),
+
                                     actions: [
                                       Builder(
                                         builder: (context) => Container(

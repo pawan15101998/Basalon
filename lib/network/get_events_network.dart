@@ -18,10 +18,12 @@ class FetchEventData {
     this.commentContent,
     this.rating,
     this.eventId,
+    this.filterByTime,
   });
 
   final int? id;
   dynamic filterByCategory;
+  dynamic filterByTime;
 
   String? eventId;
   dynamic rating;
@@ -34,39 +36,44 @@ class FetchEventData {
   List? cardData;
   FilterCategoryModel? filterCategoryModel;
   dynamic categoryData;
-    Position? geoLoc;
-setLocation() async {
+  Position? geoLoc;
+  setLocation() async {
     geoLoc = await Geolocator.getCurrentPosition();
     print(
         '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++homepage');
     print(geoLoc);
 
     // setState(() {
-  
+
     // });
-    
+
     return geoLoc;
   }
 
-
-   
-
   Future getEventData(page, filterByCategory, filterByTime, filterByAnyWhere,
-
       mapLat, mapLng, keyword, startDate, endDate, BuildContext context) async {
-        print(filterByAnyWhere);
-        print(filterByCategory);
-        print("nksajlkmsakl");
+    print(filterByAnyWhere);
+    print(filterByCategory);
+    print("nksajlkmsakl");
     try {
       final response = await ApiProvider.post(url: 'get_events', body: {
         "paged": "$page",
-        "keyword":keyword != "" || keyword != null ? "$keyword" : "" ,
+        "keyword": keyword != "" || keyword != null ? "$keyword" : "",
         "category": "${filterByCategory ?? ''}",
-        "map_lat": (filterByAnyWhere == 'עיר מסויימת' || filterByAnyWhere == 'בכל מקום' || filterByAnyWhere == 'קרוב אליי') ? '$mapLat' : null,
-        "map_lng": (filterByAnyWhere == 'עיר מסויימת' || filterByAnyWhere == 'בכל מקום' || filterByAnyWhere == 'קרוב אליי') ? '$mapLng' : null,
+        "map_lat": (filterByAnyWhere == 'עיר מסויימת' ||
+                filterByAnyWhere == 'בכל מקום' ||
+                filterByAnyWhere == 'קרוב אליי')
+            ? '$mapLat'
+            : null,
+        "map_lng": (filterByAnyWhere == 'עיר מסויימת' ||
+                filterByAnyWhere == 'בכל מקום' ||
+                filterByAnyWhere == 'קרוב אליי')
+            ? '$mapLng'
+            : null,
         "start_date": "$startDate",
         "end_date": "$endDate",
-        "time": "${ filterByTime == 'specific_date' ? "this_week" : filterByTime ?? "this_week"}",
+        "time":
+            "${filterByTime == 'specific_date' ? "this_week" : filterByTime ?? "this_week"}",
         // "sort": filterByAnyWhere == 'online'
         //     ? 'start-date'
         //     : (filterByAnyWhere == 'בכל מקום' || filterByCategory == 'אירוח קולינרי')
@@ -76,16 +83,23 @@ setLocation() async {
         //                 mapLng != null)
         //             ? 'near'
         //             : '',
-        "sort": (filterByAnyWhere == 'עיר מסויימת' || filterByAnyWhere == 'קרוב אליי' || application.filterAnywhereProvider == 'קרוב אליי') ?  "near" : (filterByAnyWhere == 'בכל מקום') ? 'start-date' : '',
+        "sort": (filterByAnyWhere == 'עיר מסויימת' ||
+                filterByAnyWhere == 'קרוב אליי' ||
+                application.filterAnywhereProvider == 'קרוב אליי')
+            ? "near"
+            : (filterByAnyWhere == 'בכל מקום')
+                ? 'start-date'
+                : '',
         "event_type": filterByAnyWhere == 'online' ? 'online' : 'classic',
-        "el_data_taxonomy_custom[]": "", 
-        "show_featured": "",     
+        "el_data_taxonomy_custom[]": "",
+        "show_featured": "",
       });
       print("dklsxjkl");
       print(application.filterAnywhereProvider);
-      print(filterByAnyWhere);
+      // print(filterByAnyWhere);
+      print(filterByTime);
 
-              print(mapLat);  
+      print(mapLat);
 
       final result = HomeData.fromJson(response['body']);
       print('uiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
@@ -95,11 +109,10 @@ setLocation() async {
       print(mapLat);
       print(response['status']);
 
-  print("ajb");
+      print("ajb");
       if (response['status'] == 401) {
         print("snbdj1");
         return errorAlertMessage('no event found', '', context);
-        
       } else {
         print("snbdj2");
         if (page > 1) {
@@ -120,9 +133,8 @@ setLocation() async {
     } catch (e) {
       print('homepage events nhi aaye ERROR!${e}');
       print("snbdj9");
-        print(keyword);
+      print(keyword);
       if (keyword != null && keyword != '') {
-        
         data = [];
         print("snbdj10");
       }
@@ -134,8 +146,6 @@ setLocation() async {
     print(data);
     return data;
   }
-
-
 
   Future getEventDetailData() async {
     try {
@@ -171,7 +181,8 @@ setLocation() async {
     return filterCategoryModel;
   }
 
-  Future postFeedbackEventDetails(context,userId,{content,rating,eventId}) async {
+  Future postFeedbackEventDetails(context, userId,
+      {content, rating, eventId}) async {
     try {
       final response = await ApiProvider.post(url: 'add_comment', body: {
         'user_id': '$userId',
@@ -199,7 +210,8 @@ setLocation() async {
     content,
   ) async {
     try {
-      final response = await ApiProvider.post(url: 'email_send_to_author', body: {
+      final response =
+          await ApiProvider.post(url: 'email_send_to_author', body: {
         'event_id': '$eventId',
         'name_customer': '$name',
         'email_customer': '$email',

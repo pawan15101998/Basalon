@@ -8,6 +8,7 @@ import 'package:basalon/widgets/dropdown_anywhere.dart';
 import 'package:basalon/widgets/dropdown_everywhere.dart';
 import 'package:basalon/widgets/dropdown_time.dart';
 import 'package:basalon/widgets/event_card.dart';
+import 'package:basalon/widgets/filter_card_widget.dart';
 import 'package:basalon/widgets/google_map.dart';
 import 'package:basalon/widgets/scroll_to_hide.dart';
 import 'package:flutter/cupertino.dart';
@@ -62,7 +63,7 @@ class HomePageState extends State<HomePage> {
   dynamic filterByAnywhere;
   late final application = Provider.of<ApplicationBloc>(context, listen: false);
   late final FetchEventData _fetchEventDataFilter = FetchEventData(
-    filterByCategory: application.realValueTime,
+    filterByTime: application.realValueTime,
   );
   StreamSubscription? locationSubscription;
   final UpdateAndGetUserProfile _updateAndGetUserProfile =
@@ -77,6 +78,12 @@ class HomePageState extends State<HomePage> {
     'סוף השבוע',
     'בשבוע הבא',
     'תאריך מסויים',
+  ];
+  List<dynamic> filterData1 = [
+    'בכל מקום',
+    'קרוב אליי',
+    'עיר מסויימת',
+    'אונליין / זום',
   ];
 
   String? realvalue;
@@ -117,7 +124,6 @@ class HomePageState extends State<HomePage> {
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     print('didChangeDependencies');
     super.didChangeDependencies();
     LoginUser.shared?.userId != null
@@ -133,7 +139,6 @@ class HomePageState extends State<HomePage> {
 
   @override
   void didUpdateWidget(covariant HomePage oldWidget) {
-    // TODO: implement didUpdateWidget
     print('didUpdateWidget');
 
     super.didUpdateWidget(oldWidget);
@@ -565,6 +570,10 @@ class HomePageState extends State<HomePage> {
                                       text1: 'מתי?',
                                       text2: 'ב-7 ימים הקרובים',
                                       onChanged: (v) {
+                                        print(v);
+                                        print(
+                                            'ffffffffffffffffffffffffffffffffff');
+
                                         setState(() {
                                           application.filterTimeProvider = v;
                                           page = 1;
@@ -1088,45 +1097,172 @@ class HomePageState extends State<HomePage> {
                     ),
                   ),
                   SliverPadding(
-                      padding: EdgeInsets.all(0.0),
-                      sliver: SliverList(
-                        delegate: SliverChildListDelegate([
-                          GridView.builder(
-                            itemCount: filterData.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Container(
-                                alignment: Alignment.center,
-                                margin: EdgeInsets.symmetric(
-                                    horizontal: 0, vertical: 8),
+                    padding: EdgeInsets.all(0.0),
+                    sliver: SliverList(
+                      delegate: SliverChildListDelegate([
+                        Column(
+                          children: [
+                            SizedBox(
+                              height: 4,
+                            ),
+
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 12.0),
+                              child: Directionality(
+                                textDirection: TextDirection.rtl,
                                 child: Text(
-                                  filterData[index],
+                                  '1. איפה מבלים?',
                                   style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.white),
+                                    fontFamily: "Helvetica",
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                                decoration: BoxDecoration(
-                                  color: countCat == index
-                                      ? Colors.blue
-                                      : Colors.amber,
-                                  borderRadius: BorderRadius.circular(30),
+                              ),
+                            ),
+                            GridView.builder(
+                                itemCount: filterData1.length,
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                        crossAxisSpacing: 5,
+                                        // mainAxisSpacing: 5,
+                                        mainAxisExtent: 50,
+                                        childAspectRatio: 1),
+                                padding: EdgeInsets.symmetric(horizontal: 8),
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) {
+                                  return FilterCardWidget(
+                                    text: filterData1[index],
+                                  );
+                                }),
+                            SizedBox(
+                              height: 40,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 12.0),
+                              child: Directionality(
+                                textDirection: TextDirection.rtl,
+                                child: Text(
+                                  '2. מתי זה קורה?',
+                                  style: TextStyle(
+                                    fontFamily: "Helvetica",
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                                // padding: EdgeInsets.symmetric(
-                                //     horizontal: 15, vertical: 5),
-                              );
-                            },
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    crossAxisSpacing: 5,
-                                    // mainAxisSpacing: 5,
-                                    mainAxisExtent: 53,
-                                    childAspectRatio: 1),
-                            padding: EdgeInsets.symmetric(horizontal: 10),
-                            shrinkWrap: true,
-                          )
-                        ]),
-                      )),
+                              ),
+                            ),
+                            // Text("(ניתן לבחור ביותר מקטגורייה אחת)"),
+                            // Text(
+                            //     "כדאי לדעת: את כל הפעילויות ניתן להזמין גם כאירוע פרטי"),
+                            GridView.builder(
+                              itemCount: filterData.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return InkWell(
+                                  onTap: () {
+                                    print(filterData[index]);
+                                    print('filterData');
+                                    setState(() {
+                                      application.filterTimeProvider =
+                                          filterData[index];
+
+                                      print(application.filterTimeProvider);
+                                      print('application');
+
+                                      realvalue = application
+                                          .filterTimeProvider!
+                                          .replaceAll(
+                                              'ב-7 ימים הקרובים', 'this_week')
+                                          .replaceAll('היום', 'today')
+                                          .replaceAll('מחר', 'tomorrow')
+                                          .replaceAll(
+                                              'סוף השבוע', 'this_week_end')
+                                          .replaceAll('בשבוע הבא', 'next_week')
+                                          .replaceFirst(
+                                              'תאריך מסויים', 'specific_date');
+
+                                      // page = 1;
+                                    });
+
+                                    _fetchEventDataFilter.getEventData(
+                                        1,
+                                        '',
+                                        realvalue,
+                                        '',
+                                        '',
+                                        '',
+                                        '',
+                                        '',
+                                        '',
+                                        context);
+
+                                    print("qwerty$realvalue");
+
+                                    // application.filterTimeProvider = realvalue;
+
+                                    print(realvalue);
+                                  },
+                                  child: FilterCardWidget(
+                                    text: filterData[index],
+                                    color: MyColors.lightBlue,
+                                  ),
+                                );
+                              },
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 3,
+                                      crossAxisSpacing: 5,
+                                      // mainAxisSpacing: 5,
+                                      mainAxisExtent: 50,
+                                      childAspectRatio: 1),
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              shrinkWrap: true,
+                            ),
+                            SizedBox(
+                              height: 40,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 15.0),
+                              child: Directionality(
+                                  textDirection: TextDirection.rtl,
+                                  child: Text(
+                                    '3. מה בתכנון?',
+                                    style: TextStyle(
+                                      fontFamily: "Helvetica",
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )),
+                            ),
+                            GridView.builder(
+                                itemCount: dropItems.length,
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 3,
+                                        crossAxisSpacing: 5,
+                                        // mainAxisSpacing: 5,
+                                        mainAxisExtent: 50,
+                                        childAspectRatio: 1),
+                                padding: EdgeInsets.symmetric(horizontal: 8),
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) {
+                                  return Directionality(
+                                    textDirection: TextDirection.rtl,
+                                    child: FilterCardWidget(
+                                      text: dropItems[index],
+                                      color: MyColors.lightBlue,
+                                    ),
+                                  );
+                                })
+                          ],
+                        )
+                      ]),
+                    ),
+                  ),
 
                   // SliverList(
                   //   delegate: SliverChildBuilderDelegate(

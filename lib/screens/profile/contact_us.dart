@@ -49,9 +49,21 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               const SizedBox(height: 40),
-              Text(
-                _contactNetWork.contact?.data?[0].title ?? 'צרו איתנו קשר',
-                style: ktextStyleLarge,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: Icon(
+                        Icons.arrow_back_ios_new_outlined,
+                      )),
+                  Text(
+                    _contactNetWork.contact?.data?[0].title ?? 'צרו איתנו קשר',
+                    style: ktextStyleLarge,
+                  ),
+                ],
               ),
               SizedBox(
                 width: 50,

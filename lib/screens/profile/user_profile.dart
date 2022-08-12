@@ -173,12 +173,10 @@ class _UserProfileState extends State<UserProfile> {
                               application.getUserDataProfileProvider?.data
                                   ?.authorImage = '';
                               isRemoveDp = true;
-                              setState(() {
-                                
-                              });
-                            } );
+                              setState(() {});
+                            });
                           },
-                          child:const Text(
+                          child: const Text(
                             'הסרת תמונה',
                             style: TextStyle(color: Colors.red),
                           )),
@@ -409,7 +407,7 @@ class _UserProfileState extends State<UserProfile> {
                       // getUpdateUserData();
                       await _updateAndGetUserProfile.getUpdateUserData(
                           LoginUser.shared?.userId! ??
-                          application.idFromLocalProvider,
+                              application.idFromLocalProvider,
                           firstNameController.text,
                           lastNameController.text,
                           emailController.text,
@@ -645,8 +643,15 @@ class _UserProfileState extends State<UserProfile> {
             Padding(
               padding: const EdgeInsets.only(top: 10),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
+                  IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: Icon(
+                        Icons.arrow_back_ios_new_outlined,
+                      )),
                   if (application.myActivity != null)
                     GestureDetector(
                       onTap: () {

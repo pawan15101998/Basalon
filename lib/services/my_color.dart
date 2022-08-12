@@ -15,4 +15,6 @@ class MyColors {
   static Color companyCategory = Color(0XFF30d371);
   static Color greenButton = Color(0XFF82b440);
   static Color purpleAppbar = Color(0XFF343353);
+  static Color lightBlue = Color(0XFF6F71A1);
+  static Color lightRed = Color(0XFFE86C60);
 }

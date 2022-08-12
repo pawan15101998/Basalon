@@ -64,7 +64,6 @@ class _DropButtonByAnywhereState extends State<DropButtonByAnywhere> {
                             color: Colors.white,
                           ),
                           textAlign: TextAlign.center,
-
                         ),
                         Expanded(
                           child: Container(
@@ -81,7 +80,6 @@ class _DropButtonByAnywhereState extends State<DropButtonByAnywhere> {
                               ),
                               maxLines: 1,
                               textDirection: TextDirection.rtl,
-
                             ),
                           ),
                         ),
@@ -117,9 +115,11 @@ class _DropButtonByAnywhereState extends State<DropButtonByAnywhere> {
                 'עיר מסויימת',
                 'אונליין / זום',
               ].map((item) {
-                var backgroundColor =
-                    (item == application.val) ? MyColors.topOrange : Colors.white;
-                var textColor = (item == application.val) ? Colors.white : Colors.black;
+                var backgroundColor = (item == application.val)
+                    ? MyColors.topOrange
+                    : Colors.white;
+                var textColor =
+                    (item == application.val) ? Colors.white : Colors.black;
                 var checkBoxColor = (item == application.val)
                     ? checkboxToggle = true
                     : checkboxToggle = false;

@@ -20,8 +20,6 @@ class DropButton1 extends StatefulWidget {
 }
 
 class _DropButton1State extends State<DropButton1> {
-
-
   late final application = Provider.of<ApplicationBloc>(context, listen: false);
 
   // String val ='ב-7 ימים הקרובים';
@@ -132,9 +130,12 @@ class _DropButton1State extends State<DropButton1> {
               'בשבוע הבא',
               'תאריך מסויים',
             ].map((item) {
-              var backgroundColor =
-                  (item == application.realValueTime) ? MyColors.topOrange : Colors.white;
-              var textColor = (item == application.realValueTime) ? Colors.white : Colors.black;
+              var backgroundColor = (item == application.realValueTime)
+                  ? MyColors.topOrange
+                  : Colors.white;
+              var textColor = (item == application.realValueTime)
+                  ? Colors.white
+                  : Colors.black;
 
               return DropdownMenuItem<String>(
                 value: item,
@@ -142,7 +143,6 @@ class _DropButton1State extends State<DropButton1> {
                 child: Container(
                   margin: EdgeInsets.all(0),
                   height: 50,
-
                   padding: const EdgeInsets.only(top: 10.0, right: 10),
                   width: double.infinity,
                   color: backgroundColor,
@@ -173,8 +173,8 @@ class _DropButton1State extends State<DropButton1> {
                     .replaceFirst('תאריך מסויים', 'specific_date');
               });
               widget.onChanged(realValue);
-              _fetchEventData.getEventData( 
-                  1, '', realValue, '', '', '','','','',context);
+              _fetchEventData.getEventData(
+                  1, '', realValue, '', '', '', '', '', '', context);
               print("qwerty$realValue");
               print('okokokkokkokkokokokokokokok');
             },
