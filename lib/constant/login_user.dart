@@ -15,4 +15,3 @@ class LoginUser {
 
   static LoginUser? get shared => _instance;
 }
-  

@@ -43,22 +43,7 @@ class _CommentCardState extends State<CommentCard> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Text(
-              'משתתפים מספרים',
-              textAlign: TextAlign.right,
-              style: TextStyle(
-                fontSize: 22,
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(
-              width: 20,
-              child: Divider(
-                thickness: 1,
-                color: Colors.red,
-              ),
-            ),
+            
             Container(
               padding: EdgeInsets.all(15),
               decoration: BoxDecoration(
@@ -70,62 +55,79 @@ class _CommentCardState extends State<CommentCard> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      RatingBar.builder(
-                        initialRating: widget.commentRating + .0,
-                        minRating: 1,
-                        itemSize: 20,
-                        direction: Axis.horizontal,
-                        allowHalfRating: true,
-                        itemCount: 5,
-                        itemBuilder: (context, _) => Icon(
-                          Icons.star_rounded,
-                          color: Colors.amber.shade700,
-                        ),
-                        onRatingUpdate: (rating) {
-                          print(rating);
-                        },
-                        tapOnlyMode: true,
-                      ),
-                      Container(
-                        height: 30,
-                        width: 30,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50),
-                            border: Border.all(color: MyColors.topOrange)),
-                        child: Center(
-                          child: Text(
-                            '${widget.commentRating}',
-                            style: TextStyle(color: MyColors.topOrange),
+                      Row(
+                        children: [
+                          RatingBar.builder(
+                            initialRating: widget.commentRating + .0,
+                            minRating: 1,
+                            itemSize: 20,
+                            direction: Axis.horizontal,
+                            allowHalfRating: true,
+                            itemCount: 5,
+                            itemBuilder: (context, _) => Icon(
+                              Icons.star_rounded,
+                              color: Colors.amber.shade700,
+                            ),
+                            onRatingUpdate: (rating) {
+                              print(rating);
+                            },
+                            tapOnlyMode: true,
                           ),
-                        ),
+                          Container(
+                            height: 30,
+                            width: 30,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50),
+                                border: Border.all(color: MyColors.topOrange)),
+                            child: Center(
+                              child: Text(
+                                '${widget.commentRating}',
+                                style: TextStyle(color: MyColors.topOrange),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
+                      Row(
+                        children: [
+                          widget.image == null
+                              ? CircleAvatar(
+                                  backgroundImage: AssetImage(
+                                      'assets/images/dummy_user.png'),
+                                  backgroundColor: Colors.transparent,
+                                )
+                              : CircleAvatar(
+                                  backgroundImage: NetworkImage(
+                                    widget.image,
+                                  ),
+                                  backgroundColor: Colors.transparent,
+                                ),
+                        ],
+                      )
                     ],
+                  ),
+
+                  SizedBox(
+                    height: 25,
                   ),
                   // Text(
                   //   '.Your comment is awaiting moderation',
                   // ),
 
                   Text(
-                    widget.commentContent.toUpperCase(),
+                    widget.userEmail,
                     style: ktextStyleBold,
                   ),
-                  widget.image == null
-                      ? CircleAvatar(
-                          backgroundImage:
-                              AssetImage('assets/images/dummy_user.png'),
-                          backgroundColor: Colors.transparent,
-                        )
-                      : CircleAvatar(
-                          backgroundImage: NetworkImage(
-                            widget.image,
-                          ),
-                          backgroundColor: Colors.transparent,
-                        ),
-
+                  SizedBox(
+                    height: 10,
+                  ),
                   Text(
-                    DateFormat(widget.commentDate).format(now),
+                    widget.commentDate,
                     textAlign: TextAlign.right,
                     style: TextStyle(color: Colors.grey),
+                  ),
+                  SizedBox(
+                    height: 10,
                   ),
                   Text(
                     '${widget.commentContent}',

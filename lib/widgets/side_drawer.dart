@@ -1,3 +1,6 @@
+import 'package:basalon/constant/login_user.dart';
+import 'package:basalon/modal/login_data.dart';
+import 'package:basalon/network/login_register_network.dart';
 import 'package:basalon/screens/activity/general_screen.dart';
 import 'package:basalon/screens/home_screen.dart';
 import 'package:basalon/screens/login/signin_screen.dart';
@@ -40,18 +43,25 @@ class _NavDrawerState extends State<NavDrawer> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    print(LoginUser.shared?.userId);
+
+    // LoginRegisterNetwork.deleteAddress(dataId: 2595);
     print(
         'navdrawer ki init state ${application.packageModel?.data?.userActivePackage?.iD}');
   }
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
+    print(LoginUser.shared?.userId);
+    print('userrrrrrrrrrrr');
+    print('userrrrrrrrrrrrsssssssssssssssssssss');
+
     return SizedBox(
       width: 250,
       child: Drawer(
@@ -299,6 +309,8 @@ class _NavDrawerState extends State<NavDrawer> {
                       textTile: 'יצירת קשר'),
                   if (isUserLogin(application.isUserLogin))
                     SidebarItems(
+                      showLine: isUserLogin(application.isUserLogin),
+
                       pressed: () async {
                         final SharedPreferences sharedPreferences =
                             await SharedPreferences.getInstance();
@@ -340,6 +352,69 @@ class _NavDrawerState extends State<NavDrawer> {
                       ),
                       // textTile: 'logout',
                       textTile: 'התנתקות',
+                    ),
+                  if (isUserLogin(application.isUserLogin))
+                    Expanded(
+                      child: SidebarItems(
+                          showLine: isUserLogin(application.isUserLogin),
+                          pressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: Text(
+                                      'Do you want delete Account ?',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    actionsAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () async {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text('NO'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () async {
+                                          print(LoginUser.shared?.userId);
+                                          print('helllo');
+                                          deleteUser(
+                                              dataId: LoginUser.shared?.userId);
+                                          final SharedPreferences
+                                              sharedPreferences =
+                                              await SharedPreferences
+                                                  .getInstance();
+
+                                          await sharedPreferences
+                                              .remove('loginId');
+
+                                          setState(() {
+                                            application.isUserLogin = false;
+                                          });
+
+                                          Navigator.pushAndRemoveUntil(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      HomeScreen()),
+                                              (route) => false);
+                                          application.dispose();
+                                        },
+                                        child: const Text('YES'),
+                                      ),
+                                    ],
+                                  );
+                                });
+                          },
+                          icon: Icon(
+                            Icons.delete,
+                            color: Colors.white,
+                          ),
+                          textTile: 'יצירת קשר'),
                     ),
                 ],
               ),

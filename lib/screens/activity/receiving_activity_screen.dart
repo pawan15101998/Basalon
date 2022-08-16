@@ -416,7 +416,6 @@ class ReceivingPaymentFields extends StatelessWidget {
           Expanded(
             flex: 2,
             child: TextFormField(
-              autofocus: isFocus ?? false,
               textDirection: TextDirection.rtl,
               onFieldSubmitted: onFieldSubmit,
               onChanged: onChange,

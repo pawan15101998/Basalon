@@ -21,6 +21,7 @@ import 'package:flutter_share/flutter_share.dart';
 // import 'package:flutter_social_content_share/flutter_social_content_share.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart' as intl;
 import 'package:provider/provider.dart';
 import 'package:url_launcher/link.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -57,6 +58,9 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
   TextEditingController fullnameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController startDateController = TextEditingController();
+
+  DateTime now = DateTime.now();
+  String date = intl.DateFormat("yyyy-MM-dd").format(DateTime.now());
 
   List<String>? imageList = [];
 
@@ -1077,6 +1081,50 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                             childCount: 1, // 1000 list items
                           ),
                         ),
+                        SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (BuildContext context, int index) {
+                              return SizedBox(
+                                height: 10,
+                              );
+                            },
+                            childCount: 1, // 1000 list items
+                          ),
+                        ),
+                        SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (BuildContext context, int index) {
+                              return Container(
+                                color: Colors.white,
+                                padding:
+                                    const EdgeInsets.only(right: 20, top: 20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      'משתתפים מספרים',
+                                      textAlign: TextAlign.right,
+                                      style: TextStyle(
+                                        fontSize: 22,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 20,
+                                      child: Divider(
+                                        thickness: 1,
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                            childCount: 1, // 1000 list items
+                          ),
+                        ),
+
                         StreamBuilder(
                           stream: streamController.stream,
                           builder: (BuildContext context,
@@ -1098,11 +1146,13 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                               .data!
                                               .comments![index]
                                               .commentContent!,
-                                          commentDate: _fetchEventData
-                                              .eventData!
-                                              .data!
-                                              .comments![index]
-                                              .commentDate,
+                                          commentDate: intl.DateFormat(
+                                                  _fetchEventData
+                                                      .eventData!
+                                                      .data!
+                                                      .comments![index]
+                                                      .commentDate)
+                                              .format(DateTime.now()),
                                           commentRating: _fetchEventData
                                               .eventData!
                                               .data!

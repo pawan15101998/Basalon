@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:basalon/modal/login_data.dart';
 import 'package:basalon/services/api_provider/api_provider.dart';
+import 'package:basalon/services/constant.dart';
 import 'package:dio/dio.dart';
 // import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -159,3 +160,43 @@ class LoginRegisterNetwork {
 // "${jsonEncode(accessToken)},${jsonEncode("token_type")}:${jsonEncode("bearer")},${jsonEncode("expires_in")}:${jsonEncode("5183998")},${jsonEncode("created")}:${jsonEncode("$userID")}"
 // }
 // },
+
+deleteUser({dataId}) async {
+  // print(object)
+  var dio = Dio();
+  var dataDe = {
+    "user_id": dataId,
+  };
+
+  print('usidddddddddddddddddd');
+  print(dataId);
+
+  FormData formData = FormData.fromMap(dataDe);
+
+  try {
+    var response = await dio.post(
+      'https://basalon.co.il/wp-json/wp/v2/delete_user_account',
+      data: formData,
+      options: Options(
+        followRedirects: false,
+        validateStatus: (status) {
+          return status! < 500;
+        },
+        headers: {
+          "Client-Service": client_service,
+          "Auth-Key": auth_key,
+        },
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      print('user Succesullyssssssss ');
+    } else {
+      print('not founddddddddddddddddddd');
+    }
+  } catch (e) {
+    print(e);
+    print('eroorrrrrrrrrrrrr');
+    // Get.snackbar('title', 'message');
+  }
+}
