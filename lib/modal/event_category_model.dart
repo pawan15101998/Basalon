@@ -1,11 +1,10 @@
-
-
 import 'dart:convert';
 
+FilterCategoryModel filterCategoryModelFromJson(String str) =>
+    FilterCategoryModel.fromJson(json.decode(str));
 
-FilterCategoryModel filterCategoryModelFromJson(String str) => FilterCategoryModel.fromJson(json.decode(str));
-
-String filterCategoryModelToJson(FilterCategoryModel data) => json.encode(data.toJson());
+String filterCategoryModelToJson(FilterCategoryModel data) =>
+    json.encode(data.toJson());
 
 class FilterCategoryModel {
   FilterCategoryModel({
@@ -18,17 +17,18 @@ class FilterCategoryModel {
   List<Datum>? data;
   dynamic error;
 
-  factory FilterCategoryModel.fromJson(Map<String, dynamic> json) => FilterCategoryModel(
-    success: json["success"],
-    data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
-    error: json["error"],
-  );
+  factory FilterCategoryModel.fromJson(Map<String, dynamic> json) =>
+      FilterCategoryModel(
+        success: json["success"],
+        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+        error: json["error"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "success": success,
-    "data": List<dynamic>.from(data!.map((x) => x.toJson())),
-    "error": error,
-  };
+        "success": success,
+        "data": List<dynamic>.from(data!.map((x) => x.toJson())),
+        "error": error,
+      };
 }
 
 class Datum {
@@ -57,28 +57,28 @@ class Datum {
   String? filter;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-    termId: json["term_id"],
-    name: json["name"],
-    slug: json["slug"],
-    termGroup: json["term_group"],
-    termTaxonomyId: json["term_taxonomy_id"],
-    taxonomy: json["taxonomy"],
-    description: json["description"],
-    parent: json["parent"],
-    count: json["count"],
-    filter: json["filter"],
-  );
+        termId: json["term_id"],
+        name: json["name"],
+        slug: json["slug"],
+        termGroup: json["term_group"],
+        termTaxonomyId: json["term_taxonomy_id"],
+        taxonomy: json["taxonomy"],
+        description: json["description"],
+        parent: json["parent"],
+        count: json["count"],
+        filter: json["filter"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "term_id": termId,
-    "name": name,
-    "slug": slug,
-    "term_group": termGroup,
-    "term_taxonomy_id": termTaxonomyId,
-    "taxonomy": taxonomy,
-    "description": description,
-    "parent": parent,
-    "count": count,
-    "filter": filter,
-  };
+        "term_id": termId,
+        "name": name,
+        "slug": slug,
+        "term_group": termGroup,
+        "term_taxonomy_id": termTaxonomyId,
+        "taxonomy": taxonomy,
+        "description": description,
+        "parent": parent,
+        "count": count,
+        "filter": filter,
+      };
 }

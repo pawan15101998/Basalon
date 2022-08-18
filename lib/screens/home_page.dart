@@ -61,6 +61,7 @@ class HomePageState extends State<HomePage> {
   bool toggleCheck = false;
 
   int countCat = 0;
+  bool? value = false;
 
   // dynamic filterCategory;
   dynamic filterByTime;
@@ -77,8 +78,8 @@ class HomePageState extends State<HomePage> {
 
   List<dynamic> filterData = [
     'מחר',
-    'היום',
     'ב-7 ימים הקרובים',
+    'היום',
     'תאריך מסויים',
     'בשבוע הבא',
     'סוף השבוע',
@@ -218,6 +219,7 @@ class HomePageState extends State<HomePage> {
     false,
     false,
     false,
+    false,
   ];
 
   // List dropItemsss = [];
@@ -346,7 +348,7 @@ class HomePageState extends State<HomePage> {
                     backgroundColor: Colors.black,
                     pinned: false,
                     //expandedHeight: MediaQuery.of(context).size.height * 0.6,
-                    expandedHeight: 400,
+                    expandedHeight: 260,
                     flexibleSpace: FlexibleSpaceBar(
                       collapseMode: CollapseMode.pin,
                       background: Container(
@@ -438,33 +440,41 @@ class HomePageState extends State<HomePage> {
                               children: [
                                 Column(
                                   children: [
-                                    const Text(
-                                      'אז... מה עושים היום?',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        shadows: <Shadow>[
-                                          Shadow(
-                                            offset: Offset(2.0, 2.0),
-                                            blurRadius: 3.0,
-                                          )
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 20.0),
+                                      child: Column(
+                                        children: [
+                                          const Text(
+                                            'אז... מה עושים היום?',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              shadows: <Shadow>[
+                                                Shadow(
+                                                  offset: Offset(2.0, 2.0),
+                                                  blurRadius: 3.0,
+                                                )
+                                              ],
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 33.0,
+                                            ),
+                                            textDirection: TextDirection.rtl,
+                                          ),
+                                          const SizedBox(height: 10),
+                                          const Text(
+                                            'גלו הרצאות, סדנאות, הופעות',
+                                            textAlign: TextAlign.center,
+                                            style: ktextStyleWhiteLarge,
+                                            // maxLines: 1,
+                                          ),
+                                          const Text(
+                                            'וארוחות בסלון הקרוב אליכם',
+                                            textAlign: TextAlign.center,
+                                            style: ktextStyleWhiteLarge,
+                                          ),
                                         ],
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 38.0,
                                       ),
-                                      textDirection: TextDirection.rtl,
-                                    ),
-                                    const SizedBox(height: 10),
-                                    const Text(
-                                      'גלו הרצאות, סדנאות, הופעות',
-                                      textAlign: TextAlign.center,
-                                      style: ktextStyleWhiteLarge,
-                                      // maxLines: 1,
-                                    ),
-                                    const Text(
-                                      'וארוחות בסלון הקרוב אליכם',
-                                      textAlign: TextAlign.center,
-                                      style: ktextStyleWhiteLarge,
                                     ),
 
                                     SizedBox(height: 30),
@@ -1010,12 +1020,10 @@ class HomePageState extends State<HomePage> {
                             //         ),
                             //       )),
                             // if (application.searchResult != null &&
-                            //     application.searchResult?.length != 0
-                            //     &&
+                            //     application.searchResult?.length != 0 &&
                             //     application.filterAnywhereProvider ==
                             //         'עיר מסויימת' &&
-                            //     locationController.text.isNotEmpty
-                            // )
+                            //     locationController.text.isNotEmpty)
                             //   Container(
                             //     margin: EdgeInsets.symmetric(horizontal: 8),
                             //     decoration: const BoxDecoration(
@@ -1037,7 +1045,7 @@ class HomePageState extends State<HomePage> {
                             //     ),
                             //     height: 150,
                             //     // width: double.infinity,
-                            //
+
                             //     child: ListView.separated(
                             //         padding: const EdgeInsets.all(0),
                             //         separatorBuilder: (context, index) =>
@@ -1054,7 +1062,7 @@ class HomePageState extends State<HomePage> {
                             //               .then((value) {
                             //             translatedData = value;
                             //           });
-                            //
+
                             //           return ListTile(
                             //             dense: true,
                             //             contentPadding:
@@ -1063,15 +1071,16 @@ class HomePageState extends State<HomePage> {
                             //             trailing: Icon(Icons.location_on),
                             //             onTap: () async {
                             //               print('list tile dabao');
-                            //
+
                             //               print(application.previewLatProvider);
                             //               print(application.previewLngProvider);
-                            //
+
                             //               locationController.text = application
                             //                   .searchResult?[index].description;
                             //               application.setSelectedLocation(
-                            //                   application.searchResult![index]
-                            //                       .placeId);
+                            //                   application
+                            //                       .searchResult![index].placeId,
+                            //                   context);
                             //               setState(() {});
                             //             },
                             //             title: translatedData == null
@@ -1169,14 +1178,16 @@ class HomePageState extends State<HomePage> {
                                     child: filterData1[index] == 'עיר מסויימת'
                                         ? Padding(
                                             padding: const EdgeInsets.symmetric(
-                                                horizontal: 18),
+                                                vertical: 4, horizontal: 00),
                                             child: Directionality(
                                               textDirection: TextDirection.rtl,
                                               child: ReceivingPaymentFields(
+                                                fillcolor: MyColors.lightBlue,
                                                 isFocus: true,
                                                 textColorPrimary: Colors.white,
                                                 maxLine: 1,
                                                 showRequired: false,
+                                                isBorder: true,
                                                 showLabel: false,
                                                 controller: locationController,
                                                 onChange: (v) {
@@ -1189,7 +1200,6 @@ class HomePageState extends State<HomePage> {
                                                   print('eeeeeeeeeeeeeeee$v');
                                                 },
                                                 textColor: Colors.white,
-                                                colors: MyColors.dropdownColor,
                                                 obscureText: false,
                                                 hintText: 'הקלד/י עיר',
                                                 // suffixIcon: IconButton(
@@ -1210,11 +1220,14 @@ class HomePageState extends State<HomePage> {
                                               ),
                                             ),
                                           )
-                                        : FilterCardWidget(
-                                            text: filterData1[index],
-                                            color: selectFilter1 == index
-                                                ? MyColors.lightRed
-                                                : MyColors.lightBlue,
+                                        : Directionality(
+                                            textDirection: TextDirection.rtl,
+                                            child: FilterCardWidget(
+                                              text: filterData1[index],
+                                              color: selectFilter1 == index
+                                                  ? MyColors.lightRed
+                                                  : MyColors.lightBlue,
+                                            ),
                                           ),
                                   );
                                 }),
@@ -1292,11 +1305,14 @@ class HomePageState extends State<HomePage> {
 
                                     print(realvalue);
                                   },
-                                  child: FilterCardWidget(
-                                    text: filterData[index],
-                                    color: selectFilter == index
-                                        ? MyColors.lightRed
-                                        : MyColors.lightBlue,
+                                  child: Directionality(
+                                    textDirection: TextDirection.rtl,
+                                    child: FilterCardWidget(
+                                      text: filterData[index],
+                                      color: selectFilter == index
+                                          ? MyColors.lightRed
+                                          : MyColors.lightBlue,
+                                    ),
                                   ),
                                 );
                               },
@@ -1318,13 +1334,14 @@ class HomePageState extends State<HomePage> {
                                 child: Padding(
                                   padding: const EdgeInsets.only(right: 18),
                                   child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       ReceivingPaymentFields(
+                                        fillcolor: MyColors.lightBlue,
                                         hintText: 'החל מתאריך...',
                                         textColor: Colors.white,
                                         width: 130,
                                         textColorPrimary: Colors.white,
-                                        colors: MyColors.dropdownColor,
                                         obscureText: false,
                                         controller: startDateController,
                                         onTap: () async {
@@ -1340,11 +1357,11 @@ class HomePageState extends State<HomePage> {
                                       ),
                                       SizedBox(width: 10),
                                       ReceivingPaymentFields(
+                                        fillcolor: MyColors.lightBlue,
                                         textColor: Colors.white,
                                         hintText: 'עד תאריך...',
                                         width: 130,
                                         textColorPrimary: Colors.white,
-                                        colors: MyColors.dropdownColor,
                                         obscureText: false,
                                         controller: endDateController,
                                         onTap: () async {
@@ -1381,30 +1398,39 @@ class HomePageState extends State<HomePage> {
                               ),
                             ),
                             GridView.builder(
-                                physics: ScrollPhysics(),
-                                itemCount: dropItems.length,
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 3,
-                                        crossAxisSpacing: 5,
-                                        // mainAxisSpacing: 5,
-                                        mainAxisExtent: 50,
-                                        childAspectRatio: 1),
-                                padding: EdgeInsets.symmetric(horizontal: 8),
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) {
-                                  return InkWell(
-                                    onTap: () {
-                                      // dropItemsHandler[index] =
-                                      //     value!;
-                                      // print(value);
-                                      setState(() {
-                                        selectFilter2 = index;
+                              physics: ScrollPhysics(),
+                              itemCount: dropItems.length,
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 3,
+                                      crossAxisSpacing: 5,
+                                      // mainAxisSpacing: 5,
+                                      mainAxisExtent: 50,
+                                      childAspectRatio: 1),
+                              padding: EdgeInsets.symmetric(horizontal: 8),
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                return InkWell(
+                                  onTap: () {
+                                    // setState(() {
+                                    //   value = !value!;
+                                    //   dropItemsHandler[index] = value!;
+                                    // });
 
-                                        application.filterCategoryProvider =
-                                            dropItems[index];
-                                        String realValue = application
-                                            .filterCategoryProvider
+                                    value = !value!;
+                                    dropItemsHandler[index] = value!;
+
+                                    print(value);
+                                    print('valueeeeeeeeeeeeeeeeeeeeeeeeeee');
+                                    print(dropItemsHandler[index]);
+
+                                    print('objectttttttttttttttttttttttttttt');
+                                    print(value);
+                                    setState(() {
+                                      if (value == true) {
+                                        selectedDropItems.add(dropItems[index]);
+                                        String realValue = selectedDropItems
+                                            .toString()
                                             .replaceAll('[', '')
                                             .replaceAll(']', '')
                                             .replaceAll(', ', ',')
@@ -1421,26 +1447,14 @@ class HomePageState extends State<HomePage> {
                                                 'סדנת יצירה', 'workshop')
                                             .replaceAll(
                                                 'פעילות לילדים', 'kids');
-
-                                        page = 1;
-
                                         application.filterCategoryProvider =
                                             realValue;
 
-                                        print(
-                                            '----------------------------------------');
-                                        print(selectedDropItems.length);
-                                        print(selectedDropItems
-                                            .toString()
-                                            .replaceAll('[', '')
-                                            .replaceAll(']', '')
-                                            .replaceAll(', ', ','));
-
                                         _fetchEventDataFilter.getEventData(
                                             1,
+                                            realValue,
                                             '',
                                             '',
-                                            realvalue,
                                             '',
                                             '',
                                             '',
@@ -1448,73 +1462,184 @@ class HomePageState extends State<HomePage> {
                                             '',
                                             context);
 
-                                        // } else {
-                                        //   print('elseeeeeeeeeeeeeee');
-                                        //   // print(e);
-                                        //   selectedDropItems
-                                        //       .remove(dropItems[index]);
-                                        //   print(selectedDropItems.length);
-                                        //   String realValue = selectedDropItems
-                                        //       .toString()
-                                        //       .replaceAll('[', '')
-                                        //       .replaceAll(']', '')
-                                        //       .replaceAll(', ', ',')
-                                        //       .replaceAll('הרצאה', 'lecture')
-                                        //       .replaceAll(
-                                        //           'אירוח קולינרי', 'meals')
-                                        //       .replaceAll('הופעה/מופע', 'show')
-                                        //       .replaceAll('מפגש חברתי', 'group')
-                                        //       .replaceAll(
-                                        //           'סדנת בישול/אפיה', 'food')
-                                        //       .replaceAll(
-                                        //           'סדנת גוף/נפש', 'body-mind')
-                                        //       .replaceAll(
-                                        //           'סדנת יצירה', 'workshop')
-                                        //       .replaceAll(
-                                        //           'פעילות לילדים', 'kids');
-                                        //   print(
-                                        //       'realValue realValue realValue realValue');
-                                        //   print(realValue);
-                                        //   application.filterCategoryProvider =
-                                        //       realValue;
-                                        // }
-                                      });
-                                    },
-                                    child: Directionality(
-                                        textDirection: TextDirection.rtl,
-                                        child: dropItems[index] == 'חיפוש חופשי'
-                                            ? Directionality(
-                                                textDirection:
-                                                    TextDirection.rtl,
-                                                child: Align(
-                                                  alignment:
-                                                      Alignment.centerRight,
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            right: 30),
-                                                    child:
-                                                        ReceivingPaymentFields(
-                                                      controller:
-                                                          categorySearchController,
-                                                      obscureText: false,
-                                                      width: width / 2,
-                                                      hintText: 'חיפוש חופשי',
-                                                      textColor: Colors.grey,
-                                                    ),
-                                                  ),
+                                        print(
+                                            '----------------------------------------');
+                                        print(selectedDropItems.length);
+                                        print(
+                                          realValue,
+                                        );
+                                        print(
+                                          'realValue',
+                                        );
+                                        print(selectedDropItems
+                                            .toString()
+                                            .replaceAll('[', '')
+                                            .replaceAll(']', '')
+                                            .replaceAll(', ', ','));
+                                      } else {
+                                        print('elseeeeeeeeeeeeeee');
+                                        // print(e);
+                                        selectedDropItems
+                                            .remove(dropItems[index]);
+                                        print(selectedDropItems.length);
+                                        String realValue = selectedDropItems
+                                            .toString()
+                                            .replaceAll('[', '')
+                                            .replaceAll(']', '')
+                                            .replaceAll(', ', ',')
+                                            .replaceAll('הרצאה', 'lecture')
+                                            .replaceAll(
+                                                'אירוח קולינרי', 'meals')
+                                            .replaceAll('הופעה/מופע', 'show')
+                                            .replaceAll('מפגש חברתי', 'group')
+                                            .replaceAll(
+                                                'סדנת בישול/אפיה', 'food')
+                                            .replaceAll(
+                                                'סדנת גוף/נפש', 'body-mind')
+                                            .replaceAll(
+                                                'סדנת יצירה', 'workshop')
+                                            .replaceAll(
+                                                'פעילות לילדים', 'kids');
+                                        print(
+                                            'realValue realValue realValue realValue');
+                                        print(realValue);
+                                        application.filterCategoryProvider =
+                                            realValue;
+                                        _fetchEventDataFilter.getEventData(
+                                            1,
+                                            '',
+                                            '',
+                                            '',
+                                            '',
+                                            '',
+                                            '',
+                                            '',
+                                            '',
+                                            context);
+                                      }
+                                    });
+
+                                    // print(value);
+                                    // setState(() {
+                                    //   selectFilter2 = index;
+
+                                    //   application.filterCategoryProvider =
+                                    //       dropItems[index];
+                                    //   String realValue = application
+                                    //       .filterCategoryProvider
+                                    //       .replaceAll('[', '')
+                                    //       .replaceAll(']', '')
+                                    //       .replaceAll(', ', ',')
+                                    //       .replaceAll('הרצאה', 'lecture')
+                                    //       .replaceAll(
+                                    //           'אירוח קולינרי', 'meals')
+                                    //       .replaceAll('הופעה/מופע', 'show')
+                                    //       .replaceAll('מפגש חברתי', 'group')
+                                    //       .replaceAll(
+                                    //           'סדנת בישול/אפיה', 'food')
+                                    //       .replaceAll(
+                                    //           'סדנת גוף/נפש', 'body-mind')
+                                    //       .replaceAll(
+                                    //           'סדנת יצירה', 'workshop')
+                                    //       .replaceAll(
+                                    //           'פעילות לילדים', 'kids');
+
+                                    //   page = 1;
+
+                                    //   application.filterCategoryProvider =
+                                    //       realValue;
+
+                                    //   print(
+                                    //       '----------------------------------------');
+                                    //   print(selectedDropItems.length);
+                                    //   print(selectedDropItems
+                                    //       .toString()
+                                    //       .replaceAll('[', '')
+                                    //       .replaceAll(']', '')
+                                    //       .replaceAll(', ', ','));
+
+                                    //   _fetchEventDataFilter.getEventData(
+                                    //       1,
+                                    //       '',
+                                    //       '',
+                                    //       realvalue,
+                                    //       '',
+                                    //       '',
+                                    //       '',
+                                    //       '',
+                                    //       '',
+                                    //       context);
+
+                                    //   // } else {
+                                    //   //   print('elseeeeeeeeeeeeeee');
+                                    //   //   // print(e);
+                                    //   //   selectedDropItems
+                                    //   //       .remove(dropItems[index]);
+                                    //   //   print(selectedDropItems.length);
+                                    //   //   String realValue = selectedDropItems
+                                    //   //       .toString()
+                                    //   //       .replaceAll('[', '')
+                                    //   //       .replaceAll(']', '')
+                                    //   //       .replaceAll(', ', ',')
+                                    //   //       .replaceAll('הרצאה', 'lecture')
+                                    //   //       .replaceAll(
+                                    //   //           'אירוח קולינרי', 'meals')
+                                    //   //       .replaceAll('הופעה/מופע', 'show')
+                                    //   //       .replaceAll('מפגש חברתי', 'group')
+                                    //   //       .replaceAll(
+                                    //   //           'סדנת בישול/אפיה', 'food')
+                                    //   //       .replaceAll(
+                                    //   //           'סדנת גוף/נפש', 'body-mind')
+                                    //   //       .replaceAll(
+                                    //   //           'סדנת יצירה', 'workshop')
+                                    //   //       .replaceAll(
+                                    //   //           'פעילות לילדים', 'kids');
+                                    //   //   print(
+                                    //   //       'realValue realValue realValue realValue');
+                                    //   //   print(realValue);
+                                    //   //   application.filterCategoryProvider =
+                                    //   //       realValue;
+                                    //   // }
+                                    // });
+                                  },
+                                  child: Directionality(
+                                    textDirection: TextDirection.rtl,
+                                    child: dropItems[index] == 'חיפוש חופשי'
+                                        ? Directionality(
+                                            textDirection: TextDirection.rtl,
+                                            child: Align(
+                                              alignment: Alignment.centerRight,
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    right: 00),
+                                                child: ReceivingPaymentFields(
+                                                  fillcolor: MyColors.lightBlue,
+                                                  controller:
+                                                      categorySearchController,
+                                                  obscureText: false,
+                                                  width: width / 2,
+                                                  hintText: 'חיפוש חופשי',
+                                                  textColor: Colors.white,
                                                 ),
-                                              )
-                                            : FilterCardWidget(
-                                                text: dropItems[index],
-                                                color: selectFilter2 == index
-                                                    ? MyColors.lightRed
-                                                    : MyColors.lightBlue,
-                                              )),
-                                  );
-                                })
+                                              ),
+                                            ),
+                                          )
+                                        : Directionality(
+                                            textDirection: TextDirection.rtl,
+                                            child: FilterCardWidget(
+                                              text: dropItems[index],
+                                              color: dropItemsHandler[index] ==
+                                                      true
+                                                  ? MyColors.lightRed
+                                                  : MyColors.lightBlue,
+                                            ),
+                                          ),
+                                  ),
+                                );
+                              },
+                            ),
                           ],
-                        )
+                        ),
                       ]),
                     ),
                   ),

@@ -17,20 +17,23 @@ class _FilterCardWidgetState extends State<FilterCardWidget> {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-      margin: EdgeInsets.symmetric(horizontal: 0, vertical: 8),
+      margin: EdgeInsets.symmetric(horizontal: 0, vertical: 4),
       child: Text(
         widget.text,
         style: TextStyle(
           fontFamily: "Helvetica",
-          fontSize: 15,
+          fontSize: 14,
           fontWeight: FontWeight.w600,
           color: Colors.white,
         ),
-        overflow: TextOverflow.ellipsis,
+        maxLines: 1,
+        textAlign: TextAlign.center,
+
+        // overflow: TextOverflow.ellipsis,
       ),
       decoration: BoxDecoration(
         color: widget.color ?? MyColors.lightBlue,
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(13),
       ),
       padding: EdgeInsets.symmetric(horizontal: 3, vertical: 2),
     );

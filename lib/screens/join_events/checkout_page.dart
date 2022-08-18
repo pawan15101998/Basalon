@@ -30,8 +30,10 @@ class CheckoutPage extends StatefulWidget {
     this.totalAfterTax,
     this.couponAmount,
     required this.formattedDate,
+    this.initialPrice,
   });
 
+  var initialPrice;
   String eventTitle;
   String eventDate;
   String formattedDate;
@@ -209,7 +211,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         (previousValue, element) =>
             int.parse(previousValue.toString()) + element);
     var finalPrice = widget.totalAmount.fold(
-        0,
+        int.parse(widget.initialPrice.toString()),
         (previousValue, element) =>
             int.parse(previousValue.toString()) + element);
     return Scaffold(
@@ -743,37 +745,20 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         sharedPreferences.getString('cardCvv');
                   }
                 });
-
-                // facebookAppEvents.logAddToCart(
-                //   id: widget.eventID,
-                //   type: 'event',
-                //   price: widget.totalAmount
-                //       .fold(
-                //           0,
-                //           (previousValue, element) =>
-                //               int.parse(previousValue.toString()) + element)
-                //       .toDouble(),
-                //   currency: 'ILS',
-                // );
               },
-              child: InkWell(
-                // onTap: (){
-                //   cardToString();
-                // },
-                child: Container(
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: Color.fromRGBO(232, 108, 96, 1),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      "ביצוע הזמנה",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold),
-                    ),
+              child: Container(
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Color.fromRGBO(232, 108, 96, 1),
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: const Center(
+                  child: Text(
+                    "ביצוע הזמנה",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
               ),

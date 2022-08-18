@@ -64,8 +64,8 @@ class _GeneralScreenState extends State<GeneralScreen> {
   ];
 
   void validate() {
-    if(formkey.currentState != null)
-    if (formkey.currentState!.validate() && formkey.currentState != null) {
+    if (formkey.currentState != null) if (formkey.currentState!.validate() &&
+        formkey.currentState != null) {
       print('VALIDATED');
       application.validate();
       print('Not Valid');
@@ -152,8 +152,8 @@ class _GeneralScreenState extends State<GeneralScreen> {
       print(editData['data']['activity']['recurrence_bydays']);
       checkboxfunction(checkData);
       dobtextEditingController.text =
-      editData['data']['activity']['calendar_start_date'];
-      
+          editData['data']['activity']['calendar_start_date'];
+
       nameEventController.text = editData['data']['title'];
       dropDownValue = editData['data']['event_category'][0]['name'];
       eventContentController.text = editData['data']['content'];
@@ -161,11 +161,15 @@ class _GeneralScreenState extends State<GeneralScreen> {
       videoController.text = editData['data']['link_video'];
       imagesListEdit = editData['data']['gallery'];
       startDOBtextEditingController.text =
-          editData['data']['disable_date'][0]['start_date'] != null? editData['data']['disable_date'][0]['start_date'] :""  ;
+          editData['data']['disable_date'][0]['start_date'] != null
+              ? editData['data']['disable_date'][0]['start_date']
+              : "";
       endDOBtextEditingController.text =
-          editData['data']['disable_date'][0]['end_date'] != null? editData['data']['disable_date'][0]['end_date']  : "";
-          firstnameController.text = editData['data']['author_data']['first_name'];
-          lastnameController.text = editData['data']['author_data']['last_name']; 
+          editData['data']['disable_date'][0]['end_date'] != null
+              ? editData['data']['disable_date'][0]['end_date']
+              : "";
+      firstnameController.text = editData['data']['author_data']['first_name'];
+      lastnameController.text = editData['data']['author_data']['last_name'];
       for (int index = 0;
           index < editData['data']['no_of_ticket'].length;
           index++) {
@@ -475,7 +479,9 @@ class _GeneralScreenState extends State<GeneralScreen> {
         application.getUserDataProfileProvider?.data?.description ??
             application.nameFromFacebook ??
             '';
-    authorImage = application.getUserDataProfileProvider != null ? application.getUserDataProfileProvider!.data!.authorImage! : "";
+    authorImage = application.getUserDataProfileProvider != null
+        ? application.getUserDataProfileProvider!.data!.authorImage!
+        : "";
     bankOwnerController.text =
         application.getUserDataProfileProvider?.data?.userBankOwner ??
             application.nameFromFacebook ??
@@ -2119,10 +2125,10 @@ class _GeneralScreenState extends State<GeneralScreen> {
                                           // value: categoryController,
                                           isExpanded: true,
                                           // if(dropDownValue != null)
-                                          value:  dropDownValue,
+                                          value: dropDownValue,
                                           menuMaxHeight: 560,
                                           // hint: dropDownValue == null
-                                              // ? const Padding(
+                                          // ? const Padding(
                                           //         padding: EdgeInsets.all(8.0),
                                           //         child: Text(
                                           //           'ביחרו קטגוריה',
@@ -2158,7 +2164,7 @@ class _GeneralScreenState extends State<GeneralScreen> {
                                           ).toList(),
                                           onChanged: (val) {
                                             setState(() {
-                                             dropDownValue = val as String?;
+                                              dropDownValue = val as String?;
                                               categoryController.text =
                                                   dropDownValue!
                                                       .replaceAll(
@@ -2209,8 +2215,7 @@ class _GeneralScreenState extends State<GeneralScreen> {
                                     child: Text(
                                       validateFields(),
                                       style: TextStyle(
-                                          color: Colors.red, fontSize: 12
-                                          ),
+                                          color: Colors.red, fontSize: 12),
                                     ),
                                   ),
                               ],
@@ -2371,8 +2376,10 @@ class _GeneralScreenState extends State<GeneralScreen> {
                                     print('list tile dabao');
                                     locationController.text = application
                                         .searchResult?[index].description;
-                                    application.setSelectedLocation(application
-                                        .searchResult![index].placeId!, context);
+                                    application.setSelectedLocation(
+                                        application
+                                            .searchResult![index].placeId!,
+                                        context);
                                     setState(() {});
                                   },
                                   title: application.searchResult == null
@@ -2562,25 +2569,28 @@ class _GeneralScreenState extends State<GeneralScreen> {
               //     )),
               // Text(imgFilePicture.toString()),
               // editData != null
-                  // ? 
-                  Container(
-                      alignment: Alignment.centerRight,
-                      child: editData != null && editData['data']['thumbnail_event'] != null &&
-                              imgFilePicture == null
-                          ? Image.network(
-                              '${editData['data']['thumbnail_event']}',
-                              height: 150,
-                              width: 150,
-                              fit: BoxFit.contain,
-                            )
-                          : imgFilePicture !=null ? Image.file(
-                              imgFilePicture! ,
-                              height: 150,
-                              width: 150,
-                              fit: BoxFit.contain,
-                            ) : SizedBox(),
-                    ),
-                  // : SizedBox(),
+              // ?
+              Container(
+                alignment: Alignment.centerRight,
+                child: editData != null &&
+                        editData['data']['thumbnail_event'] != null &&
+                        imgFilePicture == null
+                    ? Image.network(
+                        '${editData['data']['thumbnail_event']}',
+                        height: 150,
+                        width: 150,
+                        fit: BoxFit.contain,
+                      )
+                    : imgFilePicture != null
+                        ? Image.file(
+                            imgFilePicture!,
+                            height: 150,
+                            width: 150,
+                            fit: BoxFit.contain,
+                          )
+                        : SizedBox(),
+              ),
+              // : SizedBox(),
 
               SizedBox(
                 height: 10,
@@ -2597,8 +2607,8 @@ class _GeneralScreenState extends State<GeneralScreen> {
                       onPressed: () async {
                         var fileList =
                             await pickPicture(context: context).then((value) {
-                              print("value dsajhbsadh");
-                              print(value);
+                          print("value dsajhbsadh");
+                          print(value);
                           if (value.isNotEmpty) {
                             setState(() {
                               imgFilePicture = value[0];
@@ -3185,8 +3195,7 @@ class _GeneralScreenState extends State<GeneralScreen> {
                             child: Text('הוספת תאריך נוסף',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                    color: Colors.white, fontSize: 17))
-                                    ),
+                                    color: Colors.white, fontSize: 17))),
                       ),
                     ),
                   ),
@@ -3199,7 +3208,7 @@ class _GeneralScreenState extends State<GeneralScreen> {
                 child: MaterialButton(
                   height: 50,
                   onPressed: () async {
-                    if (startingTime == null || endingTime == null ) {
+                    if (startingTime == null || endingTime == null) {
                       validateFields();
                       setState(() {
                         isValidatedTime = true;
@@ -3207,12 +3216,12 @@ class _GeneralScreenState extends State<GeneralScreen> {
                     }
                     application.previewDateProvider =
                         dobtextEditingController.text;
-                        print("sdskz");
-                        print(activeRadio2);
+                    print("sdskz");
+                    print(activeRadio2);
                     if (optionCalender2 == 'auto') {
                       validate();
                       print("auto wala chala");
-                      
+
                       EasyLoading.show();
                       application.validate();
                       await _createEventNetwork.postCreateEventsCalender(
@@ -3357,8 +3366,8 @@ class _GeneralScreenState extends State<GeneralScreen> {
                       onTap: () async {
                         var fileList =
                             await pickPicture(context: context).then((value) {
-                              print("akjsjjaka");
-                              print(value);
+                          print("akjsjjaka");
+                          print(value);
                           if (value.isNotEmpty) {
                             setState(() {
                               imgfile = value[0];

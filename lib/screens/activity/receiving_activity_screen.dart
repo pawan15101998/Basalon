@@ -2,6 +2,7 @@ import 'package:basalon/network/create_event_network.dart';
 import 'package:basalon/screens/home_screen.dart';
 import 'package:basalon/screens/preview/preview_event_detail.dart';
 import 'package:basalon/services/constant.dart';
+import 'package:basalon/services/my_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -345,26 +346,28 @@ class _ReceivingActivityScreenState extends State<ReceivingActivityScreen> {
 }
 
 class ReceivingPaymentFields extends StatelessWidget {
-  ReceivingPaymentFields(
-      {this.label,
-      this.hintText,
-      required this.obscureText,
-      this.prefixIcon,
-      this.height,
-      this.controller,
-      this.maxLine,
-      this.showRequired,
-      this.suffixIcon,
-      this.onTap,
-      this.colors,
-      this.width,
-      this.textColor,
-      this.onChange,
-      this.onFieldSubmit,
-      this.isBorder = true,
-      this.textColorPrimary,
-      this.showLabel,
-      this.isFocus});
+  ReceivingPaymentFields({
+    this.label,
+    this.hintText,
+    required this.obscureText,
+    this.prefixIcon,
+    this.height,
+    this.controller,
+    this.maxLine,
+    this.showRequired,
+    this.suffixIcon,
+    this.onTap,
+    this.colors,
+    this.width,
+    this.textColor,
+    this.onChange,
+    this.onFieldSubmit,
+    this.isBorder = true,
+    this.textColorPrimary,
+    this.showLabel,
+    this.isFocus,
+    this.fillcolor,
+  });
 
   final String? label;
   double? height;
@@ -376,6 +379,7 @@ class ReceivingPaymentFields extends StatelessWidget {
   final maxLine;
   bool? showRequired;
   dynamic onTap;
+  dynamic fillcolor;
   dynamic colors;
   dynamic textColor;
   dynamic textColorPrimary;
@@ -414,7 +418,6 @@ class ReceivingPaymentFields extends StatelessWidget {
                 )
               : SizedBox(),
           Expanded(
-            flex: 2,
             child: TextFormField(
               textDirection: TextDirection.rtl,
               onFieldSubmitted: onFieldSubmit,
@@ -432,16 +435,19 @@ class ReceivingPaymentFields extends StatelessWidget {
               textAlignVertical: TextAlignVertical.top,
               // textAlign: TextAlign.end,
               controller: controller,
-              style: TextStyle(
-                  fontSize: 15, color: textColorPrimary ?? Colors.black),
+              // style: TextStyle(
+              //     fontSize: 15, color: textColorPrimary ?? Colors.black),
               decoration: InputDecoration(
                 border: isBorder == true
                     ? OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(14),
                         borderSide: BorderSide(
                             width: 0, color: Color.fromRGBO(216, 216, 216, 1)))
                     : null,
                 contentPadding: EdgeInsets.only(left: 10, right: 10, top: 12),
                 hintText: hintText,
+                filled: true,
+                fillColor: fillcolor ?? Colors.white,
                 hintStyle: TextStyle(color: textColor ?? Colors.black),
                 prefixIcon: prefixIcon,
                 suffixIcon: suffixIcon,

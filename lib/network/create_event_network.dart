@@ -1,3 +1,4 @@
+import 'package:basalon/constant/login_user.dart';
 import 'package:basalon/screens/home_screen.dart';
 import 'package:basalon/services/api_provider/api_provider.dart';
 import 'package:dio/dio.dart';
@@ -118,7 +119,7 @@ class CreateEventNetwork {
   Future postCreateEventsGeneral(
       BuildContext context, userid, postID, deleteImage) async {
     try {
-      final response = await ApiProvider.post(
+      var response = await ApiProvider.post(
         url: 'create_edit_event_general',
         body: {
           'post_id': postID,
@@ -135,10 +136,12 @@ class CreateEventNetwork {
           'next_tab': 'mb_ticket',
         },
       );
+
       EasyLoading.dismiss();
       print('post create event chala post create event chala');
       print(response['body']['data']['ID'].runtimeType);
       eventID = response['body']['data']['ID'];
+      if (response['status'] == 200) {}
     } catch (e) {
       print('createEventcreateEventcreateEvent${e}');
       EasyLoading.dismiss();
@@ -210,7 +213,7 @@ class CreateEventNetwork {
             'ticket[$i][number_max_ticket]': "10",
           if (eventIdEdit != null)
             for (int i = 0; i < ticketID.length; i++)
-            'ticket[$i][ticket_id]': "${ticketID[i].ticketId}",
+              'ticket[$i][ticket_id]': "${ticketID[i].ticketId}",
           for (int i = 0; i < nameTicket.length; i++)
             'ticket[$i][name_ticket]': nameTicket[i].text,
           for (int i = 0; i < ticketPriceController.length; i++)
@@ -345,7 +348,7 @@ class CreateEventNetwork {
   //     userAddressController,
   //     userPhoneController,
   //     userDescription,
-  //     userImage) 
+  //     userImage)
   //     async {
   //   try {
   //     final response =

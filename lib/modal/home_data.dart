@@ -169,9 +169,6 @@
 //   }
 // }
 
-
-
-
 class HomeData {
   int? success;
   List<Data>? data;
@@ -223,6 +220,7 @@ class Data {
   String? markerDate;
   String? showFeatured;
   String? shareLink;
+  int? customView;
 
   Data(
       {this.id,
@@ -242,7 +240,8 @@ class Data {
       this.markerPrice,
       this.markerDate,
       this.showFeatured,
-      this.shareLink});
+      this.shareLink,
+      this.customView});
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -250,6 +249,7 @@ class Data {
     lngEvent = json['lng_event'];
     title = json['title'];
     date = json['date'] != null ? new Date.fromJson(json['date']) : null;
+
     averageRating = json['average_rating'];
     numberComment = json['number_comment'];
     thumbnailEvent = json['thumbnail_event'];
@@ -268,6 +268,7 @@ class Data {
     markerDate = json['marker_date'];
     showFeatured = json['show_featured'];
     shareLink = json['share_link'];
+    customView = json['custom_view'];
   }
 
   Map<String, dynamic> toJson() {
@@ -295,6 +296,8 @@ class Data {
     data['marker_date'] = this.markerDate;
     data['show_featured'] = this.showFeatured;
     data['share_link'] = this.shareLink;
+    data['custom_view'] = this.customView;
+
     return data;
   }
 }

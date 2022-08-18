@@ -38,7 +38,7 @@ const ktextStyleWhiteBold = TextStyle(
 );
 
 const ktextStyleWhiteLarge = TextStyle(
-  fontSize: 25,
+  fontSize: 20,
   color: Color.fromRGBO(241, 241, 241, 1),
   fontWeight: FontWeight.bold,
   shadows: <Shadow>[

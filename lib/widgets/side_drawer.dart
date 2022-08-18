@@ -354,68 +354,66 @@ class _NavDrawerState extends State<NavDrawer> {
                       textTile: 'התנתקות',
                     ),
                   if (isUserLogin(application.isUserLogin))
-                    Expanded(
-                      child: SidebarItems(
-                          showLine: isUserLogin(application.isUserLogin),
-                          pressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    title: Text(
-                                      'Do you want delete Account ?',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.black,
-                                      ),
+                    SidebarItems(
+                        showLine: isUserLogin(application.isUserLogin),
+                        pressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Text(
+                                    'Do you want delete Account ?',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.black,
                                     ),
-                                    actionsAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () async {
-                                          Navigator.pop(context);
-                                        },
-                                        child: const Text('NO'),
-                                      ),
-                                      TextButton(
-                                        onPressed: () async {
-                                          print(LoginUser.shared?.userId);
-                                          print('helllo');
-                                          deleteUser(
-                                              dataId: LoginUser.shared?.userId);
-                                          final SharedPreferences
-                                              sharedPreferences =
-                                              await SharedPreferences
-                                                  .getInstance();
+                                  ),
+                                  actionsAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () async {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text('NO'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () async {
+                                        print(LoginUser.shared?.userId);
+                                        print('helllo');
+                                        deleteUser(
+                                            dataId: LoginUser.shared?.userId);
+                                        final SharedPreferences
+                                            sharedPreferences =
+                                            await SharedPreferences
+                                                .getInstance();
 
-                                          await sharedPreferences
-                                              .remove('loginId');
+                                        await sharedPreferences
+                                            .remove('loginId');
 
-                                          setState(() {
-                                            application.isUserLogin = false;
-                                          });
+                                        setState(() {
+                                          application.isUserLogin = false;
+                                        });
 
-                                          Navigator.pushAndRemoveUntil(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      HomeScreen()),
-                                              (route) => false);
-                                          application.dispose();
-                                        },
-                                        child: const Text('YES'),
-                                      ),
-                                    ],
-                                  );
-                                });
-                          },
-                          icon: Icon(
-                            Icons.delete,
-                            color: Colors.white,
-                          ),
-                          textTile: 'יצירת קשר'),
-                    ),
+                                        Navigator.pushAndRemoveUntil(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    HomeScreen()),
+                                            (route) => false);
+                                        application.dispose();
+                                      },
+                                      child: const Text('YES'),
+                                    ),
+                                  ],
+                                );
+                              });
+                        },
+                        icon: Icon(
+                          Icons.delete,
+                          color: Colors.white,
+                        ),
+                        textTile: 'יצירת קשר'),
                 ],
               ),
             ),

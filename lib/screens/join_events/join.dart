@@ -63,6 +63,8 @@ class _BookEventPageState extends State<BookEventPage> {
   late List<int> ticketCount = [];
   List<int> finalPrice = [];
 
+  bool showtitle = true;
+
   void getProfileData() async {
     try {
       Response response;
@@ -229,8 +231,13 @@ class _BookEventPageState extends State<BookEventPage> {
     }
   }
 
+  add() {}
+
   @override
   Widget build(BuildContext context) {
+    print('noOfTicket');
+    print(widget.noOfTicket![0].priceTicket);
+    print('noOfTicket');
     String bookingText =
         "${widget.date?.date1} , ${widget.date?.date2} (${widget.date?.startTime}- ${widget.date?.endTime})";
     print('widget.date');
@@ -240,7 +247,7 @@ class _BookEventPageState extends State<BookEventPage> {
         (previousValue, element) =>
             int.parse(previousValue.toString()) + element));
     var finalTotal = finalPrice.fold(
-        0,
+        widget.noOfTicket![0].priceTicket,
         (previousValue, element) =>
             int.parse(previousValue.toString()) + element);
     return Scaffold(
@@ -478,12 +485,17 @@ class _BookEventPageState extends State<BookEventPage> {
                             onTap: () {
                               print("minus");
                               setState(() {
-                                if (ticketCount[i] > 0) ticketCount[i]--;
+                                if (ticketCount[i] > 0) {
+                                  ticketCount[i]--;
+                                }
                               });
                               // addPrice();
                               setState(() {
                                 finalPrice[i] = price[i] * ticketCount[i];
                               });
+
+                              print(finalTotal);
+                              print('finalTotal');
                             },
                             child: Container(
                               margin: EdgeInsets.only(right: 3),
@@ -799,7 +811,7 @@ class _BookEventPageState extends State<BookEventPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text("${ticketCount[i]}"),
+                            Text("${ticketCount[i] + 1}"),
                             Text(
                                 "₪${widget.noOfTicket?[i].priceTicket} ${widget.noOfTicket?[i].nameTicket ?? 'כרטיס רגיל'}")
                           ],
@@ -874,40 +886,66 @@ class _BookEventPageState extends State<BookEventPage> {
                       await registerData();
                     }
 
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CheckoutPage(
-                          totalAmount: finalPrice,
-                          // email: getUserData != null
-                          //     ? getUserData!.data.authorEmail.toString()
-                          //     : 'email',
-                          email: emailController.text,
-                          eventDate: bookingText,
-                          eventTitle: widget.title.toString(),
-                          // fullName: getUserData != null
-                          //     ? getUserData!.data.displayName.toString()
-                          //     : 'fullname',
-                          fullName: firstnameController.text +
-                              ' ' +
-                              lastnameController.text,
-                          // mobileNumber: getUserData != null
-                          //     ? getUserData!.data.userPhone.toString()
-                          //     : '9876543210',
-                          mobileNumber: phoneNoController.text,
-                          nOofTicketInstance: widget.noOfTicket,
-                          numOfTicket: ticketCount,
-                          userId: LoginUser.shared?.userId! ??
-                              application.idFromLocalProvider ??
-                              registeredID,
-                          eventID: int.parse(widget.id),
-                          couponCode: couponController.text,
+                    if (finalPrice == 0) {
+                      PlaceOrderNetwork(
+                        userPhone: phoneNoController.text,
+                        userId: LoginUser.shared?.userId! ??
+                            application.idFromLocalProvider ??
+                            registeredID,
+                        userEmail: emailController.text,
+                        userAddress: '',
+                        userFullname: firstnameController.text +
+                            ' ' +
+                            lastnameController.text,
+                        ticketId: widget.noOfTicket,
+                        totalAmount: [0],
+                        numOfTicket: ticketCount,
+                        productId: int.parse(widget.id),
+                        couponCode: couponController.text,
+                        couponAmount: '0',
+                        totalAfterTax: '',
+                        eventTax: '0',
+                        formatDate: widget.date?.eventDate ?? '',
+                      );
 
-                          // ticketCount: ticketCount,
-                          formattedDate: widget.date?.eventDate ?? '',
+                      PlaceOrderNetwork().placeOrder(context, showtitle);
+                    } else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CheckoutPage(
+                            initialPrice: widget.noOfTicket![0].priceTicket,
+                            totalAmount: finalPrice, // for price static 0
+                            // email: getUserData != n
+                            //     ? getUserData!.data.authorEmail.toString()
+                            //     : 'email',
+                            email: emailController.text,
+                            eventDate: bookingText,
+                            eventTitle: widget.title.toString(),
+                            // fullName: getUserData != null
+                            //     ? getUserData!.data.displayName.toString()
+                            //     : 'fullname',
+                            fullName: firstnameController.text +
+                                ' ' +
+                                lastnameController.text,
+                            // mobileNumber: getUserData != null
+                            //     ? getUserData!.data.userPhone.toString()
+                            //     : '9876543210',
+                            mobileNumber: phoneNoController.text,
+                            nOofTicketInstance: widget.noOfTicket,
+                            numOfTicket: ticketCount,
+                            userId: LoginUser.shared?.userId! ??
+                                application.idFromLocalProvider ??
+                                registeredID,
+                            eventID: int.parse(widget.id),
+                            couponCode: couponController.text,
+
+                            // ticketCount: ticketCount,
+                            formattedDate: widget.date?.eventDate ?? '',
+                          ),
                         ),
-                      ),
-                    );
+                      );
+                    }
                   }
                 },
                 child: Container(

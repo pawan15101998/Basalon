@@ -398,8 +398,9 @@ class EventCardState extends State<EventCard> {
                         //       i++)
                         Container(
                           decoration: BoxDecoration(
-                            color: Color(int.parse('0xff${item.color}'))
-                                .withOpacity(1),
+                            color: MyColors.lightBlue,
+                            //  Color(int.parse('0xff${item.color}'))
+                            //     .withOpacity(1),
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(30),
                               bottomLeft: Radius.circular(30),
@@ -425,8 +426,10 @@ class EventCardState extends State<EventCard> {
                         //       i++)
                         Container(
                           decoration: BoxDecoration(
-                            color: Color(int.parse('0xff${item.color}'))
-                                .withOpacity(1),
+                            color: MyColors.lightBlue,
+
+                            //  Color(int.parse('0xff${item.color}'))
+                            //     .withOpacity(1),
                             borderRadius: BorderRadius.only(
                               topRight: Radius.circular(30),
                               bottomRight: Radius.circular(30),
@@ -607,7 +610,38 @@ class EventCardState extends State<EventCard> {
                               ),
                             ),
                             SizedBox(
-                              height: 10,
+                              height: 3,
+                            ),
+
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text('אנשים השתתפו'),
+                                  SizedBox(
+                                    width: 4,
+                                  ),
+                                  Text(
+                                    widget.datum.customView!.toString(),
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      // fontFamily: 'Alef',
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 4,
+                                  ),
+                                  Icon(
+                                    Icons.person,
+                                    color: Colors.red[300],
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 3,
                             ),
                             if (removeIsrael != '')
                               Padding(

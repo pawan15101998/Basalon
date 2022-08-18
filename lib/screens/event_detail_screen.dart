@@ -10,11 +10,9 @@ import 'package:basalon/screens/activity/receiving_activity_screen.dart';
 import 'package:basalon/services/my_color.dart';
 import 'package:basalon/widgets/custom_buttons.dart';
 import 'package:basalon/widgets/side_drawer.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_share/flutter_share.dart';
@@ -63,6 +61,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
   String date = intl.DateFormat("yyyy-MM-dd").format(DateTime.now());
 
   List<String>? imageList = [];
+  bool checkBoxValue = true;
 
   addGallery() {
     for (int i = 0; i < _fetchEventData.eventData!.data!.gallery!.length; i++) {
@@ -174,6 +173,8 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(LoginUser.shared?.userId!);
+    print('gggggggggggggggggggggggggggg');
     return SafeArea(
       child: Scaffold(
         extendBody: true,
@@ -682,7 +683,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                             width: double.infinity,
 //Button
                                             child: ElevatedButton(
-                                                onPressed: () {
+                                                onPressed: () async {
                                                   print('ליחצו booknow');
                                                   if (_fetchEventData
                                                           .eventData!
@@ -710,6 +711,8 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                                         .eventData
                                                         ?.data
                                                         ?.mapAddress);
+
+                                                        
                                                     Navigator.push(
                                                       context,
                                                       MaterialPageRoute(
@@ -726,19 +729,18 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                                                   ?.noOfTicket,
                                                           thumbnailImage:
                                                               _fetchEventData
-                                                                      .eventData
-                                                                      ?.data
-                                                                      ?.thumbnailEvent ??
-                                                                  "",
+                                                                  .eventData
+                                                                  ?.data
+                                                                  ?.thumbnailEvent,
                                                           title:
                                                               '${_fetchEventData.eventData?.data?.title}',
                                                           date:
                                                               dynamicBookingDate,
-                                                          mapAdress:
-                                                              _fetchEventData
+                                                          mapAdress: _fetchEventData
                                                                   .eventData
                                                                   ?.data
-                                                                  ?.mapAddress,
+                                                                  ?.mapAddress ??
+                                                              '',
                                                         ),
                                                       ),
                                                     );
