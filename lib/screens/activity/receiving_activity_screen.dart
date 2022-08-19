@@ -419,6 +419,7 @@ class ReceivingPaymentFields extends StatelessWidget {
               : SizedBox(),
           Expanded(
             child: TextFormField(
+              textAlign: TextAlign.center,
               textDirection: TextDirection.rtl,
               onFieldSubmitted: onFieldSubmit,
               onChanged: onChange,

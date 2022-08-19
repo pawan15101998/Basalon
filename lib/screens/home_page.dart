@@ -1107,33 +1107,316 @@ class HomePageState extends State<HomePage> {
                     padding: EdgeInsets.all(0.0),
                     sliver: SliverList(
                       delegate: SliverChildListDelegate([
-                        Column(
-                          children: [
-                            SizedBox(
-                              height: 4,
-                            ),
+                        Container(
+                          padding: EdgeInsets.only(
+                            bottom: 15,
+                          ),
+                          color: Colors.white,
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 4,
+                              ),
 
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 12.0),
-                              child: Directionality(
-                                textDirection: TextDirection.rtl,
-                                child: Text(
-                                  '1. איפה מבלים?',
-                                  style: TextStyle(
-                                    fontFamily: "Helvetica",
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 12.0),
+                                child: Directionality(
+                                  textDirection: TextDirection.rtl,
+                                  child: Text(
+                                    '1. איפה מבלים?',
+                                    style: TextStyle(
+                                      fontFamily: "Helvetica",
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            GridView.builder(
+                              GridView.builder(
+                                  physics: ScrollPhysics(),
+                                  itemCount: filterData1.length,
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 2,
+                                          crossAxisSpacing: 5,
+                                          // mainAxisSpacing: 5,
+                                          mainAxisExtent: 50,
+                                          childAspectRatio: 1),
+                                  padding: EdgeInsets.symmetric(horizontal: 8),
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) {
+                                    return InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          selectFilter1 = index;
+
+                                          application.filterAnywhereProvider =
+                                              filterData1[index].replaceAll(
+                                                  'אונליין / זום', 'online');
+                                          application.showOnline = !showOnline;
+                                          page = 1;
+                                        });
+
+                                        if (filterData1[index] == 'בכל מקום') {
+                                          print(
+                                              'chli kya condition ??????????/');
+                                          setState(() {
+                                            application.filterCategoryProvider =
+                                                '';
+                                            // application.filterTimeProvider =
+                                            //     '';
+                                            application.filterAnywhereProvider =
+                                                'בכל מקום';
+                                            categorySearchController.text = '';
+                                            endDateController.text = '';
+                                            startDateController.text = '';
+                                            klatitude = null;
+                                            klongitude = null;
+                                            page = 1;
+                                          });
+                                        }
+                                        if (filterData1[index] == 'קרוב אליי') {
+                                          klatitude = null;
+                                          klongitude = null;
+                                        }
+                                      },
+                                      child: filterData1[index] == 'עיר מסויימת'
+                                          ? Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 4,
+                                                      horizontal: 00),
+                                              child: Directionality(
+                                                textDirection:
+                                                    TextDirection.rtl,
+                                                child: ReceivingPaymentFields(
+                                                  fillcolor: MyColors.lightBlue,
+                                                  isFocus: true,
+                                                  textColorPrimary:
+                                                      Colors.white,
+                                                  maxLine: 1,
+                                                  showRequired: false,
+                                                  isBorder: true,
+                                                  showLabel: false,
+                                                  controller:
+                                                      locationController,
+                                                  onChange: (v) {
+                                                    application.searchPlaces(v);
+                                                    print('eeeeeeeeeeeeeeee$v');
+                                                    setState(() {});
+                                                  },
+                                                  onFieldSubmit: (v) {
+                                                    application.searchPlaces(v);
+                                                    print('eeeeeeeeeeeeeeee$v');
+                                                  },
+                                                  textColor: Colors.white,
+                                                  obscureText: false,
+                                                  hintText: 'הקלד/י עיר',
+                                                  // suffixIcon: IconButton(
+                                                  //   icon: const Icon(
+                                                  //     Icons.close,
+                                                  //     color: Colors.white,
+                                                  //   ),
+                                                  //   onPressed: () {
+                                                  //     setState(() {
+                                                  //       application
+                                                  //               .filterAnywhereProvider =
+                                                  //           null;
+                                                  //       locationController
+                                                  //           .clear();
+                                                  //     });
+                                                  //   },
+                                                  // ),
+                                                ),
+                                              ),
+                                            )
+                                          : Directionality(
+                                              textDirection: TextDirection.rtl,
+                                              child: FilterCardWidget(
+                                                text: filterData1[index],
+                                                color: selectFilter1 == index
+                                                    ? MyColors.lightRed
+                                                    : MyColors.lightBlue,
+                                              ),
+                                            ),
+                                    );
+                                  }),
+                              SizedBox(
+                                height: 40,
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 12.0),
+                                child: Directionality(
+                                  textDirection: TextDirection.rtl,
+                                  child: Text(
+                                    '2. מתי זה קורה?',
+                                    style: TextStyle(
+                                      fontFamily: "Helvetica",
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              // Text("(ניתן לבחור ביותר מקטגורייה אחת)"),
+                              // Text(
+                              //     "כדאי לדעת: את כל הפעילויות ניתן להזמין גם כאירוע פרטי"),
+                              GridView.builder(
                                 physics: ScrollPhysics(),
-                                itemCount: filterData1.length,
+                                itemCount: filterData.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return InkWell(
+                                    onTap: () {
+                                      print(filterData[index]);
+                                      print('filterData');
+                                      setState(() {
+                                        selectFilter = index;
+                                        application.filterTimeProvider =
+                                            filterData[index];
+
+                                        print(application.filterTimeProvider);
+                                        print('application');
+
+                                        realvalue = application
+                                            .filterTimeProvider!
+                                            .replaceAll(
+                                                'ב-7 ימים הקרובים', 'this_week')
+                                            .replaceAll('היום', 'today')
+                                            .replaceAll('מחר', 'tomorrow')
+                                            .replaceAll(
+                                                'סוף השבוע', 'this_week_end')
+                                            .replaceAll(
+                                                'בשבוע הבא', 'next_week')
+                                            .replaceFirst('תאריך מסויים',
+                                                'specific_date');
+
+                                        page = 1;
+                                      });
+
+                                      application.filterTimeProvider =
+                                          realvalue;
+
+                                      _fetchEventDataFilter.getEventData(
+                                          1,
+                                          '',
+                                          realvalue,
+                                          '',
+                                          '',
+                                          '',
+                                          '',
+                                          '',
+                                          '',
+                                          context);
+
+                                      print(application.filterTimeProvider);
+
+                                      print("qwerty$realvalue");
+
+                                      // application.filterTimeProvider = realvalue;
+
+                                      print(realvalue);
+                                    },
+                                    child: Directionality(
+                                      textDirection: TextDirection.rtl,
+                                      child: FilterCardWidget(
+                                        text: filterData[index],
+                                        color: selectFilter == index
+                                            ? MyColors.lightRed
+                                            : MyColors.lightBlue,
+                                      ),
+                                    ),
+                                  );
+                                },
                                 gridDelegate:
                                     SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 2,
+                                        crossAxisCount: 3,
+                                        crossAxisSpacing: 5,
+                                        // mainAxisSpacing: 5,
+                                        mainAxisExtent: 50,
+                                        childAspectRatio: 1),
+                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                shrinkWrap: true,
+                              ),
+
+                              if (application.filterTimeProvider ==
+                                  'specific_date')
+                                Directionality(
+                                  textDirection: TextDirection.rtl,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 18),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        ReceivingPaymentFields(
+                                          fillcolor: MyColors.lightBlue,
+                                          hintText: 'החל מתאריך...',
+                                          textColor: Colors.white,
+                                          width: 130,
+                                          textColorPrimary: Colors.white,
+                                          obscureText: false,
+                                          controller: startDateController,
+                                          onTap: () async {
+                                            var date = await selectDate(
+                                                isDob: true, context: context);
+                                            if (date != "null") {
+                                              setState(() {
+                                                startDateController.text =
+                                                    convertSingleDate(date);
+                                              });
+                                            }
+                                          },
+                                        ),
+                                        SizedBox(width: 10),
+                                        ReceivingPaymentFields(
+                                          fillcolor: MyColors.lightBlue,
+                                          textColor: Colors.white,
+                                          hintText: 'עד תאריך...',
+                                          width: 130,
+                                          textColorPrimary: Colors.white,
+                                          obscureText: false,
+                                          controller: endDateController,
+                                          onTap: () async {
+                                            var date = await selectDate(
+                                                isDob: true, context: context);
+                                            if (date != "null") {
+                                              setState(() {
+                                                endDateController.text =
+                                                    convertSingleDate(date);
+                                              });
+                                            }
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              SizedBox(
+                                height: 40,
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 15.0),
+                                child: Directionality(
+                                  textDirection: TextDirection.rtl,
+                                  child: Text(
+                                    '3. מה בתכנון?',
+                                    style: TextStyle(
+                                      fontFamily: "Helvetica",
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              GridView.builder(
+                                physics: ScrollPhysics(),
+                                itemCount: dropItems.length,
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 3,
                                         crossAxisSpacing: 5,
                                         // mainAxisSpacing: 5,
                                         mainAxisExtent: 50,
@@ -1143,502 +1426,240 @@ class HomePageState extends State<HomePage> {
                                 itemBuilder: (context, index) {
                                   return InkWell(
                                     onTap: () {
-                                      setState(() {
-                                        selectFilter1 = index;
+                                      // setState(() {
+                                      //   value = !value!;
+                                      //   dropItemsHandler[index] = value!;
+                                      // });
 
-                                        application.filterAnywhereProvider =
-                                            filterData1[index].replaceAll(
-                                                'אונליין / זום', 'online');
-                                        application.showOnline = !showOnline;
-                                        page = 1;
+                                      value = !value!;
+                                      dropItemsHandler[index] = value!;
+
+                                      print(value);
+                                      print('valueeeeeeeeeeeeeeeeeeeeeeeeeee');
+                                      print(dropItemsHandler[index]);
+
+                                      print(
+                                          'objectttttttttttttttttttttttttttt');
+                                      print(value);
+                                      setState(() {
+                                        if (value == true) {
+                                          selectedDropItems
+                                              .add(dropItems[index]);
+                                          String realValue = selectedDropItems
+                                              .toString()
+                                              .replaceAll('[', '')
+                                              .replaceAll(']', '')
+                                              .replaceAll(', ', ',')
+                                              .replaceAll('הרצאה', 'lecture')
+                                              .replaceAll(
+                                                  'אירוח קולינרי', 'meals')
+                                              .replaceAll('הופעה/מופע', 'show')
+                                              .replaceAll('מפגש חברתי', 'group')
+                                              .replaceAll(
+                                                  'סדנת בישול/אפיה', 'food')
+                                              .replaceAll(
+                                                  'סדנת גוף/נפש', 'body-mind')
+                                              .replaceAll(
+                                                  'סדנת יצירה', 'workshop')
+                                              .replaceAll(
+                                                  'פעילות לילדים', 'kids');
+                                          application.filterCategoryProvider =
+                                              realValue;
+
+                                          _fetchEventDataFilter.getEventData(
+                                              1,
+                                              realValue,
+                                              '',
+                                              '',
+                                              '',
+                                              '',
+                                              '',
+                                              '',
+                                              '',
+                                              context);
+
+                                          print(
+                                              '----------------------------------------');
+                                          print(selectedDropItems.length);
+                                          print(
+                                            realValue,
+                                          );
+                                          print(
+                                            'realValue',
+                                          );
+                                          print(selectedDropItems
+                                              .toString()
+                                              .replaceAll('[', '')
+                                              .replaceAll(']', '')
+                                              .replaceAll(', ', ','));
+                                        } else {
+                                          print('elseeeeeeeeeeeeeee');
+                                          // print(e);
+                                          selectedDropItems
+                                              .remove(dropItems[index]);
+                                          print(selectedDropItems.length);
+                                          String realValue = selectedDropItems
+                                              .toString()
+                                              .replaceAll('[', '')
+                                              .replaceAll(']', '')
+                                              .replaceAll(', ', ',')
+                                              .replaceAll('הרצאה', 'lecture')
+                                              .replaceAll(
+                                                  'אירוח קולינרי', 'meals')
+                                              .replaceAll('הופעה/מופע', 'show')
+                                              .replaceAll('מפגש חברתי', 'group')
+                                              .replaceAll(
+                                                  'סדנת בישול/אפיה', 'food')
+                                              .replaceAll(
+                                                  'סדנת גוף/נפש', 'body-mind')
+                                              .replaceAll(
+                                                  'סדנת יצירה', 'workshop')
+                                              .replaceAll(
+                                                  'פעילות לילדים', 'kids');
+                                          print(
+                                              'realValue realValue realValue realValue');
+                                          print(realValue);
+                                          application.filterCategoryProvider =
+                                              realValue;
+                                          _fetchEventDataFilter.getEventData(
+                                              1,
+                                              '',
+                                              '',
+                                              '',
+                                              '',
+                                              '',
+                                              '',
+                                              '',
+                                              '',
+                                              context);
+                                        }
                                       });
 
-                                      if (filterData1[index] == 'בכל מקום') {
-                                        print('chli kya condition ??????????/');
-                                        setState(() {
-                                          application.filterCategoryProvider =
-                                              '';
-                                          // application.filterTimeProvider =
-                                          //     '';
-                                          application.filterAnywhereProvider =
-                                              'בכל מקום';
-                                          categorySearchController.text = '';
-                                          endDateController.text = '';
-                                          startDateController.text = '';
-                                          klatitude = null;
-                                          klongitude = null;
-                                          page = 1;
-                                        });
-                                      }
-                                      if (filterData1[index] == 'קרוב אליי') {
-                                        klatitude = null;
-                                        klongitude = null;
-                                      }
+                                      // print(value);
+                                      // setState(() {
+                                      //   selectFilter2 = index;
+
+                                      //   application.filterCategoryProvider =
+                                      //       dropItems[index];
+                                      //   String realValue = application
+                                      //       .filterCategoryProvider
+                                      //       .replaceAll('[', '')
+                                      //       .replaceAll(']', '')
+                                      //       .replaceAll(', ', ',')
+                                      //       .replaceAll('הרצאה', 'lecture')
+                                      //       .replaceAll(
+                                      //           'אירוח קולינרי', 'meals')
+                                      //       .replaceAll('הופעה/מופע', 'show')
+                                      //       .replaceAll('מפגש חברתי', 'group')
+                                      //       .replaceAll(
+                                      //           'סדנת בישול/אפיה', 'food')
+                                      //       .replaceAll(
+                                      //           'סדנת גוף/נפש', 'body-mind')
+                                      //       .replaceAll(
+                                      //           'סדנת יצירה', 'workshop')
+                                      //       .replaceAll(
+                                      //           'פעילות לילדים', 'kids');
+
+                                      //   page = 1;
+
+                                      //   application.filterCategoryProvider =
+                                      //       realValue;
+
+                                      //   print(
+                                      //       '----------------------------------------');
+                                      //   print(selectedDropItems.length);
+                                      //   print(selectedDropItems
+                                      //       .toString()
+                                      //       .replaceAll('[', '')
+                                      //       .replaceAll(']', '')
+                                      //       .replaceAll(', ', ','));
+
+                                      //   _fetchEventDataFilter.getEventData(
+                                      //       1,
+                                      //       '',
+                                      //       '',
+                                      //       realvalue,
+                                      //       '',
+                                      //       '',
+                                      //       '',
+                                      //       '',
+                                      //       '',
+                                      //       context);
+
+                                      //   // } else {
+                                      //   //   print('elseeeeeeeeeeeeeee');
+                                      //   //   // print(e);
+                                      //   //   selectedDropItems
+                                      //   //       .remove(dropItems[index]);
+                                      //   //   print(selectedDropItems.length);
+                                      //   //   String realValue = selectedDropItems
+                                      //   //       .toString()
+                                      //   //       .replaceAll('[', '')
+                                      //   //       .replaceAll(']', '')
+                                      //   //       .replaceAll(', ', ',')
+                                      //   //       .replaceAll('הרצאה', 'lecture')
+                                      //   //       .replaceAll(
+                                      //   //           'אירוח קולינרי', 'meals')
+                                      //   //       .replaceAll('הופעה/מופע', 'show')
+                                      //   //       .replaceAll('מפגש חברתי', 'group')
+                                      //   //       .replaceAll(
+                                      //   //           'סדנת בישול/אפיה', 'food')
+                                      //   //       .replaceAll(
+                                      //   //           'סדנת גוף/נפש', 'body-mind')
+                                      //   //       .replaceAll(
+                                      //   //           'סדנת יצירה', 'workshop')
+                                      //   //       .replaceAll(
+                                      //   //           'פעילות לילדים', 'kids');
+                                      //   //   print(
+                                      //   //       'realValue realValue realValue realValue');
+                                      //   //   print(realValue);
+                                      //   //   application.filterCategoryProvider =
+                                      //   //       realValue;
+                                      //   // }
+                                      // });
                                     },
-                                    child: filterData1[index] == 'עיר מסויימת'
-                                        ? Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 4, horizontal: 00),
-                                            child: Directionality(
+                                    child: Directionality(
+                                      textDirection: TextDirection.rtl,
+                                      child: dropItems[index] == 'חיפוש חופשי'
+                                          ? Directionality(
                                               textDirection: TextDirection.rtl,
-                                              child: ReceivingPaymentFields(
-                                                fillcolor: MyColors.lightBlue,
-                                                isFocus: true,
-                                                textColorPrimary: Colors.white,
-                                                maxLine: 1,
-                                                showRequired: false,
-                                                isBorder: true,
-                                                showLabel: false,
-                                                controller: locationController,
-                                                onChange: (v) {
-                                                  application.searchPlaces(v);
-                                                  print('eeeeeeeeeeeeeeee$v');
-                                                  setState(() {});
-                                                },
-                                                onFieldSubmit: (v) {
-                                                  application.searchPlaces(v);
-                                                  print('eeeeeeeeeeeeeeee$v');
-                                                },
-                                                textColor: Colors.white,
-                                                obscureText: false,
-                                                hintText: 'הקלד/י עיר',
-                                                // suffixIcon: IconButton(
-                                                //   icon: const Icon(
-                                                //     Icons.close,
-                                                //     color: Colors.white,
-                                                //   ),
-                                                //   onPressed: () {
-                                                //     setState(() {
-                                                //       application
-                                                //               .filterAnywhereProvider =
-                                                //           null;
-                                                //       locationController
-                                                //           .clear();
-                                                //     });
-                                                //   },
-                                                // ),
-                                              ),
-                                            ),
-                                          )
-                                        : Directionality(
-                                            textDirection: TextDirection.rtl,
-                                            child: FilterCardWidget(
-                                              text: filterData1[index],
-                                              color: selectFilter1 == index
-                                                  ? MyColors.lightRed
-                                                  : MyColors.lightBlue,
-                                            ),
-                                          ),
-                                  );
-                                }),
-                            SizedBox(
-                              height: 40,
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 12.0),
-                              child: Directionality(
-                                textDirection: TextDirection.rtl,
-                                child: Text(
-                                  '2. מתי זה קורה?',
-                                  style: TextStyle(
-                                    fontFamily: "Helvetica",
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            // Text("(ניתן לבחור ביותר מקטגורייה אחת)"),
-                            // Text(
-                            //     "כדאי לדעת: את כל הפעילויות ניתן להזמין גם כאירוע פרטי"),
-                            GridView.builder(
-                              physics: ScrollPhysics(),
-                              itemCount: filterData.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return InkWell(
-                                  onTap: () {
-                                    print(filterData[index]);
-                                    print('filterData');
-                                    setState(() {
-                                      selectFilter = index;
-                                      application.filterTimeProvider =
-                                          filterData[index];
-
-                                      print(application.filterTimeProvider);
-                                      print('application');
-
-                                      realvalue = application
-                                          .filterTimeProvider!
-                                          .replaceAll(
-                                              'ב-7 ימים הקרובים', 'this_week')
-                                          .replaceAll('היום', 'today')
-                                          .replaceAll('מחר', 'tomorrow')
-                                          .replaceAll(
-                                              'סוף השבוע', 'this_week_end')
-                                          .replaceAll('בשבוע הבא', 'next_week')
-                                          .replaceFirst(
-                                              'תאריך מסויים', 'specific_date');
-
-                                      page = 1;
-                                    });
-
-                                    application.filterTimeProvider = realvalue;
-
-                                    _fetchEventDataFilter.getEventData(
-                                        1,
-                                        '',
-                                        realvalue,
-                                        '',
-                                        '',
-                                        '',
-                                        '',
-                                        '',
-                                        '',
-                                        context);
-
-                                    print(application.filterTimeProvider);
-
-                                    print("qwerty$realvalue");
-
-                                    // application.filterTimeProvider = realvalue;
-
-                                    print(realvalue);
-                                  },
-                                  child: Directionality(
-                                    textDirection: TextDirection.rtl,
-                                    child: FilterCardWidget(
-                                      text: filterData[index],
-                                      color: selectFilter == index
-                                          ? MyColors.lightRed
-                                          : MyColors.lightBlue,
-                                    ),
-                                  ),
-                                );
-                              },
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 3,
-                                      crossAxisSpacing: 5,
-                                      // mainAxisSpacing: 5,
-                                      mainAxisExtent: 50,
-                                      childAspectRatio: 1),
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              shrinkWrap: true,
-                            ),
-
-                            if (application.filterTimeProvider ==
-                                'specific_date')
-                              Directionality(
-                                textDirection: TextDirection.rtl,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(right: 18),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      ReceivingPaymentFields(
-                                        fillcolor: MyColors.lightBlue,
-                                        hintText: 'החל מתאריך...',
-                                        textColor: Colors.white,
-                                        width: 130,
-                                        textColorPrimary: Colors.white,
-                                        obscureText: false,
-                                        controller: startDateController,
-                                        onTap: () async {
-                                          var date = await selectDate(
-                                              isDob: true, context: context);
-                                          if (date != "null") {
-                                            setState(() {
-                                              startDateController.text =
-                                                  convertSingleDate(date);
-                                            });
-                                          }
-                                        },
-                                      ),
-                                      SizedBox(width: 10),
-                                      ReceivingPaymentFields(
-                                        fillcolor: MyColors.lightBlue,
-                                        textColor: Colors.white,
-                                        hintText: 'עד תאריך...',
-                                        width: 130,
-                                        textColorPrimary: Colors.white,
-                                        obscureText: false,
-                                        controller: endDateController,
-                                        onTap: () async {
-                                          var date = await selectDate(
-                                              isDob: true, context: context);
-                                          if (date != "null") {
-                                            setState(() {
-                                              endDateController.text =
-                                                  convertSingleDate(date);
-                                            });
-                                          }
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            SizedBox(
-                              height: 40,
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 15.0),
-                              child: Directionality(
-                                textDirection: TextDirection.rtl,
-                                child: Text(
-                                  '3. מה בתכנון?',
-                                  style: TextStyle(
-                                    fontFamily: "Helvetica",
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            GridView.builder(
-                              physics: ScrollPhysics(),
-                              itemCount: dropItems.length,
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 3,
-                                      crossAxisSpacing: 5,
-                                      // mainAxisSpacing: 5,
-                                      mainAxisExtent: 50,
-                                      childAspectRatio: 1),
-                              padding: EdgeInsets.symmetric(horizontal: 8),
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) {
-                                return InkWell(
-                                  onTap: () {
-                                    // setState(() {
-                                    //   value = !value!;
-                                    //   dropItemsHandler[index] = value!;
-                                    // });
-
-                                    value = !value!;
-                                    dropItemsHandler[index] = value!;
-
-                                    print(value);
-                                    print('valueeeeeeeeeeeeeeeeeeeeeeeeeee');
-                                    print(dropItemsHandler[index]);
-
-                                    print('objectttttttttttttttttttttttttttt');
-                                    print(value);
-                                    setState(() {
-                                      if (value == true) {
-                                        selectedDropItems.add(dropItems[index]);
-                                        String realValue = selectedDropItems
-                                            .toString()
-                                            .replaceAll('[', '')
-                                            .replaceAll(']', '')
-                                            .replaceAll(', ', ',')
-                                            .replaceAll('הרצאה', 'lecture')
-                                            .replaceAll(
-                                                'אירוח קולינרי', 'meals')
-                                            .replaceAll('הופעה/מופע', 'show')
-                                            .replaceAll('מפגש חברתי', 'group')
-                                            .replaceAll(
-                                                'סדנת בישול/אפיה', 'food')
-                                            .replaceAll(
-                                                'סדנת גוף/נפש', 'body-mind')
-                                            .replaceAll(
-                                                'סדנת יצירה', 'workshop')
-                                            .replaceAll(
-                                                'פעילות לילדים', 'kids');
-                                        application.filterCategoryProvider =
-                                            realValue;
-
-                                        _fetchEventDataFilter.getEventData(
-                                            1,
-                                            realValue,
-                                            '',
-                                            '',
-                                            '',
-                                            '',
-                                            '',
-                                            '',
-                                            '',
-                                            context);
-
-                                        print(
-                                            '----------------------------------------');
-                                        print(selectedDropItems.length);
-                                        print(
-                                          realValue,
-                                        );
-                                        print(
-                                          'realValue',
-                                        );
-                                        print(selectedDropItems
-                                            .toString()
-                                            .replaceAll('[', '')
-                                            .replaceAll(']', '')
-                                            .replaceAll(', ', ','));
-                                      } else {
-                                        print('elseeeeeeeeeeeeeee');
-                                        // print(e);
-                                        selectedDropItems
-                                            .remove(dropItems[index]);
-                                        print(selectedDropItems.length);
-                                        String realValue = selectedDropItems
-                                            .toString()
-                                            .replaceAll('[', '')
-                                            .replaceAll(']', '')
-                                            .replaceAll(', ', ',')
-                                            .replaceAll('הרצאה', 'lecture')
-                                            .replaceAll(
-                                                'אירוח קולינרי', 'meals')
-                                            .replaceAll('הופעה/מופע', 'show')
-                                            .replaceAll('מפגש חברתי', 'group')
-                                            .replaceAll(
-                                                'סדנת בישול/אפיה', 'food')
-                                            .replaceAll(
-                                                'סדנת גוף/נפש', 'body-mind')
-                                            .replaceAll(
-                                                'סדנת יצירה', 'workshop')
-                                            .replaceAll(
-                                                'פעילות לילדים', 'kids');
-                                        print(
-                                            'realValue realValue realValue realValue');
-                                        print(realValue);
-                                        application.filterCategoryProvider =
-                                            realValue;
-                                        _fetchEventDataFilter.getEventData(
-                                            1,
-                                            '',
-                                            '',
-                                            '',
-                                            '',
-                                            '',
-                                            '',
-                                            '',
-                                            '',
-                                            context);
-                                      }
-                                    });
-
-                                    // print(value);
-                                    // setState(() {
-                                    //   selectFilter2 = index;
-
-                                    //   application.filterCategoryProvider =
-                                    //       dropItems[index];
-                                    //   String realValue = application
-                                    //       .filterCategoryProvider
-                                    //       .replaceAll('[', '')
-                                    //       .replaceAll(']', '')
-                                    //       .replaceAll(', ', ',')
-                                    //       .replaceAll('הרצאה', 'lecture')
-                                    //       .replaceAll(
-                                    //           'אירוח קולינרי', 'meals')
-                                    //       .replaceAll('הופעה/מופע', 'show')
-                                    //       .replaceAll('מפגש חברתי', 'group')
-                                    //       .replaceAll(
-                                    //           'סדנת בישול/אפיה', 'food')
-                                    //       .replaceAll(
-                                    //           'סדנת גוף/נפש', 'body-mind')
-                                    //       .replaceAll(
-                                    //           'סדנת יצירה', 'workshop')
-                                    //       .replaceAll(
-                                    //           'פעילות לילדים', 'kids');
-
-                                    //   page = 1;
-
-                                    //   application.filterCategoryProvider =
-                                    //       realValue;
-
-                                    //   print(
-                                    //       '----------------------------------------');
-                                    //   print(selectedDropItems.length);
-                                    //   print(selectedDropItems
-                                    //       .toString()
-                                    //       .replaceAll('[', '')
-                                    //       .replaceAll(']', '')
-                                    //       .replaceAll(', ', ','));
-
-                                    //   _fetchEventDataFilter.getEventData(
-                                    //       1,
-                                    //       '',
-                                    //       '',
-                                    //       realvalue,
-                                    //       '',
-                                    //       '',
-                                    //       '',
-                                    //       '',
-                                    //       '',
-                                    //       context);
-
-                                    //   // } else {
-                                    //   //   print('elseeeeeeeeeeeeeee');
-                                    //   //   // print(e);
-                                    //   //   selectedDropItems
-                                    //   //       .remove(dropItems[index]);
-                                    //   //   print(selectedDropItems.length);
-                                    //   //   String realValue = selectedDropItems
-                                    //   //       .toString()
-                                    //   //       .replaceAll('[', '')
-                                    //   //       .replaceAll(']', '')
-                                    //   //       .replaceAll(', ', ',')
-                                    //   //       .replaceAll('הרצאה', 'lecture')
-                                    //   //       .replaceAll(
-                                    //   //           'אירוח קולינרי', 'meals')
-                                    //   //       .replaceAll('הופעה/מופע', 'show')
-                                    //   //       .replaceAll('מפגש חברתי', 'group')
-                                    //   //       .replaceAll(
-                                    //   //           'סדנת בישול/אפיה', 'food')
-                                    //   //       .replaceAll(
-                                    //   //           'סדנת גוף/נפש', 'body-mind')
-                                    //   //       .replaceAll(
-                                    //   //           'סדנת יצירה', 'workshop')
-                                    //   //       .replaceAll(
-                                    //   //           'פעילות לילדים', 'kids');
-                                    //   //   print(
-                                    //   //       'realValue realValue realValue realValue');
-                                    //   //   print(realValue);
-                                    //   //   application.filterCategoryProvider =
-                                    //   //       realValue;
-                                    //   // }
-                                    // });
-                                  },
-                                  child: Directionality(
-                                    textDirection: TextDirection.rtl,
-                                    child: dropItems[index] == 'חיפוש חופשי'
-                                        ? Directionality(
-                                            textDirection: TextDirection.rtl,
-                                            child: Align(
-                                              alignment: Alignment.centerRight,
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    right: 00),
-                                                child: ReceivingPaymentFields(
-                                                  fillcolor: MyColors.lightBlue,
-                                                  controller:
-                                                      categorySearchController,
-                                                  obscureText: false,
-                                                  width: width / 2,
-                                                  hintText: 'חיפוש חופשי',
-                                                  textColor: Colors.white,
+                                              child: Align(
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          right: 00),
+                                                  child: ReceivingPaymentFields(
+                                                    fillcolor:
+                                                        MyColors.lightBlue,
+                                                    controller:
+                                                        categorySearchController,
+                                                    obscureText: false,
+                                                    width: width / 2,
+                                                    hintText: 'חיפוש חופשי',
+                                                    textColor: Colors.white,
+                                                  ),
                                                 ),
                                               ),
+                                            )
+                                          : Directionality(
+                                              textDirection: TextDirection.rtl,
+                                              child: FilterCardWidget(
+                                                text: dropItems[index],
+                                                color:
+                                                    dropItemsHandler[index] ==
+                                                            true
+                                                        ? MyColors.lightRed
+                                                        : MyColors.lightBlue,
+                                              ),
                                             ),
-                                          )
-                                        : Directionality(
-                                            textDirection: TextDirection.rtl,
-                                            child: FilterCardWidget(
-                                              text: dropItems[index],
-                                              color: dropItemsHandler[index] ==
-                                                      true
-                                                  ? MyColors.lightRed
-                                                  : MyColors.lightBlue,
-                                            ),
-                                          ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
                         ),
                       ]),
                     ),

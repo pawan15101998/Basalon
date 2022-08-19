@@ -80,7 +80,7 @@ class _BookEventPageState extends State<BookEventPage> {
           "Auth-Key": "XkCRn9Y4PPmspuqYKolqbyhcDFhID7kl"
         }),
       );
-      print('LoginUser.shared?.userId ${LoginUser.shared?.userId}');
+      // print('LoginUser.shared?.userId ${LoginUser.shared?.userId}');
       if (response.data['success'] == 401) {
         // errorAlertMessage('No Data Found', 'Error!');
         print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
@@ -235,21 +235,26 @@ class _BookEventPageState extends State<BookEventPage> {
 
   @override
   Widget build(BuildContext context) {
+    LoginUser.shared?.userId!;
     print('noOfTicket');
     print(widget.noOfTicket![0].priceTicket);
     print('noOfTicket');
     String bookingText =
         "${widget.date?.date1} , ${widget.date?.date2} (${widget.date?.startTime}- ${widget.date?.endTime})";
     print('widget.date');
-    print(finalPrice);
-    print(finalPrice.fold(
-        0,
-        (previousValue, element) =>
-            int.parse(previousValue.toString()) + element));
-    var finalTotal = finalPrice.fold(
-        widget.noOfTicket![0].priceTicket,
-        (previousValue, element) =>
-            int.parse(previousValue.toString()) + element);
+    // print(finalPrice);
+    // print(finalPrice.fold(
+    //     0,
+    //     (previousValue, element) => widget.noOfTicket![0].priceTicket == null
+    //         ? previousValue.toString() + element.toString()
+    //         : int.tryParse(previousValue.toString())! + element));
+    var finalTotal = widget.noOfTicket![0].priceTicket == ""
+        ? 0
+        : finalPrice.fold(
+            widget.noOfTicket![0].priceTicket ?? 0,
+            (previousValue, element) => widget.noOfTicket![0].priceTicket == ""
+                ? previousValue.toString() + element.toString()
+                : int.tryParse(previousValue.toString())! + element);
     return Scaffold(
       backgroundColor: Colors.white,
       endDrawer: NavDrawer(),
@@ -886,29 +891,54 @@ class _BookEventPageState extends State<BookEventPage> {
                       await registerData();
                     }
 
-                    if (finalPrice == 0) {
-                      PlaceOrderNetwork(
+                    if (finalTotal == 0) {
+                      print('objecttttttttttttttttt');
+
+                      print(phoneNoController.text);
+                      // print(LoginUser.shared?.userId!);
+                      print(emailController.text);
+                      print(firstnameController.text);
+                      print(lastnameController.text);
+                      print(widget.noOfTicket);
+                      print(ticketCount);
+                      print(int.parse(widget.id));
+                      print(widget.date?.eventDate);
+                      print('emailController');
+                      await PlaceOrderNetwork.placeOrders(
+                        context,
+                        true,
+                        fname: firstnameController.text,
+                        lname: lastnameController.text,
                         userPhone: phoneNoController.text,
-                        userId: LoginUser.shared?.userId! ??
-                            application.idFromLocalProvider ??
-                            registeredID,
+                        userId: LoginUser.shared?.userId!,
                         userEmail: emailController.text,
-                        userAddress: '',
-                        userFullname: firstnameController.text +
-                            ' ' +
-                            lastnameController.text,
                         ticketId: widget.noOfTicket,
-                        totalAmount: [0],
                         numOfTicket: ticketCount,
                         productId: int.parse(widget.id),
-                        couponCode: couponController.text,
-                        couponAmount: '0',
-                        totalAfterTax: '',
-                        eventTax: '0',
-                        formatDate: widget.date?.eventDate ?? '',
+                        couponCode: 'coupen',
+                        formatDate: widget.date?.eventDate,
+                        totalAmount: [0],
                       );
 
-                      PlaceOrderNetwork().placeOrder(context, showtitle);
+                      // PlaceOrderNetwork(
+                      //   userPhone: phoneNoController.text,
+                      //   userId: 1319,
+                      //   //  LoginUser.shared?.userId! ??
+                      //   //     application.idFromLocalProvider ??
+                      //   //     registeredID,
+                      //   userEmail: emailController.text,
+                      //   userFullname: firstnameController.text +
+                      //       ' ' +
+                      //       lastnameController.text,
+                      //   ticketId: widget.noOfTicket,
+                      //   totalAmount: [0],
+                      //   numOfTicket: ticketCount,
+                      //   productId: int.parse(widget.id),
+                      //   couponCode: 'coupen',
+                      //   formatDate: widget.date?.eventDate,
+                      // );
+
+                      // PlaceOrderNetwork().placeOrder(context, showtitle);
                     } else {
                       Navigator.push(
                         context,
