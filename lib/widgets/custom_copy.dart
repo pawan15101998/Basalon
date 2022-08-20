@@ -14,7 +14,7 @@ class CopiableText extends StatelessWidget {
       width: double.infinity,
       child: InkWell(
         onTap: () {
-          Scaffold.of(context).showSnackBar(SnackBar(
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(this.copyMessage),
           ));
           Clipboard.setData(new ClipboardData(text: this.text));

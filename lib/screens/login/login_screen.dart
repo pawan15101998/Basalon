@@ -40,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Padding(
                     padding: const EdgeInsets.only(
                       left: 15,
-                      right: 15,
+                      right: 65,
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -87,7 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        RegistrationScreen()));
+                                        RegistrationScreen(isAppleLogin: false,)));
                           },
                           text: 'הרשמה',
                           textStyle: TextStyle(fontSize: 20),

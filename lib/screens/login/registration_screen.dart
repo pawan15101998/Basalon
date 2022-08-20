@@ -7,6 +7,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../../blocs/application_bloc.dart';
 import '../../constant/login_user.dart';
@@ -16,7 +17,10 @@ import '../../utils/utils.dart';
 import '../home_screen.dart';
 
 class RegistrationScreen extends StatefulWidget {
-  const RegistrationScreen({Key? key}) : super(key: key);
+  bool isAppleLogin;
+  int? userId;
+  RegistrationScreen({Key? key, required this.isAppleLogin, this.userId})
+      : super(key: key);
 
   @override
   _RegistrationScreenState createState() => _RegistrationScreenState();
@@ -72,18 +76,20 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     try {
       Response response;
       var dio = Dio();
-
+      var data = {
+        'first_name': firstNameController.text,
+        'last_name': lastNameController.text,
+        'email': emailController.text,
+        'password': passwordController.text,
+        if (isChecked) 'newsletter': isChecked,
+      };
+      if (widget.isAppleLogin) {
+        data['user_id'] = widget.userId!;
+      }
+      String registerUrl = widget.isAppleLogin ? "ios_user_update_profile" : "user_register";
       response = await dio.post(
-        'https://basalon.co.il/wp-json/wp/v2/user_register',
-        data: FormData.fromMap(
-          {
-            'first_name': firstNameController.text,
-            'last_name': lastNameController.text,
-            'email': emailController.text,
-            'password': passwordController.text,
-            if (isChecked) 'newsletter': isChecked,
-          },
-        ),
+        'https://basalon.co.il/wp-json/wp/v2/$registerUrl',
+        data: FormData.fromMap(data),
         options: Options(headers: {
           "Client-Service": "basalon-client-t1T83YHm60J8yNG5",
           "Auth-Key": "XkCRn9Y4PPmspuqYKolqbyhcDFhID7kl"
@@ -99,12 +105,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             'newsletter': $isChecked,
       ''');
       EasyLoading.dismiss();
+
+      
       if (response.data['success'] == 200) {
         // ignore: avoid_print
-        print(response.data['data']['user_id']);
+        int id = int.parse((widget.isAppleLogin?response.data['data'][0]['ID']:response.data['data']['user_id']).toString());
+        print(id);
         SharedPreferences sharedPreferences =
             await SharedPreferences.getInstance();
-        sharedPreferences.setInt('loginId', response.data['data']['user_id']);
+        sharedPreferences.setInt('loginId', id);
         isUserLogin(true);
 
         LoginUser.shared?.userId = sharedPreferences.getInt('loginId');
@@ -114,7 +123,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         application.isUserLogin = true;
         print(sharedPreferences.getInt('loginId'));
         Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) =>  HomeScreen()),
+            MaterialPageRoute(builder: (context) => HomeScreen()),
             (Route<dynamic> route) => false);
       } else {
         errorAlertMessage('Invalid Credential!');
@@ -122,24 +131,26 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     } catch (error) {
       print(error);
       EasyLoading.dismiss();
-      errorAlertMessage('Something went wrong!');
+      errorAlertMessage('Something went wrong! ${error}');
+      print("chetan sable bhai");
     }
   }
-  sendUserId(response){
-      // ignore: unrelated_type_equality_checks
-      if (response['body']['data'].runtimeType == String) {
-        print("send user id chali");
-        print(response['body']['data']);
-        return response['body']['data'];
-      } else if (response['body']['data'].runtimeType == int) {
-        print("send user id chali");
-        print(response['body']['data']);
-        return response['body']['data'];
-      } else {
-        print("first time user send id ");
-        return response['body']['data']['user_id'];
-      }
+
+  sendUserId(response) {
+    // ignore: unrelated_type_equality_checks
+    if (response['body']['data'].runtimeType == String) {
+      print("send user id chali");
+      print(response['body']['data']);
+      return response['body']['data'];
+    } else if (response['body']['data'].runtimeType == int) {
+      print("send user id chali");
+      print(response['body']['data']);
+      return response['body']['data'];
+    } else {
+      print("first time user send id ");
+      return response['body']['data']['user_id'];
     }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -189,93 +200,99 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 //     fontSize: 16,
                 //   ),
                 // ),
+
                 const SizedBox(height: 25),
-                SizedBox(
-                  height: 50,
-                  width: width - 30,
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      print('facebook login,,,,,,,,,,,');
-                      final result = await FacebookAuth.i.login(permissions: [
-                        "public_profile",
-                        "email",
-                      ]);
-                      if (result.status == LoginStatus.success) {
-                        final requestData = await FacebookAuth.i.getUserData(
-                            fields:
-                                "email, name, picture.height(200).width(200)");
+                if (!widget.isAppleLogin)
+                  SizedBox(
+                    height: 50,
+                    width: width - 30,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        print('facebook login,,,,,,,,,,,');
+                        final result = await FacebookAuth.i.login(permissions: [
+                          "public_profile",
+                          "email",
+                        ]);
+                        if (result.status == LoginStatus.success) {
+                          final requestData = await FacebookAuth.i.getUserData(
+                              fields:
+                                  "email, name, picture.height(200).width(200)");
 
-                        setState(() {
-                          userData = requestData;
-                          LoginUser(
-                            userName: userData!['name'],
-                            email: userData!['email'] != null
-                                ? userData!['email']
-                                : userData!['name'],
-                            userId: int.parse(userData!['id']),
-                          );
-                          LoginUser.shared?.userId = int.parse(userData!['id']);
-                        });
+                          setState(() {
+                            userData = requestData;
+                            LoginUser(
+                              userName: userData!['name'],
+                              email: userData!['email'] != null
+                                  ? userData!['email']
+                                  : userData!['name'],
+                              userId: int.parse(userData!['id']),
+                            );
+                            LoginUser.shared?.userId =
+                                int.parse(userData!['id']);
+                          });
 
-                        setState(() {
-                          application.imageFromFacebook =
-                              userData!['picture']['data']['url'];
-                          application.emailFromFacebook = userData!['email'];
-                          application.nameFromFacebook = userData!['name'];
-                          application.isUserLogin = true;
-                        });
-                        print(int.parse(userData!['id']));
-                        print(result.accessToken?.token);
-                        print(result.status);
-                        print(result.message);
-                        print('-------------------FACEBOOK----------------');
-                        SharedPreferences sharedPreferences =
-                            await SharedPreferences.getInstance();
-                        sharedPreferences.setString(
-                            'email',
-                            userData!['email'] != null
-                                ? userData!['email']
-                                : userData!['name']);
-                        sharedPreferences.setString('facebookName',
-                            userData!['name'] != null ? userData!['name'] : '');
-                        sharedPreferences.setString(
-                            'facebookImage',
-                            userData!['picture']['data']['url'] != null
-                                ? userData!['picture']['data']['url']
-                                : 'no image found ---------');
-                        sharedPreferences.setInt(
-                            'loginId', int.parse(userData!['id']));
-                        await _loginRegisterNetwork.registerFbData(
-                            result.accessToken?.token,
-                            int.parse(userData!['id']));
+                          setState(() {
+                            application.imageFromFacebook =
+                                userData!['picture']['data']['url'];
+                            application.emailFromFacebook = userData!['email'];
+                            application.nameFromFacebook = userData!['name'];
+                            application.isUserLogin = true;
+                          });
+                          print(int.parse(userData!['id']));
+                          print(result.accessToken?.token);
+                          print(result.status);
+                          print(result.message);
+                          print('-------------------FACEBOOK----------------');
+                          SharedPreferences sharedPreferences =
+                              await SharedPreferences.getInstance();
+                          sharedPreferences.setString(
+                              'email',
+                              userData!['email'] != null
+                                  ? userData!['email']
+                                  : userData!['name']);
+                          sharedPreferences.setString(
+                              'facebookName',
+                              userData!['name'] != null
+                                  ? userData!['name']
+                                  : '');
+                          sharedPreferences.setString(
+                              'facebookImage',
+                              userData!['picture']['data']['url'] != null
+                                  ? userData!['picture']['data']['url']
+                                  : 'no image found ---------');
+                          sharedPreferences.setInt(
+                              'loginId', int.parse(userData!['id']));
+                          await _loginRegisterNetwork.registerFbData(
+                              result.accessToken?.token,
+                              int.parse(userData!['id']));
 
-                        //Navigator.pushNamed(context, HomeScreen.route);
-                        Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                                builder: (context) =>  HomeScreen()),
-                            (Route<dynamic> route) => false);
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: const Color.fromRGBO(25, 119, 243, 1),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)),
-                      shadowColor: Colors.transparent,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 5),
-                          child: Image.asset("assets/images/facebook.png"),
-                        ),
-                        const Text('המשיכו עם פייסבוק',
-                            style: TextStyle(fontSize: 20))
-                      ],
+                          //Navigator.pushNamed(context, HomeScreen.route);
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                  builder: (context) => HomeScreen()),
+                              (Route<dynamic> route) => false);
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: const Color.fromRGBO(25, 119, 243, 1),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5)),
+                        shadowColor: Colors.transparent,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 5),
+                            child: Image.asset("assets/images/facebook.png"),
+                          ),
+                          const Text('המשיכו עם פייסבוק',
+                              style: TextStyle(fontSize: 20))
+                        ],
+                      ),
                     ),
                   ),
-                ),
                 SizedBox(
                   height: 20,
                 ),
@@ -400,11 +417,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       } else if (passwordController.text !=
                           confirmPasswordController.text) {
                         errorAlertMessage('Both password should be same!');
-                      }
-                      // else if (!isChecked) {
-                      //   errorAlertMessage('Please check the checkbox!');
-                      // }
-                      else {
+                      } else {
                         EasyLoading.show();
                         registerData();
                       }

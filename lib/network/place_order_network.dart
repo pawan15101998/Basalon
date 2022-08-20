@@ -130,6 +130,7 @@ class PlaceOrderNetwork {
     print(userId);
     print('userId');
     try {
+      EasyLoading.show();
       final response = await ApiProvider.post(
         url: 'place_order',
         body: {
@@ -177,6 +178,7 @@ class PlaceOrderNetwork {
       print(totalAmount);
       print(numOfTicket);
       print(response);
+      EasyLoading.dismiss();
       showDialog<String>(
         context: context,
         builder: (BuildContext context) => AlertDialog(
@@ -227,7 +229,7 @@ class PlaceOrderNetwork {
           ],
         ),
       );
-      EasyLoading.dismiss();
+    
     } catch (e) {
       print('${e} failed order');
       EasyLoading.dismiss();

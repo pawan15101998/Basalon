@@ -12,6 +12,7 @@ import '../blocs/application_bloc.dart';
 import '../constant/login_user.dart';
 import '../screens/home_screen.dart';
 import '../utils/utils.dart';
+import 'package:http/http.dart' as http;
 
 class LoginRegisterNetwork {
   Map? userData;
@@ -24,7 +25,6 @@ class LoginRegisterNetwork {
   getUserLoginData(BuildContext context) async {
     late final application =
         Provider.of<ApplicationBloc>(context, listen: false);
-
     try {
       final response = await ApiProvider.post(
         url: 'user_login',
@@ -43,13 +43,7 @@ class LoginRegisterNetwork {
       } else {
         print('ye wala login chala');
         getLoginData = LoginData.fromJson(response['body']);
-        print(
-            '${getLoginData?.data.name}ffffffffffffffffffffffffffffffffffffffffffff');
-        print(
-            '${getLoginData?.data.id}ffffffffffffffffffffffffffffffffffffffffffff');
-        print(
-            '${getLoginData?.data.userEmail}ffffffffffffffffffffffffffffffffffffffffffff');
-
+       
         SharedPreferences sharedPreferences =
             await SharedPreferences.getInstance();
         sharedPreferences.setInt('loginId', getLoginData!.data.id!);
@@ -107,6 +101,20 @@ class LoginRegisterNetwork {
 
       sharedPreferences.setInt('loginId', id);
       LoginUser.shared?.userId = sharedPreferences.getInt('loginId');
+    } catch (e) {
+      print('nhi hua fb register');
+      print(e);
+    }
+  }
+
+
+  registerAppleData(accessToken, userID) async {
+    try {
+     return
+          await ApiProvider.post(url: 'ios_user_registration', body: 
+          { "social_access_token": accessToken, "social_id":userID});
+     
+     
     } catch (e) {
       print('nhi hua fb register');
       print(e);
