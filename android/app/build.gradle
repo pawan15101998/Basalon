@@ -33,6 +33,12 @@ def keystoreProperties = new Properties()
    }
 
 android {
+    lintOptions {
+        disable 'InvalidPackage'
+        disable "Instantiatable"
+        checkReleaseBuilds false
+        abortOnError false
+    }
     // lintOptions {
     //     disable 'InvalidPackage'
     //     disable "Instantiatable"
@@ -80,7 +86,7 @@ android {
    }
    buildTypes {
        release {
-           signingConfig signingConfigs.debug
+           signingConfig signingConfigs.release
        }
    }
 
