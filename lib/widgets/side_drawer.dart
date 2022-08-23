@@ -1,5 +1,4 @@
 import 'package:basalon/constant/login_user.dart';
-import 'package:basalon/modal/login_data.dart';
 import 'package:basalon/network/login_register_network.dart';
 import 'package:basalon/screens/activity/general_screen.dart';
 import 'package:basalon/screens/home_screen.dart';
@@ -96,10 +95,11 @@ class _NavDrawerState extends State<NavDrawer> {
                         textStyle: ktextStyleWhite,
                         onPressed: () {
                           if ((application.packageModel?.data?.userActivePackage
-                                      ?.iD !=
-                                  "" &&application.packageModel?.data?.userActivePackage
-                                      ?.iD !=
-                                  null) &&
+                                          ?.iD !=
+                                      "" &&
+                                  application.packageModel?.data
+                                          ?.userActivePackage?.iD !=
+                                      null) &&
                               isUserLogin(application.isUserLogin)) {
                             Navigator.push(
                                 context,
@@ -134,7 +134,9 @@ class _NavDrawerState extends State<NavDrawer> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                             RegistrationScreen(isAppleLogin: false,)));
+                                            RegistrationScreen(
+                                              isAppleLogin: false,
+                                            )));
                               },
                               child: Text(
                                 'הרשמה',
