@@ -45,6 +45,8 @@ class _NavDrawerState extends State<NavDrawer> {
     super.initState();
 
     print(LoginUser.shared?.userId);
+    print(LoginUser.shared?.userName);
+    print(LoginUser.shared?.email);
 
     // LoginRegisterNetwork.deleteAddress(dataId: 2595);
     print(
@@ -95,7 +97,9 @@ class _NavDrawerState extends State<NavDrawer> {
                         onPressed: () {
                           if ((application.packageModel?.data?.userActivePackage
                                       ?.iD !=
-                                  "") &&
+                                  "" &&application.packageModel?.data?.userActivePackage
+                                      ?.iD !=
+                                  null) &&
                               isUserLogin(application.isUserLogin)) {
                             Navigator.push(
                                 context,
@@ -130,7 +134,7 @@ class _NavDrawerState extends State<NavDrawer> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            const RegistrationScreen()));
+                                             RegistrationScreen(isAppleLogin: false,)));
                               },
                               child: Text(
                                 'הרשמה',

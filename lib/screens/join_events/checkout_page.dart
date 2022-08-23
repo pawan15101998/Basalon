@@ -96,6 +96,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         'https://secure.cardcom.solutions/Interface/Direct2.aspx?TerminalNumber=130735&Sum=$totalAmount&cardnumber=${cardValueChange == false ? temp : cardNumberController.text}&cardvalidityyear=$endTime&cardvaliditymonth=$startingTime&username=rq6xvee8hxRaDewuTQT7&Languages=en&coinid=1&codpage=65001&Cvv=${cvvController.text}&CardOwnerName=${holderController.text}',
         options: Options(contentType: Headers.formUrlEncodedContentType),
       );
+      print(response);
       String status = response.data;
       print(status);
       print(widget.totalAmount.fold(
@@ -108,11 +109,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
       print(cvvController.text);
       print(status.split(' ').first.contains('ResponseCode=0'));
       if (status.split(' ').first.contains('ResponseCode=0')) {
-        // facebookAppEvents.logPurchase(amount: 1, currency: "ILS");
-
         await _placeOrderNetwork.placeOrder(context, checkBoxValue);
       } else {
-        // print('invalid creds!!!!!!!!!!!!!');
         EasyLoading.dismiss();
         errorAlertMessage(context, 'Invalid Credentials!');
       }
@@ -709,10 +707,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
             child: GestureDetector(
               onTap: () async {
-                await _placeOrderNetwork.placeOrder(
-                  context,
-                  checkBoxValue,
-                );
                 final SharedPreferences sharedPreferences =
                     await SharedPreferences.getInstance();
                 print(

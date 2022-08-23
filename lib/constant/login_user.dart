@@ -7,7 +7,6 @@ class LoginUser {
 
   factory LoginUser(
       {required String userName, required String email, required int userId}) {
-    print("jkzhjkkc");
     _instance ??= LoginUser._(userName, email, userId);
     print(LoginUser.shared?.userId);
     return _instance!;

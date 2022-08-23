@@ -890,6 +890,8 @@ class _BookEventPageState extends State<BookEventPage> {
                         !isUserLogin(application.isUserLogin)) {
                       await registerData();
                     }
+                  print(finalTotal);
+                  
 
                     if (finalTotal == 0) {
                       print('objecttttttttttttttttt');

@@ -35,6 +35,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
+    
     FirebaseMessaging.instance.getInitialMessage().then((message) {
       print("FirebaseMessaging.instance.getInitialMessage");
       if (message != null) {
@@ -73,6 +74,7 @@ class _SplashScreenState extends State<SplashScreen>
         }
       },
     );
+    
     animation = Tween(begin: 0.0, end: 0.5).animate(_controller);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       selected = true;
