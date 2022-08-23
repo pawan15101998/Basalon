@@ -203,6 +203,84 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
                 const SizedBox(height: 25),
                 if (!widget.isAppleLogin)
+
+Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                  child: SignInWithAppleButton(
+                    text: "היכנס עם אפל",
+                    onPressed: () async {
+                      final credential =
+                          await SignInWithApple.getAppleIDCredential(
+                        scopes: [
+                          AppleIDAuthorizationScopes.email,
+                          AppleIDAuthorizationScopes.fullName,
+                        ],
+                        webAuthenticationOptions: WebAuthenticationOptions(
+                          // TODO: Set the `clientId` and `redirectUri` arguments to the values you entered in the Apple Developer portal during the setup
+                          clientId:
+                              'de.lunaone.flutter.signinwithappleexample.service',
+
+                          redirectUri:
+                              // For web your redirect URI needs to be the host of the "current page",
+                              // while for Android you will be using the API server that redirects back into your app via a deep link
+                              // kIsWeb
+                              // ? Uri.parse('https://${window.location.host}/')
+                              Uri.parse(
+                            'https://flutter-sign-in-with-apple-example.glitch.me/callbacks/sign_in_with_apple',
+                          ),
+                        ),
+                      );
+
+                      var response =
+                          await _loginRegisterNetwork.registerAppleData(
+                              credential.identityToken,
+                              credential.userIdentifier);
+                      print(response);
+                      print(response['status'] == 200);
+                      print(response['body']['data'][0]['user_nicename']=='');
+                      print(response['body']['data'][0]['user_nicename']);
+                      print(response['body']['data'][0]['user_nicename']==null);       
+print(response['status'] == 200 &&
+                          (response['body']['data'][0]['user_nicename'] == '' ||
+                              response['body']['data'][0]['user_nicename'] == null));
+                      if(response['status'] == 200){
+
+                      if (
+                          (response['body']['data'][0]['user_nicename'] == '' ||
+                              response['body']['data'][0]['user_nicename'] == null)) {    
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => RegistrationScreen(
+                                      isAppleLogin: true,
+                                      userId: int.parse(response['body']['data'][0]['ID'].toString()),
+                                    )));
+                        return;
+                      }
+                     
+                      var id = int.parse(response['body']['data'][0]['ID'].toString());
+                      //  user_email
+                      //display_name
+                       LoginUser(
+                            userName: response['body']['data'][0]['display_name'],
+                            email: response['body']['data'][0]['user_email'],
+                            userId: id,
+                          );
+                      SharedPreferences sharedPreferences =
+                          await SharedPreferences.getInstance();
+                      sharedPreferences.setInt('loginId', id);
+                      LoginUser.shared?.userId =
+                          sharedPreferences.getInt('loginId');
+        application.isUserLogin = true;
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => HomeScreen()),
+            (Route<dynamic> route) => false);  
+                      }
+                    },
+                  ),
+                ),
+                const SizedBox(height: 25),
+                if (!widget.isAppleLogin)
                   SizedBox(
                     height: 50,
                     width: width - 30,

@@ -32,17 +32,16 @@ class _LoginScreenState extends State<LoginScreen> {
             height: height,
             width: width,
             child: SizedBox(
+              width: width,
               child: Stack(
                 children: [
                   SizedBox(
                     child: Image.asset("assets/images/image_onboard_4.png"),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      left: 15,
-                      right: 65,
-                    ),
+                  SizedBox(
+                    width: width,
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Image.asset(kLogoImage,width: width/1.3,),
