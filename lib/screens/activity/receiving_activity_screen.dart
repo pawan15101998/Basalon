@@ -442,8 +442,10 @@ class ReceivingPaymentFields extends StatelessWidget {
                 border: isBorder == true
                     ? OutlineInputBorder(
                         borderRadius: BorderRadius.circular(14),
-                        borderSide: BorderSide(
-                            width: 0, color: Color.fromRGBO(216, 216, 216, 1)))
+                        borderSide: BorderSide.none,
+                        // (
+                        //     width: 0, color: Color.fromRGBO(216, 216, 216, 1))
+                      )
                     : null,
                 contentPadding: EdgeInsets.only(left: 10, right: 10, top: 12),
                 hintText: hintText,
@@ -452,6 +454,14 @@ class ReceivingPaymentFields extends StatelessWidget {
                 hintStyle: TextStyle(color: textColor ?? Colors.black),
                 prefixIcon: prefixIcon,
                 suffixIcon: suffixIcon,
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
               ),
             ),
           )

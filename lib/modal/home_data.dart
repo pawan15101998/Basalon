@@ -207,7 +207,7 @@ class Data {
   String? lngEvent;
   String? title;
   Date? date;
-  int? averageRating;
+  dynamic averageRating;
   int? numberComment;
   String? thumbnailEvent;
   String? address;

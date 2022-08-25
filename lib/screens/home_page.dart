@@ -47,7 +47,7 @@ class HomePageState extends State<HomePage> {
   bool showToolBar = false;
   bool showToolBarRow = false;
 
-  int selectFilter = 0;
+  int selectFilter = 2;
   int selectFilter1 = 0;
   int selectFilter2 = 0;
 
@@ -77,12 +77,12 @@ class HomePageState extends State<HomePage> {
   PackageNetwork packageNetwork = PackageNetwork();
 
   List<dynamic> filterData = [
-    'מחר',
-    'ב-7 ימים הקרובים',
     'היום',
+    'ב-7 ימים הקרובים',
+    ' בכל זמן ',
     'תאריך מסויים',
-    'בשבוע הבא',
     'סוף השבוע',
+    ' מחר  ',
   ];
   List<dynamic> filterData1 = [
     'בכל מקום',
@@ -90,7 +90,6 @@ class HomePageState extends State<HomePage> {
     'אונליין / זום',
     'עיר מסויימת',
   ];
-
   String? realvalue;
   String? realvalue1;
 
@@ -716,93 +715,93 @@ class HomePageState extends State<HomePage> {
                                 ),
                               ],
                             ),
-                            // if (application.searchResult != null &&
-                            //     application.searchResult?.length != 0 &&
-                            //     application.filterAnywhereProvider ==
-                            //         'עיר מסויימת' &&
-                            //     locationController.text.isNotEmpty)
-                            //   Positioned(
-                            //     top: 250,
-                            //     right: 0,
-                            //     left: 0,
-                            //     child: Container(
-                            //       margin: EdgeInsets.symmetric(horizontal: 20),
-                            //       decoration: const BoxDecoration(
-                            //         color: Colors.white,
-                            //         // boxShadow: [
-                            //         //   BoxShadow(
-                            //         //     color: Colors.grey,
-                            //         //     blurRadius: 15.0,
-                            //         //     // soften the shadow
-                            //         //     spreadRadius: 0.1,
-                            //         //     //extend the shadow
-                            //         ///     offset: Offset(
-                            //         //       15.icon
-                            //         //       // Move to right 10  horizontally
-                            //         //       15.0, // Move to bottom 10 Vertically
-                            //         //     ),
-                            //         //   )
-                            //         // ],
-                            //       ),
-                            //       height: 190,
-                            //       // width: double.infinity,
-                            //       child: ListView.separated(
-                            //           padding: const EdgeInsets.all(0),
-                            //           separatorBuilder: (context, index) =>
-                            //               const Divider(
-                            //                 color: Colors.grey,
-                            //               ),
-                            //           itemCount:
-                            //               application.searchResult!.length,
-                            //           itemBuilder: (context, index) {
-                            //             // translator
-                            //             //     .translate(
-                            //             //     application.searchResult?[index]
-                            //             //         .description,
-                            //             //     to: 'iw')
-                            //             //     .then((value) {
-                            //             //   translatedData = value;
-                            //             // });
+                            if (application.searchResult != null &&
+                                application.searchResult?.length != 0 &&
+                                application.filterAnywhereProvider ==
+                                    'עיר מסויימת' &&
+                                locationController.text.isNotEmpty)
+                              Positioned(
+                                top: 250,
+                                right: 0,
+                                left: 0,
+                                child: Container(
+                                  margin: EdgeInsets.symmetric(horizontal: 20),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    // boxShadow: [
+                                    //   BoxShadow(
+                                    //     color: Colors.grey,
+                                    //     blurRadius: 15.0,
+                                    //     // soften the shadow
+                                    //     spreadRadius: 0.1,
+                                    //     //extend the shadow
+                                    ///     offset: Offset(
+                                    //       15.icon
+                                    //       // Move to right 10  horizontally
+                                    //       15.0, // Move to bottom 10 Vertically
+                                    //     ),
+                                    //   )
+                                    // ],
+                                  ),
+                                  height: 190,
+                                  // width: double.infinity,
+                                  child: ListView.separated(
+                                      padding: const EdgeInsets.all(0),
+                                      separatorBuilder: (context, index) =>
+                                          const Divider(
+                                            color: Colors.grey,
+                                          ),
+                                      itemCount:
+                                          application.searchResult!.length,
+                                      itemBuilder: (context, index) {
+                                        // translator
+                                        //     .translate(
+                                        //     application.searchResult?[index]
+                                        //         .description,
+                                        //     to: 'iw')
+                                        //     .then((value) {
+                                        //   translatedData = value;
+                                        // });
 
-                            //             return ListTile(
-                            //               visualDensity: VisualDensity.compact,
-                            //               dense: true,
-                            //               contentPadding:
-                            //                   const EdgeInsets.symmetric(
-                            //                       vertical: 0, horizontal: 10),
-                            //               trailing: Icon(Icons.location_on),
-                            //               onTap: () async {
-                            //                 print('list tile dabao');
+                                        return ListTile(
+                                          visualDensity: VisualDensity.compact,
+                                          dense: true,
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                  vertical: 0, horizontal: 10),
+                                          trailing: Icon(Icons.location_on),
+                                          onTap: () async {
+                                            print('list tile dabao');
 
-                            //                 locationController.text =
-                            //                     // translatedData!.text;
-                            //                     application.searchResult?[index]
-                            //                         .description;
-                            //                 application.setSelectedLocation(
-                            //                     application.searchResult![index]
-                            //                         .placeId,
-                            //                     context);
-                            //                 setState(() {});
-                            //               },
-                            //               title: application
-                            //                           .searchResult?[index]
-                            //                           .description ==
-                            //                       null
-                            //                   ? CupertinoActivityIndicator()
-                            //                   : Text(
-                            //                       "${application.searchResult?[index].description}",
-                            //                       // "${translatedData?.text}",
-                            //                       style: TextStyle(
-                            //                           color: Colors.black,
-                            //                           fontSize: 11),
-                            //                       textDirection:
-                            //                           TextDirection.rtl,
-                            //                       textAlign: TextAlign.start,
-                            //                     ),
-                            //             );
-                            //           }),
-                            //     ),
-                            //   ),
+                                            locationController.text =
+                                                // translatedData!.text;
+                                                application.searchResult?[index]
+                                                    .description;
+                                            application.setSelectedLocation(
+                                                application.searchResult![index]
+                                                    .placeId,
+                                                context);
+                                            setState(() {});
+                                          },
+                                          title: application
+                                                      .searchResult?[index]
+                                                      .description ==
+                                                  null
+                                              ? CupertinoActivityIndicator()
+                                              : Text(
+                                                  "${application.searchResult?[index].description}",
+                                                  // "${translatedData?.text}",
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 11),
+                                                  textDirection:
+                                                      TextDirection.rtl,
+                                                  textAlign: TextAlign.start,
+                                                ),
+                                        );
+                                      }),
+                                ),
+                              ),
                             // if (showToolBar)
                             //   Positioned(
                             //       top: 80,
@@ -992,7 +991,7 @@ class HomePageState extends State<HomePage> {
                             //                   child: ReceivingPaymentFields(
                             //                     controller:
                             //                         categorySearchController,
-                            //                     obscureText: false,
+                            //                     obscureText: false,`
                             //                     width: width / 2,
                             //                     hintText: 'חיפוש חופשי',
                             //                     textColor: Colors.grey,
@@ -1019,85 +1018,85 @@ class HomePageState extends State<HomePage> {
                             //           ],
                             //         ),
                             //       )),
-                            // if (application.searchResult != null &&
-                            //     application.searchResult?.length != 0 &&
-                            //     application.filterAnywhereProvider ==
-                            //         'עיר מסויימת' &&
-                            //     locationController.text.isNotEmpty)
-                            //   Container(
-                            //     margin: EdgeInsets.symmetric(horizontal: 8),
-                            //     decoration: const BoxDecoration(
-                            //       color: Colors.white,
-                            //       boxShadow: [
-                            //         BoxShadow(
-                            //           color: Colors.grey,
-                            //           blurRadius: 15.0,
-                            //           // soften the shadow
-                            //           spreadRadius: 1.0,
-                            //           //extend the shadow
-                            //           offset: Offset(
-                            //             15.0,
-                            //             // Move to right 10  horizontally
-                            //             15.0, // Move to bottom 10 Vertically
-                            //           ),
-                            //         )
-                            //       ],
-                            //     ),
-                            //     height: 150,
-                            //     // width: double.infinity,
+                            if (application.searchResult != null &&
+                                application.searchResult?.length != 0 &&
+                                application.filterAnywhereProvider ==
+                                    'עיר מסויימת' &&
+                                locationController.text.isNotEmpty)
+                              Container(
+                                margin: EdgeInsets.symmetric(horizontal: 8),
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey,
+                                      blurRadius: 15.0,
+                                      // soften the shadow
+                                      spreadRadius: 1.0,
+                                      //extend the shadow
+                                      offset: Offset(
+                                        15.0,
+                                        // Move to right 10  horizontally
+                                        15.0, // Move to bottom 10 Vertically
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                height: 150,
+                                // width: double.infinity,
 
-                            //     child: ListView.separated(
-                            //         padding: const EdgeInsets.all(0),
-                            //         separatorBuilder: (context, index) =>
-                            //             const Divider(
-                            //               color: Colors.grey,
-                            //             ),
-                            //         itemCount: application.searchResult!.length,
-                            //         itemBuilder: (context, index) {
-                            //           translator
-                            //               .translate(
-                            //                   application.searchResult?[index]
-                            //                       .description,
-                            //                   to: 'iw')
-                            //               .then((value) {
-                            //             translatedData = value;
-                            //           });
+                                child: ListView.separated(
+                                    padding: const EdgeInsets.all(0),
+                                    separatorBuilder: (context, index) =>
+                                        const Divider(
+                                          color: Colors.grey,
+                                        ),
+                                    itemCount: application.searchResult!.length,
+                                    itemBuilder: (context, index) {
+                                      translator
+                                          .translate(
+                                              application.searchResult?[index]
+                                                  .description,
+                                              to: 'iw')
+                                          .then((value) {
+                                        translatedData = value;
+                                      });
 
-                            //           return ListTile(
-                            //             dense: true,
-                            //             contentPadding:
-                            //                 const EdgeInsets.symmetric(
-                            //                     vertical: 0, horizontal: 10),
-                            //             trailing: Icon(Icons.location_on),
-                            //             onTap: () async {
-                            //               print('list tile dabao');
+                                      return ListTile(
+                                        dense: true,
+                                        contentPadding:
+                                            const EdgeInsets.symmetric(
+                                                vertical: 0, horizontal: 10),
+                                        trailing: Icon(Icons.location_on),
+                                        onTap: () async {
+                                          print('list tile dabao');
 
-                            //               print(application.previewLatProvider);
-                            //               print(application.previewLngProvider);
+                                          print(application.previewLatProvider);
+                                          print(application.previewLngProvider);
 
-                            //               locationController.text = application
-                            //                   .searchResult?[index].description;
-                            //               application.setSelectedLocation(
-                            //                   application
-                            //                       .searchResult![index].placeId,
-                            //                   context);
-                            //               setState(() {});
-                            //             },
-                            //             title: translatedData == null
-                            //                 ? CupertinoActivityIndicator()
-                            //                 : Text(
-                            //                     "${application.searchResult?[index].description}",
-                            //                     // "$translatedData",
-                            //                     style: TextStyle(
-                            //                         color: Colors.black,
-                            //                         fontSize: 11),
-                            //                     textDirection:
-                            //                         TextDirection.rtl,
-                            //                     textAlign: TextAlign.start,
-                            //                   ),
-                            //           );
-                            //         }),
-                            //   ),
+                                          locationController.text = application
+                                              .searchResult?[index].description;
+                                          application.setSelectedLocation(
+                                              application
+                                                  .searchResult![index].placeId,
+                                              context);
+                                          setState(() {});
+                                        },
+                                        title: translatedData == null
+                                            ? CupertinoActivityIndicator()
+                                            : Text(
+                                                "${application.searchResult?[index].description}",
+                                                // "$translatedData",
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 11),
+                                                textDirection:
+                                                    TextDirection.rtl,
+                                                textAlign: TextAlign.start,
+                                              ),
+                                      );
+                                    }),
+                              ),
                           ],
                         ),
                       ),
@@ -1177,8 +1176,13 @@ class HomePageState extends State<HomePage> {
                                           });
                                         }
                                         if (filterData1[index] == 'קרוב אליי') {
-                                          klatitude = null;
-                                          klongitude = null;
+                                          print('lyyyyyyyyyyyyyyyyyyyyyyyyyy');
+                                          print(geoLoc!.latitude);
+                                          print(geoLoc!.latitude);
+                                          print('lyyyyyyyyyyyyyyyyyyyyyyyyyy');
+
+                                          klatitude = geoLoc!.latitude;
+                                          klongitude = geoLoc!.longitude;
                                         }
                                       },
                                       child: filterData1[index] == 'עיר מסויימת'
@@ -1201,15 +1205,25 @@ class HomePageState extends State<HomePage> {
                                                   showLabel: false,
                                                   controller:
                                                       locationController,
-                                                  onChange: (v) {
-                                                    application.searchPlaces(v);
-                                                    print('eeeeeeeeeeeeeeee$v');
-                                                    setState(() {});
+                                                  onTap: () {
+                                                    setState(() {
+                                                      application.searchPlaces(
+                                                          locationController
+                                                              .text);
+                                                    });
                                                   },
-                                                  onFieldSubmit: (v) {
-                                                    application.searchPlaces(v);
-                                                    print('eeeeeeeeeeeeeeee$v');
-                                                  },
+                                                  // onChange: (v) {
+                                                  //   locationController.text = v;
+                                                  //   application.searchPlaces(v);
+                                                  //   print('eeeeeeeeeeeeeeee$v');
+                                                  //   setState(() {});
+                                                  // },
+                                                  // onFieldSubmit: (v) {
+                                                  //   locationController.text = v;
+
+                                                  //   application.searchPlaces(v);
+                                                  //   print('eeeeeeeeeeeeeeee$v');
+                                                  // },
                                                   textColor: Colors.white,
                                                   obscureText: false,
                                                   hintText: 'הקלד/י עיר',
@@ -1234,6 +1248,7 @@ class HomePageState extends State<HomePage> {
                                           : Directionality(
                                               textDirection: TextDirection.rtl,
                                               child: FilterCardWidget(
+                                                fontsize: 15,
                                                 text: filterData1[index],
                                                 color: selectFilter1 == index
                                                     ? MyColors.lightRed
@@ -1263,11 +1278,16 @@ class HomePageState extends State<HomePage> {
                               // Text("(ניתן לבחור ביותר מקטגורייה אחת)"),
                               // Text(
                               //     "כדאי לדעת: את כל הפעילויות ניתן להזמין גם כאירוע פרטי"),
-                              GridView.builder(
-                                physics: ScrollPhysics(),
-                                itemCount: filterData.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return InkWell(
+
+                              Wrap(
+                                // alignment: WrapAlignment.start,
+                                // crossAxisAlignment: WrapCrossAlignment.start,
+                                // runAlignment: WrapAlignment.start,
+                                spacing: 5,
+                                runSpacing: 8,
+                                children: List.generate(
+                                  filterData.length,
+                                  (index) => InkWell(
                                     onTap: () {
                                       print(filterData[index]);
                                       print('filterData');
@@ -1286,7 +1306,7 @@ class HomePageState extends State<HomePage> {
                                             .replaceAll('היום', 'today')
                                             .replaceAll('מחר', 'tomorrow')
                                             .replaceAll(
-                                                'סוף השבוע', 'this_week_end')
+                                                'בכל זמן', 'this_week_end')
                                             .replaceAll(
                                                 'בשבוע הבא', 'next_week')
                                             .replaceFirst('תאריך מסויים',
@@ -1318,27 +1338,106 @@ class HomePageState extends State<HomePage> {
 
                                       print(realvalue);
                                     },
-                                    child: Directionality(
-                                      textDirection: TextDirection.rtl,
-                                      child: FilterCardWidget(
-                                        text: filterData[index],
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 14, vertical: 12),
+                                      decoration: BoxDecoration(
                                         color: selectFilter == index
                                             ? MyColors.lightRed
                                             : MyColors.lightBlue,
+                                        borderRadius: BorderRadius.circular(13),
+                                      ),
+                                      child: Text(
+                                        filterData[index].toString(),
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          fontFamily: "Helvetica",
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
-                                  );
-                                },
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 3,
-                                        crossAxisSpacing: 5,
-                                        // mainAxisSpacing: 5,
-                                        mainAxisExtent: 50,
-                                        childAspectRatio: 1),
-                                padding: EdgeInsets.symmetric(horizontal: 10),
-                                shrinkWrap: true,
+                                  ),
+                                ),
                               ),
+
+                              // GridView.builder(
+                              //   physics: ScrollPhysics(),
+                              //   itemCount: filterData.length,
+                              //   itemBuilder: (BuildContext context, int index) {
+                              //     return InkWell(
+                              //       onTap: () {
+                              //         print(filterData[index]);
+                              //         print('filterData');
+                              //         setState(() {
+                              //           selectFilter = index;
+                              //           application.filterTimeProvider =
+                              //               filterData[index];
+
+                              //           print(application.filterTimeProvider);
+                              //           print('application');
+
+                              //           realvalue = application
+                              //               .filterTimeProvider!
+                              //               .replaceAll(
+                              //                   'ב-7 ימים הקרובים', 'this_week')
+                              //               .replaceAll('היום', 'today')
+                              //               .replaceAll('מחר', 'tomorrow')
+                              //               .replaceAll(
+                              //                   'סוף השבוע', 'this_week_end')
+                              //               .replaceAll(
+                              //                   'בשבוע הבא', 'next_week')
+                              //               .replaceFirst('תאריך מסויים',
+                              //                   'specific_date');
+
+                              //           page = 1;
+                              //         });
+
+                              //         application.filterTimeProvider =
+                              //             realvalue;
+
+                              //         _fetchEventDataFilter.getEventData(
+                              //             1,
+                              //             '',
+                              //             realvalue,
+                              //             '',
+                              //             '',
+                              //             '',
+                              //             '',
+                              //             '',
+                              //             '',
+                              //             context);
+
+                              //         print(application.filterTimeProvider);
+
+                              //         print("qwerty$realvalue");
+
+                              //         // application.filterTimeProvider = realvalue;
+
+                              //         print(realvalue);
+                              //       },
+                              //       child: Directionality(
+                              //         textDirection: TextDirection.rtl,
+                              //         child: FilterCardWidget(
+                              //           fontsize: 15,
+                              //           text: filterData[index],
+                              //           color: selectFilter == index
+                              //               ? MyColors.lightRed
+                              //               : MyColors.lightBlue,
+                              //         ),
+                              //       ),
+                              //     );
+                              //   },
+                              //   gridDelegate:
+                              //       SliverGridDelegateWithFixedCrossAxisCount(
+                              //           crossAxisCount: 3,
+                              //           crossAxisSpacing: 5,
+                              //           // mainAxisSpacing: 5,
+                              //           mainAxisExtent: 50,
+                              //           childAspectRatio: 1),
+                              //   padding: EdgeInsets.symmetric(horizontal: 10),
+                              //   shrinkWrap: true,
+                              // ),
 
                               if (application.filterTimeProvider ==
                                   'specific_date')
@@ -1401,16 +1500,33 @@ class HomePageState extends State<HomePage> {
                                     const EdgeInsets.symmetric(vertical: 15.0),
                                 child: Directionality(
                                   textDirection: TextDirection.rtl,
-                                  child: Text(
-                                    '3. מה בתכנון?',
-                                    style: TextStyle(
-                                      fontFamily: "Helvetica",
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        '3. מה בתכנון?',
+                                        style: TextStyle(
+                                          fontFamily: "Helvetica",
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 3,
+                                      ),
+                                      Text(
+                                        '(ניתן לבחור ביותר מקטגורייה אחת)',
+                                        style: TextStyle(
+                                          fontFamily: "Helvetica",
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
+
+                              // if (showToolBar)
                               GridView.builder(
                                 physics: ScrollPhysics(),
                                 itemCount: dropItems.length,
@@ -1627,10 +1743,16 @@ class HomePageState extends State<HomePage> {
                                                 alignment:
                                                     Alignment.centerRight,
                                                 child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          right: 00),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(vertical: 4),
                                                   child: ReceivingPaymentFields(
+                                                    onTap: () {
+                                                      print(
+                                                          categorySearchController
+                                                              .text);
+                                                      print(
+                                                          'objecttttttttttttttttttttt');
+                                                    },
                                                     fillcolor:
                                                         MyColors.lightBlue,
                                                     controller:
@@ -1646,6 +1768,7 @@ class HomePageState extends State<HomePage> {
                                           : Directionality(
                                               textDirection: TextDirection.rtl,
                                               child: FilterCardWidget(
+                                                fontsize: 15,
                                                 text: dropItems[index],
                                                 color:
                                                     dropItemsHandler[index] ==

@@ -296,6 +296,7 @@ class EventCardState extends State<EventCard> {
   Widget build(BuildContext context) {
     print("jksjnsd");
     print(widget.datum.ticketRest);
+    print(widget.datum.averageRating ?? 0);
     print('dateSplit dateSplit dateSplit');
 
     print(dateSplit);

@@ -36,15 +36,10 @@ android {
     lintOptions {
         disable 'InvalidPackage'
         disable "Instantiatable"
-        // checkReleaseBuilds false
-        // abortOnError false
+        checkReleaseBuilds false
+        abortOnError false
     }
-    // lintOptions {
-    //     disable 'InvalidPackage'
-    //     disable "Instantiatable"
-    //     checkReleaseBuilds false
-    //     abortOnError false
-    // }
+   
     compileSdkVersion 32
 
     

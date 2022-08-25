@@ -40,7 +40,6 @@ class _NavDrawerState extends State<NavDrawer> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     print(LoginUser.shared?.userId);
