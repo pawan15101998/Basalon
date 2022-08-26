@@ -20,6 +20,7 @@ class ApiProvider {
 
     print("Url:");
     print(url);
+
     print(constant.api);
     if (!await Connection.isConnected()) {
       return {'status': 'No Connection', 'body': 'No Internet Connection'};
