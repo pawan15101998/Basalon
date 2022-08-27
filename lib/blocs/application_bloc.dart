@@ -52,7 +52,6 @@ class ApplicationBloc with ChangeNotifier {
   dynamic previewAuthorDescriptionrovider;
   dynamic previewAuthorImagerovider;
 
-
   dynamic mapLat;
   dynamic mapLog;
 
@@ -78,8 +77,6 @@ class ApplicationBloc with ChangeNotifier {
 
   ApplicationBloc() {
     setCurrentLocation();
-    print(
-        'ApplicationBloc ApplicationBloc ApplicationBloc ApplicationBloc ApplicationBloc ApplicationBloc');
 
     Future.delayed(const Duration(seconds: 0), () async {
       final SharedPreferences sharedPreferences =
@@ -133,7 +130,7 @@ class ApplicationBloc with ChangeNotifier {
   }
 
   setSelectedLocation(String placeId, BuildContext context) async {
-    var place = await placesService.getPlace(placeId , context);
+    var place = await placesService.getPlace(placeId, context);
     selectedLocation.add(place);
     searchResult = null;
     notifyListeners();

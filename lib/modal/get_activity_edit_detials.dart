@@ -488,8 +488,7 @@ class GetUserActivityEditDetails {
   GetUserActivityEditDetails({this.success, this.data, this.error});
 
   GetUserActivityEditDetails.fromJson(Map<String, dynamic> json) {
-    print("lol");
-    print(Data.fromJson(json['data']));
+   
     success = json['success'];
     data = json['data'] != null ? Data.fromJson(json['data']) : null;
     error = json['error'];

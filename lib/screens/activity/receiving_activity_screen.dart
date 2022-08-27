@@ -436,8 +436,7 @@ class ReceivingPaymentFields extends StatelessWidget {
               textAlignVertical: TextAlignVertical.top,
               // textAlign: TextAlign.end,
               controller: controller,
-              // style: TextStyle(
-              //     fontSize: 15, color: textColorPrimary ?? Colors.black),
+              style: TextStyle(color: textColorPrimary ?? Colors.black),
               decoration: InputDecoration(
                 border: isBorder == true
                     ? OutlineInputBorder(

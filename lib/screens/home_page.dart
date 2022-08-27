@@ -98,8 +98,6 @@ class HomePageState extends State<HomePage> {
     Future.delayed(Duration(milliseconds: 100), () {
       setLocation();
     });
-    print('home page initstate');
-    print(application.getUserDataProfileProvider?.data?.authorImage);
 
     LoginUser.shared?.userId != null
         ? packageNetwork.getPackage(
@@ -111,14 +109,10 @@ class HomePageState extends State<HomePage> {
     // _fetchEventData.getEventData(page,application.filterCategoryProvider, filterByTime);
     _fetchEventData.getEventCategories();
     locationSubscription = application.selectedLocation.stream.listen((place) {
-      print(place);
       if (place != null) {
         _goToPlace(place);
       }
     });
-    print(application.idFromLocalProvider);
-    print("TTTTTTTTTTTT");
-    print(LoginUser.shared?.userId);
 
     _updateAndGetUserProfile.getProfileData(
         LoginUser.shared?.userId! ?? application.idFromLocalProvider,
@@ -129,7 +123,6 @@ class HomePageState extends State<HomePage> {
 
   @override
   void didChangeDependencies() {
-    print('didChangeDependencies');
     super.didChangeDependencies();
     LoginUser.shared?.userId != null
         ? _updateAndGetUserProfile.getProfileData(
@@ -144,8 +137,6 @@ class HomePageState extends State<HomePage> {
 
   @override
   void didUpdateWidget(covariant HomePage oldWidget) {
-    print('didUpdateWidget');
-
     super.didUpdateWidget(oldWidget);
     setState(() {});
   }
@@ -167,7 +158,6 @@ class HomePageState extends State<HomePage> {
   }
 
   void _onLoading() {
-    print("on lading chrla"); // monitor network fetch
     page += 1;
     if (application.filterAnywhereProvider != null) {
       _fetchEventData.getEventData(
@@ -233,10 +223,6 @@ class HomePageState extends State<HomePage> {
   setLocation() async {
     geoLoc = await Geolocator.getCurrentPosition();
 
-    print(
-        '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++homepage');
-    print(geoLoc);
-
     setState(() {
       if (geoLoc != null) {
         application.filterAnywhereProvider = 'קרוב אליי';
@@ -261,11 +247,6 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    print(filterData[0]);
-    print('----------------------');
-    print('network image');
-    print(application.getUserDataProfileProvider?.data?.authorImage);
-    print(application.getUserDataProfileProvider?.data?.authorImage);
     return SafeArea(
       child: Scaffold(
         extendBody: true,
@@ -771,8 +752,6 @@ class HomePageState extends State<HomePage> {
                                                   vertical: 0, horizontal: 10),
                                           trailing: Icon(Icons.location_on),
                                           onTap: () async {
-                                            print('list tile dabao');
-
                                             locationController.text =
                                                 // translatedData!.text;
                                                 application.searchResult?[index]
@@ -1069,11 +1048,6 @@ class HomePageState extends State<HomePage> {
                                                 vertical: 0, horizontal: 10),
                                         trailing: Icon(Icons.location_on),
                                         onTap: () async {
-                                          print('list tile dabao');
-
-                                          print(application.previewLatProvider);
-                                          print(application.previewLngProvider);
-
                                           locationController.text = application
                                               .searchResult?[index].description;
                                           application.setSelectedLocation(
@@ -1116,7 +1090,6 @@ class HomePageState extends State<HomePage> {
                               SizedBox(
                                 height: 4,
                               ),
-
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 12.0),
@@ -1149,7 +1122,6 @@ class HomePageState extends State<HomePage> {
                                       onTap: () {
                                         setState(() {
                                           selectFilter1 = index;
-
                                           application.filterAnywhereProvider =
                                               filterData1[index].replaceAll(
                                                   'אונליין / זום', 'online');
@@ -1158,8 +1130,6 @@ class HomePageState extends State<HomePage> {
                                         });
 
                                         if (filterData1[index] == 'בכל מקום') {
-                                          print(
-                                              'chli kya condition ??????????/');
                                           setState(() {
                                             application.filterCategoryProvider =
                                                 '';
@@ -1176,11 +1146,6 @@ class HomePageState extends State<HomePage> {
                                           });
                                         }
                                         if (filterData1[index] == 'קרוב אליי') {
-                                          print('lyyyyyyyyyyyyyyyyyyyyyyyyyy');
-                                          print(geoLoc!.latitude);
-                                          print(geoLoc!.latitude);
-                                          print('lyyyyyyyyyyyyyyyyyyyyyyyyyy');
-
                                           klatitude = geoLoc!.latitude;
                                           klongitude = geoLoc!.longitude;
                                         }
@@ -1205,12 +1170,18 @@ class HomePageState extends State<HomePage> {
                                                   showLabel: false,
                                                   controller:
                                                       locationController,
-                                                  onTap: () {
+                                                  onChange: (v) {
                                                     setState(() {
                                                       application.searchPlaces(
                                                           locationController
                                                               .text);
                                                     });
+                                                  },
+                                                  onTap: () {
+                                                    application
+                                                            .filterAnywhereProvider =
+                                                        'עיר מסויימת';
+                                                    setState(() {});
                                                   },
                                                   // onChange: (v) {
                                                   //   locationController.text = v;
@@ -1289,15 +1260,10 @@ class HomePageState extends State<HomePage> {
                                   filterData.length,
                                   (index) => InkWell(
                                     onTap: () {
-                                      print(filterData[index]);
-                                      print('filterData');
                                       setState(() {
                                         selectFilter = index;
                                         application.filterTimeProvider =
                                             filterData[index];
-
-                                        print(application.filterTimeProvider);
-                                        print('application');
 
                                         realvalue = application
                                             .filterTimeProvider!
@@ -1329,14 +1295,6 @@ class HomePageState extends State<HomePage> {
                                           '',
                                           '',
                                           context);
-
-                                      print(application.filterTimeProvider);
-
-                                      print("qwerty$realvalue");
-
-                                      // application.filterTimeProvider = realvalue;
-
-                                      print(realvalue);
                                     },
                                     child: Container(
                                       padding: EdgeInsets.symmetric(
@@ -1541,115 +1499,89 @@ class HomePageState extends State<HomePage> {
                                 shrinkWrap: true,
                                 itemBuilder: (context, index) {
                                   return InkWell(
-                                    onTap: () {
+                                    onTap: () async {
                                       // setState(() {
                                       //   value = !value!;
                                       //   dropItemsHandler[index] = value!;
                                       // });
+                                      print(dropItems);
 
+                                      print("data check of category");
+                                      print(!selectedDropItems
+                                          .contains(dropItems[index]));
+                                      print(dropItems[index]);
                                       value = !value!;
                                       dropItemsHandler[index] = value!;
+                                      if (!selectedDropItems
+                                          .contains(dropItems[index])) {
+                                        selectedDropItems.insert(
+                                            0, dropItems[index]);
+                                        setState(() {});
 
-                                      print(value);
-                                      print('valueeeeeeeeeeeeeeeeeeeeeeeeeee');
-                                      print(dropItemsHandler[index]);
+                                        print(selectedDropItems.toString());
+                                        print("selectedDropItems.toString()");
+                                        String realValue = selectedDropItems
+                                            .toString()
+                                            .replaceAll('[', '')
+                                            .replaceAll(']', '')
+                                            .replaceAll(', ', ',')
+                                            .replaceAll('הרצאה', 'lecture')
+                                            .replaceAll(
+                                                'אירוח קולינרי', 'meals')
+                                            .replaceAll('הופעה/מופע', 'show')
+                                            .replaceAll('הופעה', 'show')
+                                            .replaceAll('מפגש חברתי', 'group')
+                                            .replaceAll(
+                                                'סדנת בישול/אפיה', 'food')
+                                            .replaceAll('סדנת בישול', 'food')
+                                            .replaceAll(
+                                                'סדנת גוף/נפש', 'body-mind')
+                                            .replaceAll(
+                                                'סדנת יצירה', 'workshop')
+                                            .replaceAll(
+                                                'פעילות לילדים', 'kids');
 
-                                      print(
-                                          'objectttttttttttttttttttttttttttt');
-                                      print(value);
-                                      setState(() {
-                                        if (value == true) {
-                                          selectedDropItems
-                                              .add(dropItems[index]);
-                                          String realValue = selectedDropItems
-                                              .toString()
-                                              .replaceAll('[', '')
-                                              .replaceAll(']', '')
-                                              .replaceAll(', ', ',')
-                                              .replaceAll('הרצאה', 'lecture')
-                                              .replaceAll(
-                                                  'אירוח קולינרי', 'meals')
-                                              .replaceAll('הופעה/מופע', 'show')
-                                              .replaceAll('מפגש חברתי', 'group')
-                                              .replaceAll(
-                                                  'סדנת בישול/אפיה', 'food')
-                                              .replaceAll(
-                                                  'סדנת גוף/נפש', 'body-mind')
-                                              .replaceAll(
-                                                  'סדנת יצירה', 'workshop')
-                                              .replaceAll(
-                                                  'פעילות לילדים', 'kids');
-                                          application.filterCategoryProvider =
-                                              realValue;
+                                        print(realValue);
+                                        print("realValue 2");
+                                        application.filterCategoryProvider =
+                                            realValue;
+                                        await _fetchEventDataFilter
+                                            .getEventData(1, realValue, '', '',
+                                                '', '', '', '', '', context);
+                                      } else {
+                                        selectedDropItems
+                                            .remove(dropItems[index]);
+                                        setState(() {});
 
-                                          _fetchEventDataFilter.getEventData(
-                                              1,
-                                              realValue,
-                                              '',
-                                              '',
-                                              '',
-                                              '',
-                                              '',
-                                              '',
-                                              '',
-                                              context);
-
-                                          print(
-                                              '----------------------------------------');
-                                          print(selectedDropItems.length);
-                                          print(
-                                            realValue,
-                                          );
-                                          print(
-                                            'realValue',
-                                          );
-                                          print(selectedDropItems
-                                              .toString()
-                                              .replaceAll('[', '')
-                                              .replaceAll(']', '')
-                                              .replaceAll(', ', ','));
-                                        } else {
-                                          print('elseeeeeeeeeeeeeee');
-                                          // print(e);
-                                          selectedDropItems
-                                              .remove(dropItems[index]);
-                                          print(selectedDropItems.length);
-                                          String realValue = selectedDropItems
-                                              .toString()
-                                              .replaceAll('[', '')
-                                              .replaceAll(']', '')
-                                              .replaceAll(', ', ',')
-                                              .replaceAll('הרצאה', 'lecture')
-                                              .replaceAll(
-                                                  'אירוח קולינרי', 'meals')
-                                              .replaceAll('הופעה/מופע', 'show')
-                                              .replaceAll('מפגש חברתי', 'group')
-                                              .replaceAll(
-                                                  'סדנת בישול/אפיה', 'food')
-                                              .replaceAll(
-                                                  'סדנת גוף/נפש', 'body-mind')
-                                              .replaceAll(
-                                                  'סדנת יצירה', 'workshop')
-                                              .replaceAll(
-                                                  'פעילות לילדים', 'kids');
-                                          print(
-                                              'realValue realValue realValue realValue');
-                                          print(realValue);
-                                          application.filterCategoryProvider =
-                                              realValue;
-                                          _fetchEventDataFilter.getEventData(
-                                              1,
-                                              '',
-                                              '',
-                                              '',
-                                              '',
-                                              '',
-                                              '',
-                                              '',
-                                              '',
-                                              context);
-                                        }
-                                      });
+                                        String realValue = selectedDropItems
+                                            .toString()
+                                            .replaceAll('[', '')
+                                            .replaceAll(']', '')
+                                            .replaceAll(', ', ',')
+                                            .replaceAll('הרצאה', 'lecture')
+                                            .replaceAll(
+                                                'אירוח קולינרי', 'meals')
+                                            .replaceAll('הופעה/מופע', 'show')
+                                            .replaceAll('הופעה', 'show')
+                                            .replaceAll('מפגש חברתי', 'group')
+                                            .replaceAll(
+                                                'סדנת בישול/אפיה', 'food')
+                                            .replaceAll('סדנת בישול', 'food')
+                                            .replaceAll(
+                                                'סדנת גוף/נפש', 'body-mind')
+                                            .replaceAll(
+                                                'סדנת יצירה', 'workshop')
+                                            .replaceAll(
+                                                'פעילות לילדים', 'kids');
+                                        print(realValue);
+                                        print("realValue 1");
+                                        application.filterCategoryProvider =
+                                            realValue;
+                                        await _fetchEventDataFilter
+                                            .getEventData(1, realValue, '', '',
+                                                '', '', '', '', '', context);
+                                      }
+                                      setState(() {});
 
                                       // print(value);
                                       // setState(() {
@@ -1746,13 +1678,7 @@ class HomePageState extends State<HomePage> {
                                                   padding: const EdgeInsets
                                                       .symmetric(vertical: 4),
                                                   child: ReceivingPaymentFields(
-                                                    onTap: () {
-                                                      print(
-                                                          categorySearchController
-                                                              .text);
-                                                      print(
-                                                          'objecttttttttttttttttttttt');
-                                                    },
+                                                    onTap: () {},
                                                     fillcolor:
                                                         MyColors.lightBlue,
                                                     controller:
@@ -1771,8 +1697,8 @@ class HomePageState extends State<HomePage> {
                                                 fontsize: 15,
                                                 text: dropItems[index],
                                                 color:
-                                                    dropItemsHandler[index] ==
-                                                            true
+                                                    selectedDropItems.contains(
+                                                            dropItems[index])
                                                         ? MyColors.lightRed
                                                         : MyColors.lightBlue,
                                               ),
@@ -2326,7 +2252,6 @@ class HomePageState extends State<HomePage> {
                             ),
                           );
                         }
-                        print('location floating');
                       },
                       child: Image.asset(
                         'assets/icons/map.png',
@@ -2350,9 +2275,6 @@ class HomePageState extends State<HomePage> {
   dynamic klongitude;
 
   Future<void> _goToPlace(place) async {
-    print('ye rhi place');
-    print(place.lat);
-    print(place.lng);
     setState(() {
       klatitude = place.lat;
       klongitude = place.lng;
