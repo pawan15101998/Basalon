@@ -229,6 +229,8 @@
 
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
+
 Welcome welcomeFromJson(String str) => Welcome.fromJson(json.decode(str));
 
 String welcomeToJson(Welcome data) => json.encode(data.toJson());
@@ -244,11 +246,16 @@ class Welcome {
   Data? data;
   dynamic error;
 
-  factory Welcome.fromJson(Map<String, dynamic> json) => Welcome(
-        success: json["success"],
-        data: Data.fromJson(json["data"]),
-        error: json["error"],
-      );
+  factory Welcome.fromJson(Map<String, dynamic> json) {
+    print("json data checking 0");
+    debugPrint("chetan ${json['data']}");
+    print("json data checking 1");
+    return Welcome(
+      success: json["success"],
+      data: Data.fromJson(json["data"]),
+      error: json["error"],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         "success": success,
@@ -258,27 +265,28 @@ class Welcome {
 }
 
 class Data {
-  Data({
-    this.id,
-    this.latEvent,
-    this.lngEvent,
-    this.title = '',
-    this.date,
-    this.thumbnailEvent,
-    this.markerPrice,
-    this.content,
-    this.mapAddress,
-    this.averageRating,
-    this.numberComment,
-    this.comments,
-    // this.relatedEvent,
-    this.bookingDates,
-    this.gallery,
-    this.noOfTicket,
-    this.shareLink,
-    this.authorData,
-    this.linkVideo,
-  });
+  Data(
+      {this.id,
+      this.latEvent,
+      this.lngEvent,
+      this.title = '',
+      this.date,
+      this.thumbnailEvent,
+      this.markerPrice,
+      this.content,
+      this.mapAddress,
+      this.averageRating,
+      this.numberComment,
+      this.comments,
+      // this.relatedEvent,
+      this.bookingDates,
+      this.gallery,
+      this.noOfTicket,
+      this.shareLink,
+      this.authorData,
+      this.linkVideo,
+      this.ticketRest,
+      this.customView});
 
   String? id;
   String? latEvent;
@@ -292,17 +300,18 @@ class Data {
   dynamic averageRating;
   dynamic numberComment;
   List<Comment>? comments;
-
-  // List<RelatedEvent>? relatedEvent;
+  int? customView;
   List<BookingDate>? bookingDates;
   List<Gallery>? gallery;
   List<NoOfTicket>? noOfTicket;
   String? shareLink;
   String? linkVideo;
+  String? ticketRest;
 
   AuthorData? authorData;
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory Data.fromJson(Map<String, dynamic> json) {
+    return Data(
         id: json["id"],
         latEvent: json["lat_event"],
         lngEvent: json["lng_event"],
@@ -311,6 +320,7 @@ class Data {
         thumbnailEvent: json["thumbnail_event"],
         markerPrice: json["marker_price"],
         content: json["content"],
+        ticketRest: json["ticket_rest"],
         mapAddress: json["map_address"],
         averageRating: json["average_rating"],
         numberComment: json["number_comment"],
@@ -327,7 +337,8 @@ class Data {
         shareLink: json["share_link"],
         authorData: AuthorData.fromJson(json["author_data"]),
         linkVideo: json["link_video"],
-      );
+        customView: json['custum_view']);
+  }
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -349,8 +360,10 @@ class Data {
         "gallery": List<dynamic>.from(gallery!.map((x) => x.toJson())),
         "no_of_ticket": List<dynamic>.from(noOfTicket!.map((x) => x.toJson())),
         "share_link": shareLink,
+        "ticket_rest": ticketRest,
         "author_data": authorData?.toJson(),
         "link_video": linkVideo,
+        'custum_view': customView
       };
 }
 

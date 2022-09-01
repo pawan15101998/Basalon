@@ -182,6 +182,9 @@ class HomeData {
     if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {
+        // print(v);
+        // print("chetan json data check");
+
         data!.add(new Data.fromJson(v));
       });
     }

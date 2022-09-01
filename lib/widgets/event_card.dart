@@ -10,6 +10,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_share/flutter_share.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/link.dart';
 
@@ -38,8 +39,6 @@ class EventCardState extends State<EventCard> {
   @override
   void initState() {
     super.initState();
-    print(
-        'EventCard EventCard EventCard EventCard EventCard EventCard EventCard EventCard EventCard ');
   }
 
   List<Data> data = <Data>[];
@@ -79,6 +78,20 @@ class EventCardState extends State<EventCard> {
         // linkUrl: 'https://basalon.co.il/event/סדנת-חקלאות-בסביבה-הביתית/',
         linkUrl: '${widget.datum.shareLink}',
         chooserTitle: 'Example Chooser Title');
+  }
+
+  bool isCategoryContain(List<CategoryData> data) {
+    for (var item in data) {
+      print(item.name?.contains('סדנה'));
+      print("category item name");
+      if (item.name!.contains('סדנ') ||
+          item.name!.contains('גו-נפש') ||
+          item.name!.contains('מזון')) {
+        return true;
+      }
+      print(item.name);
+    }
+    return false;
   }
 
   //
@@ -160,7 +173,6 @@ class EventCardState extends State<EventCard> {
                             height: 30,
                           )),
             ),
-
             Link(
               uri: Uri.parse(
                   'https://www.facebook.com/sharer/sharer.php?u=${widget.datum.shareLink}'),
@@ -298,8 +310,10 @@ class EventCardState extends State<EventCard> {
     print(widget.datum.ticketRest);
     print(widget.datum.averageRating ?? 0);
     print('dateSplit dateSplit dateSplit');
-
+    print('${widget.datum.thumbnailEvent}');
+    print('dateSplit dateSplit dateSplit');
     print(dateSplit);
+    widget.datum.categoryData = widget.datum.categoryData.reversed.toList();
     return FutureBuilder(builder: (context, snapshot) {
       print(snapshot.connectionState);
       return Container(
@@ -355,7 +369,7 @@ class EventCardState extends State<EventCard> {
                 // ),
                 Positioned(
                   left: 20,
-                  top: 20,
+                  bottom: 20,
                   child: InkWell(
                     onTap: () {
                       if (!isLiked) {
@@ -365,16 +379,15 @@ class EventCardState extends State<EventCard> {
                                 : LoginUser.shared?.userId,
                             widget.datum.id);
                       }
-
                       setState(() {
                         isLiked = !isLiked;
                       });
                     },
                     child: CircleAvatar(
                       radius: 18,
-                      backgroundColor: Colors.white,
+                      backgroundColor: Colors.black,
                       child: CircleAvatar(
-                          backgroundColor: Colors.white,
+                          backgroundColor: Colors.black,
                           // backgroundImage: AssetImage('assets/icons/fav card.png'),
                           child: isLiked
                               ? Icon(
@@ -383,71 +396,84 @@ class EventCardState extends State<EventCard> {
                                 )
                               : Icon(
                                   Icons.favorite_border,
-                                  color: Colors.black,
+                                  color: Colors.white,
                                 )),
                     ),
                   ),
                 ),
                 Positioned(
-                  right: 00,
-                  bottom: 20,
-                  child: Row(
-                    children: [
-                      for (var item in widget.datum.categoryData)
-                        //   for (int i = 0;
-                        //       i < widget.datum.categoryData.length;
-                        //       i++)
-                        Container(
+                    right: 00,
+                    bottom: 00,
+                    child: Row(
+                        children: List.generate(
+                      widget.datum.categoryData.length,
+                      (index) => Transform.translate(
+                        // e.g: vertical negative margin
+                        offset: Offset(
+                            index == 1 || widget.datum.categoryData.length == 1
+                                ? 0
+                                : 15,
+                            0),
+                        child: Container(
                           decoration: BoxDecoration(
-                            color: MyColors.lightBlue,
-                            //  Color(int.parse('0xff${item.color}'))
-                            //     .withOpacity(1),
+                            color: Color(int.parse(
+                                "0xff${widget.datum.categoryData[index].color}")),
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(30),
                               bottomLeft: Radius.circular(30),
+                              bottomRight: Radius.circular(index == 1 ||
+                                      widget.datum.categoryData.length == 1
+                                  ? 0
+                                  : 30),
+                              topRight: Radius.circular(index == 1 ||
+                                      widget.datum.categoryData.length == 1
+                                  ? 0
+                                  : 30),
                             ),
                           ),
-                          padding: EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 20),
-                          child: Text('${item.name}',
+                          padding:
+                              EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                          child: Text(
+                              '${widget.datum.categoryData[index].name}',
                               style:
                                   TextStyle(fontSize: 14, color: Colors.white)),
                         ),
-                    ],
-                  ),
-                ),
-                Positioned(
-                  left: 00,
-                  bottom: 20,
-                  child: Row(
-                    children: [
-                      for (var item in widget.datum.categoryData)
-                        //   for (int i = 0;
-                        //       i < widget.datum.categoryData.length;
-                        //       i++)
-                        Container(
-                          decoration: BoxDecoration(
-                            color: MyColors.lightBlue,
+                      ),
+                    ))),
 
-                            //  Color(int.parse('0xff${item.color}'))
-                            //     .withOpacity(1),
-                            borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(30),
-                              bottomRight: Radius.circular(30),
-                            ),
-                          ),
-                          padding: EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 20),
-                          child: Text('${widget.datum.markerPrice}',
-                              style:
-                                  TextStyle(fontSize: 14, color: Colors.white)),
-                        ),
-                    ],
-                  ),
-                ),
+                // Positioned(
+                //   left: 00,
+                //   bottom: 20,
+                //   child: Row(
+                //     children: [
+                //       for (var item in widget.datum.categoryData)
+                //         //   for (int i = 0;
+                //         //       i < widget.datum.categoryData.length;
+                //         //       i++)
+                //         Container(
+                //           decoration: BoxDecoration(
+                //             color: MyColors.lightBlue,
+
+                //             //  Color(int.parse('0xff${item.color}'))
+                //             //     .withOpacity(1),
+                //             borderRadius: BorderRadius.only(
+                //               topRight: Radius.circular(30),
+                //               bottomRight: Radius.circular(30),
+                //             ),
+                //           ),
+                //           padding: EdgeInsets.symmetric(
+                //               vertical: 10, horizontal: 20),
+                //           child: Text('${widget.datum.markerPrice}',
+                //               style:
+                //                   TextStyle(fontSize: 14, color: Colors.white)),
+                //         ),
+                //     ],
+                //   ),
+                // ),
+
                 Positioned(
                   left: 65,
-                  top: 20,
+                  bottom: 20,
                   child: InkWell(
                     // onTap: share,
                     onTap: () {
@@ -458,14 +484,14 @@ class EventCardState extends State<EventCard> {
                     //last
                     child: CircleAvatar(
                       radius: 18,
-                      backgroundColor: Colors.white,
+                      backgroundColor: Colors.black,
                       child: CircleAvatar(
-                        backgroundColor: Colors.white,
+                        backgroundColor: Colors.black,
                         // backgroundImage: AssetImage('assets/icons/Share.png'),
                         child: Icon(
                           Icons.share,
                           size: 20,
-                          color: Colors.black,
+                          color: Colors.white,
                         ),
                         radius: 15,
                       ),
@@ -493,57 +519,91 @@ class EventCardState extends State<EventCard> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
+                            SizedBox(
+                              height: 10,
+                            ),
+                            if (widget.datum.numberComment != 0 &&
+                                widget.datum.averageRating != 0)
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Text('אנשים השתתפו'),
+                                        SizedBox(
+                                          width: 4,
+                                        ),
+                                        Text(
+                                          widget.datum.customView!.toString(),
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            // fontFamily: 'Alef',
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 4,
+                                        ),
+                                        Icon(
+                                          Icons.groups,
+                                          size: 30,
+                                          color: Colors.red[300],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.only(top: 8, right: 8),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          '(${widget.datum.numberComment})',
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            // fontFamily: 'Alef',
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                        RatingBar.builder(
+                                          initialRating: widget
+                                              .datum.averageRating!
+                                              .toDouble(),
+                                          minRating: 1,
+                                          itemSize: 20,
+                                          direction: Axis.horizontal,
+                                          allowHalfRating: true,
+                                          itemCount: 5,
+                                          // itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
+                                          itemBuilder: (context, _) => Icon(
+                                            Icons.star,
+                                            // color: MyColors.topOrange,
+                                            color: Colors.amber.shade700,
+                                          ),
+                                          onRatingUpdate: (rating) {
+                                            print(rating);
+                                          },
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+
                             Padding(
                               padding:
                                   const EdgeInsets.only(right: 10, top: 10),
                               child: SizedBox(
                                 child: Text('${widget.datum.title}',
-                                    // maxLines: 2,
-                                    // overflow: TextOverflow.ellipsis,
-                                    // 'name',
-
-                                    // textAlign: TextAlign.right,
                                     textDirection: TextDirection.rtl,
                                     style: ktextStyleBoldMedium),
                               ),
                             ),
-                            if (widget.datum.numberComment != 0 &&
-                                widget.datum.averageRating != 0)
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 8, right: 8),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      '(${widget.datum.numberComment})',
-                                      style: TextStyle(
-                                        color: Colors.grey,
-                                        // fontFamily: 'Alef',
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                    RatingBar.builder(
-                                      initialRating: widget.datum.averageRating!
-                                          .toDouble(),
-                                      minRating: 1,
-                                      itemSize: 20,
-                                      direction: Axis.horizontal,
-                                      allowHalfRating: true,
-                                      itemCount: 5,
-                                      // itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
-                                      itemBuilder: (context, _) => Icon(
-                                        Icons.star,
-                                        // color: MyColors.topOrange,
-                                        color: Colors.amber.shade700,
-                                      ),
-                                      onRatingUpdate: (rating) {
-                                        print(rating);
-                                      },
-                                    )
-                                  ],
-                                ),
-                              ),
 
                             Padding(
                               padding: const EdgeInsets.only(right: 10, top: 5),
@@ -551,6 +611,42 @@ class EventCardState extends State<EventCard> {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 10.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        //  SizedBox(),
+                                        // SizedBox(
+                                        //   width: 14.0,
+                                        // ),
+                                        // ElevatedButton(
+                                        //   onPressed: () {
+                                        //     print('lecture clicked.');
+                                        //   },
+                                        //   child: Text(
+                                        //     widget.datum.markerPrice
+                                        //         .toString()
+                                        //         .replaceAll(' ', ''),
+
+                                        //     // '₪${ widget.datum.noOfTicket[0].priceTicket}',
+                                        //     style: TextStyle(
+                                        //       fontSize: 20,
+                                        //       fontWeight: FontWeight.w500,
+                                        //     ),
+                                        //   ),
+                                        //   style: ElevatedButton.styleFrom(
+                                        //       shape: RoundedRectangleBorder(
+                                        //         borderRadius: BorderRadius.only(
+                                        //             bottomLeft: Radius.circular(25),
+                                        //             topLeft: Radius.circular(25)),
+                                        //       ),
+                                        //       elevation: 0.0,
+                                        //       primary: MyColors.topOrange),
+                                        // ),
+                                      ],
+                                    ),
+                                  ),
                                   RichText(
                                     textAlign: TextAlign.end,
                                     text: TextSpan(
@@ -595,10 +691,6 @@ class EventCardState extends State<EventCard> {
                                           ),
                                         ]),
                                   ),
-                                  // Icon(
-                                  //   Icons.calendar_today,
-                                  //   color: MyColors.topOrange,
-                                  // )
                                   SizedBox(
                                     width: 6,
                                   ),
@@ -613,34 +705,34 @@ class EventCardState extends State<EventCard> {
                             SizedBox(
                               height: 3,
                             ),
+                            // Padding(
+                            //   padding: const EdgeInsets.only(right: 8.0),
+                            //   child: Row(
+                            //     mainAxisAlignment: MainAxisAlignment.end,
+                            //     children: [
+                            //       Text('אנשים השתתפו'),
+                            //       SizedBox(
+                            //         width: 4,
+                            //       ),
+                            //       Text(
+                            //         widget.datum.customView!.toString(),
+                            //         style: TextStyle(
+                            //           color: Colors.grey,
+                            //           // fontFamily: 'Alef',
+                            //           fontSize: 16,
+                            //         ),
+                            //       ),
+                            //       SizedBox(
+                            //         width: 4,
+                            //       ),
+                            //       Icon(
+                            //         Icons.person,
+                            //         color: Colors.red[300],
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
 
-                            Padding(
-                              padding: const EdgeInsets.only(right: 8.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Text('אנשים השתתפו'),
-                                  SizedBox(
-                                    width: 4,
-                                  ),
-                                  Text(
-                                    widget.datum.customView!.toString(),
-                                    style: TextStyle(
-                                      color: Colors.grey,
-                                      // fontFamily: 'Alef',
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 4,
-                                  ),
-                                  Icon(
-                                    Icons.person,
-                                    color: Colors.red[300],
-                                  ),
-                                ],
-                              ),
-                            ),
                             SizedBox(
                               height: 3,
                             ),
@@ -649,6 +741,40 @@ class EventCardState extends State<EventCard> {
                                 padding: const EdgeInsets.only(right: 7),
                                 child: Row(
                                   children: [
+                                    SizedBox(width: 10),
+                                    if (widget.datum.ticketRest != '')
+                                      Container(
+                                        height: 35,
+                                        width: 120,
+                                        decoration: BoxDecoration(
+                                            color: MyColors.topOrange,
+                                            border: Border.all(
+                                                color: MyColors.topOrange,
+                                                width: 2)),
+                                        child: Center(
+                                          child: RichText(
+                                              text: TextSpan(
+                                                  style: ktextStyleBoldSmall
+                                                      .copyWith(
+                                                          color: Colors.white),
+                                                  text: '  נותרו ',
+                                                  children: [
+                                                // TextSpan(text: widget.datum.ticketRest),
+                                                // if( widget.datum.ticketRest != '' && int.parse(widget.datum.ticketRest.replaceAll(new RegExp(r'[^0-9]'), '')) < 10)
+                                                TextSpan(
+                                                    text:
+                                                        '${widget.datum.ticketRest.replaceAll(new RegExp(r'[^0-9]'), '')}'),
+                                                TextSpan(
+                                                  text: ' מקומות  ',
+                                                ),
+                                              ])),
+
+                                          // Text(
+                                          //   'נותרו${widget.datum.noOfTicket[0].numberTotalTicket}מקומות',
+                                          //   style: ktextStyleBoldSmall,
+                                          // ),
+                                        ),
+                                      ),
                                     Expanded(
                                       child: Row(
                                         mainAxisAlignment:
@@ -715,77 +841,59 @@ class EventCardState extends State<EventCard> {
                                   ],
                                 ),
                               ),
-                            SizedBox(
-                              height: 10,
-                            ),
                             Padding(
-                              padding: const EdgeInsets.only(bottom: 18.0),
+                              padding: const EdgeInsets.only(right: 8.0),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  if (widget.datum.ticketRest != '' &&
-                                      int.parse(widget.datum.ticketRest
-                                              .replaceAll(
-                                                  new RegExp(r'[^0-9]'), '')) <
-                                          10)
-                                    Container(
-                                      height: 35,
-                                      width: 120,
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: MyColors.topOrange,
-                                              width: 2)),
-                                      child: Center(
-                                        child: RichText(
-                                            text: TextSpan(
-                                                style: ktextStyleBoldSmall,
-                                                text: '  נותרו ',
-                                                children: [
-                                              // TextSpan(text: widget.datum.ticketRest),
-                                              // if( widget.datum.ticketRest != '' && int.parse(widget.datum.ticketRest.replaceAll(new RegExp(r'[^0-9]'), '')) < 10)
-                                              TextSpan(
-                                                  text:
-                                                      '${widget.datum.ticketRest.replaceAll(new RegExp(r'[^0-9]'), '')}'),
-                                              TextSpan(text: ' מקומות  '),
-                                            ])),
-
-                                        // Text(
-                                        //   'נותרו${widget.datum.noOfTicket[0].numberTotalTicket}מקומות',
-                                        //   style: ktextStyleBoldSmall,
-                                        // ),
-                                      ),
-                                    ),
-                                  //  SizedBox(),
-                                  // SizedBox(
-                                  //   width: 14.0,
-                                  // ),
-                                  // ElevatedButton(
-                                  //   onPressed: () {
-                                  //     print('lecture clicked.');
-                                  //   },
-                                  //   child: Text(
-                                  //     widget.datum.markerPrice
-                                  //         .toString()
-                                  //         .replaceAll(' ', ''),
-
-                                  //     // '₪${ widget.datum.noOfTicket[0].priceTicket}',
-                                  //     style: TextStyle(
-                                  //       fontSize: 20,
-                                  //       fontWeight: FontWeight.w500,
-                                  //     ),
-                                  //   ),
-                                  //   style: ElevatedButton.styleFrom(
-                                  //       shape: RoundedRectangleBorder(
-                                  //         borderRadius: BorderRadius.only(
-                                  //             bottomLeft: Radius.circular(25),
-                                  //             topLeft: Radius.circular(25)),
-                                  //       ),
-                                  //       elevation: 0.0,
-                                  //       primary: MyColors.topOrange),
-                                  // ),
+                                  Container(
+                                    margin: EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 8),
+                                    child: Text('${widget.datum.markerPrice}',
+                                        style: TextStyle(
+                                            fontSize: 16, color: Colors.black)),
+                                  ),
+                                  FaIcon(FontAwesomeIcons.ticket,
+                                      color: MyColors.topOrange)
                                 ],
                               ),
                             ),
+                            SizedBox(height: 15),
+                            if (isCategoryContain(widget.datum.categoryData))
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    height: 35,
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 10),
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: MyColors.greenButton,
+                                            width: 2)),
+                                    child: Center(
+                                      child: RichText(
+                                          text: TextSpan(
+                                              style: ktextStyleBoldSmall,
+                                              text:
+                                                  'ניתן להזמין גם כסדנה פרטית לזוג או קבוצה בתאריך אחר',
+                                              children: [
+                                            // TextSpan(text: widget.datum.ticketRest),
+                                            // if( widget.datum.ticketRest != '' && int.parse(widget.datum.ticketRest.replaceAll(new RegExp(r'[^0-9]'), '')) < 10)
+                                          ])),
+
+                                      // Text(
+                                      //   'נותרו${widget.datum.noOfTicket[0].numberTotalTicket}מקומות',
+                                      //   style: ktextStyleBoldSmall,
+                                      // ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            SizedBox(
+                              height: 10,
+                            ),
+
                             // Text(
                             //   'נשארו רק עוד  8  כרטיסים',
                             //   style: TextStyle(

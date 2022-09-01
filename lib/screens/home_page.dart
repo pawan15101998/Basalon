@@ -95,6 +95,7 @@ class HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    super.initState();
     Future.delayed(Duration(milliseconds: 100), () {
       setLocation();
     });
@@ -104,7 +105,6 @@ class HomePageState extends State<HomePage> {
             LoginUser.shared?.userId! ?? application.idFromLocalProvider,
             context)
         : "";
-    super.initState();
     _scrollViewController.addListener;
     // _fetchEventData.getEventData(page,application.filterCategoryProvider, filterByTime);
     _fetchEventData.getEventCategories();
@@ -222,7 +222,11 @@ class HomePageState extends State<HomePage> {
 
   setLocation() async {
     geoLoc = await Geolocator.getCurrentPosition();
-
+    print("geoLoc");
+    print(geoLoc);
+    print(geoLoc?.latitude);
+    print(geoLoc?.longitude);
+    print("geoLoc lat long");
     setState(() {
       if (geoLoc != null) {
         application.filterAnywhereProvider = 'קרוב אליי';
@@ -328,7 +332,7 @@ class HomePageState extends State<HomePage> {
                     backgroundColor: Colors.black,
                     pinned: false,
                     //expandedHeight: MediaQuery.of(context).size.height * 0.6,
-                    expandedHeight: 260,
+                    expandedHeight: 300,
                     flexibleSpace: FlexibleSpaceBar(
                       collapseMode: CollapseMode.pin,
                       background: Container(
@@ -426,7 +430,7 @@ class HomePageState extends State<HomePage> {
                                       child: Column(
                                         children: [
                                           const Text(
-                                            'אז... מה עושים היום?',
+                                            '?אז מה עושים היום',
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               shadows: <Shadow>[
@@ -439,24 +443,32 @@ class HomePageState extends State<HomePage> {
                                               fontWeight: FontWeight.bold,
                                               fontSize: 33.0,
                                             ),
-                                            textDirection: TextDirection.rtl,
                                           ),
                                           const SizedBox(height: 10),
                                           const Text(
-                                            'גלו הרצאות, סדנאות, הופעות',
+                                            'גלו סדנאות, הרצאות, הופעות,',
                                             textAlign: TextAlign.center,
+                                            textDirection: TextDirection.rtl,
                                             style: ktextStyleWhiteLarge,
                                             // maxLines: 1,
                                           ),
                                           const Text(
-                                            'וארוחות בסלון הקרוב אליכם',
+                                            ' אירוחים קולינריים ומפגשים חברתיים',
                                             textAlign: TextAlign.center,
                                             style: ktextStyleWhiteLarge,
+                                          ),
+                                          Text(
+                                            'בסלונים ומרחבים מסביבכם',
+                                            textAlign: TextAlign.center,
+                                            style:
+                                                ktextStyleWhiteLarge.copyWith(
+                                                    fontWeight:
+                                                        FontWeight.w900),
+                                            // maxLines: 1,
                                           ),
                                         ],
                                       ),
                                     ),
-
                                     SizedBox(height: 30),
                                     // application.filterAnywhereProvider ==
                                     //         'עיר מסויימת'
@@ -743,7 +755,6 @@ class HomePageState extends State<HomePage> {
                                         //     .then((value) {
                                         //   translatedData = value;
                                         // });
-
                                         return ListTile(
                                           visualDensity: VisualDensity.compact,
                                           dense: true,
@@ -1096,7 +1107,7 @@ class HomePageState extends State<HomePage> {
                                 child: Directionality(
                                   textDirection: TextDirection.rtl,
                                   child: Text(
-                                    '1. איפה מבלים?',
+                                    ' 1. איפה תרצו',
                                     style: TextStyle(
                                       fontFamily: "Helvetica",
                                       fontSize: 20,
@@ -1505,7 +1516,6 @@ class HomePageState extends State<HomePage> {
                                       //   dropItemsHandler[index] = value!;
                                       // });
                                       print(dropItems);
-
                                       print("data check of category");
                                       print(!selectedDropItems
                                           .contains(dropItems[index]));
@@ -1857,7 +1867,8 @@ class HomePageState extends State<HomePage> {
                                       ConnectionState.done) {
                                 return Text('data');
                               } else {
-                                return EventCard(
+                                return 
+                                EventCard(
                                   datum: items[index],
                                   email: _updateAndGetUserProfile
                                       .getUserData?.data?.authorEmail,
