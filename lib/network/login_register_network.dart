@@ -12,7 +12,6 @@ import '../blocs/application_bloc.dart';
 import '../constant/login_user.dart';
 import '../screens/home_screen.dart';
 import '../utils/utils.dart';
-import 'package:http/http.dart' as http;
 
 class LoginRegisterNetwork {
   Map? userData;
@@ -43,7 +42,7 @@ class LoginRegisterNetwork {
       } else {
         print('ye wala login chala');
         getLoginData = LoginData.fromJson(response['body']);
-       
+
         SharedPreferences sharedPreferences =
             await SharedPreferences.getInstance();
         sharedPreferences.setInt('loginId', getLoginData!.data.id!);
@@ -107,14 +106,11 @@ class LoginRegisterNetwork {
     }
   }
 
-
   registerAppleData(accessToken, userID) async {
     try {
-     return
-          await ApiProvider.post(url: 'ios_user_registration', body: 
-          { "social_access_token": accessToken, "social_id":userID});
-     
-     
+      return await ApiProvider.post(
+          url: 'ios_user_registration',
+          body: {"social_access_token": accessToken, "social_id": userID});
     } catch (e) {
       print('nhi hua fb register');
       print(e);

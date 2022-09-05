@@ -18,13 +18,6 @@ class _LocationScreenState extends State<LocationScreen> {
 
   PermissionStatus? _permissionGranted;
 
-  Future<void> _checkPermissions() async {
-    final PermissionStatus permissionGrantedResult =
-        await location.hasPermission();
-    setState(() {
-      _permissionGranted = permissionGrantedResult;
-    });
-  }
 
   Future<void> _requestPermission() async {
     if (_permissionGranted != PermissionStatus.granted) {

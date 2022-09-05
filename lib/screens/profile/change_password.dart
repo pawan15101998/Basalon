@@ -28,7 +28,7 @@ class _ChangePasswordState extends State<ChangePassword> {
       print('VALIDATED');
 
       if (newPasswordController.text == confirmPasswordController.text) {
-        EasyLoading.show();
+        //EasyLoading.show();
         await _updateAndGetUserProfile.updatePassword(
           LoginUser.shared?.userId ?? application.idFromLocalProvider,
           oldPasswordController.text,

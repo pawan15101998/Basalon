@@ -1,12 +1,9 @@
 import 'dart:async';
+import 'package:appsflyer_sdk/appsflyer_sdk.dart';
 import 'package:basalon/network/get_events_network.dart';
 import 'package:basalon/network/package_network.dart';
 import 'package:basalon/services/constant.dart';
 import 'package:basalon/services/my_color.dart';
-import 'package:basalon/widgets/custom_buttons.dart';
-import 'package:basalon/widgets/dropdown_anywhere.dart';
-import 'package:basalon/widgets/dropdown_everywhere.dart';
-import 'package:basalon/widgets/dropdown_time.dart';
 import 'package:basalon/widgets/event_card.dart';
 import 'package:basalon/widgets/filter_card_widget.dart';
 import 'package:basalon/widgets/google_map.dart';
@@ -15,6 +12,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:translator/translator.dart';
@@ -23,9 +21,9 @@ import '../constant/login_user.dart';
 import '../network/get_update_profile_network.dart';
 import '../utils/utils.dart';
 import '../widgets/date_helper.dart';
-import '../widgets/dropDownButton1.dart';
 import '../widgets/side_drawer.dart';
 import 'activity/receiving_activity_screen.dart';
+import 'package:device_id/device_id.dart';
 
 class HomePage extends StatefulWidget {
   var categoryFilter;
@@ -48,7 +46,7 @@ class HomePageState extends State<HomePage> {
   bool showToolBarRow = false;
 
   int selectFilter = 2;
-  int selectFilter1 = 0;
+  int selectFilter1 = 1;
   int selectFilter2 = 0;
 
   bool loading = false;
@@ -93,9 +91,14 @@ class HomePageState extends State<HomePage> {
   String? realvalue;
   String? realvalue1;
 
+  AppsflyerSdk? _appsflyerSdk;
+  Map? _deepLinkData;
+  Map? _gcd;
+
   @override
   void initState() {
     super.initState();
+    getId();
     Future.delayed(Duration(milliseconds: 100), () {
       setLocation();
     });
@@ -106,7 +109,6 @@ class HomePageState extends State<HomePage> {
             context)
         : "";
     _scrollViewController.addListener;
-    // _fetchEventData.getEventData(page,application.filterCategoryProvider, filterByTime);
     _fetchEventData.getEventCategories();
     locationSubscription = application.selectedLocation.stream.listen((place) {
       if (place != null) {
@@ -117,8 +119,60 @@ class HomePageState extends State<HomePage> {
     _updateAndGetUserProfile.getProfileData(
         LoginUser.shared?.userId! ?? application.idFromLocalProvider,
         context: context);
+    final AppsFlyerOptions options = AppsFlyerOptions(
+        afDevKey: 'hWwUS2NSsbHdzNzVUTEt4',
+        appId: 'il.co.basalon',
+        showDebug: true,
+        timeToWaitForATTUserAuthorization: 15);
+    _appsflyerSdk = AppsflyerSdk(options);
+    _appsflyerSdk!.onAppOpenAttribution((res) {
+      print("onAppOpenAttribution res: " + res.toString());
+      setState(() {
+        _deepLinkData = res;
+      });
+    });
+    _appsflyerSdk!.onInstallConversionData((res) {
+      print("onInstallConversionData res: " + res.toString());
+      setState(() {
+        _gcd = res;
+      });
+    });
+    _appsflyerSdk!.onDeepLinking((DeepLinkResult dp) {
+      switch (dp.status) {
+        case Status.FOUND:
+          print(dp.deepLink?.toString());
+          print("deep link value: ${dp.deepLink?.deepLinkValue}");
+          break;
+        case Status.NOT_FOUND:
+          print("deep link not found");
+          break;
+        case Status.ERROR:
+          print("deep link error: ${dp.error}");
+          break;
+        case Status.PARSE_ERROR:
+          print("deep link status parsing error");
+          break;
+      }
+      print("onDeepLinking res: " + dp.toString());
+      setState(() {
+        _deepLinkData = dp.toJson();
+      });
+    });
+    _appsflyerSdk!
+        .initSdk(
+            registerConversionDataCallback: true,
+            registerOnAppOpenAttributionCallback: false,
+            registerOnDeepLinkingCallback: true)
+        .then((value) {
+      print("value of appflyer");
+      print(value);
+    });
+  }
 
-    // _updateAndGetUserProfile.getProfileData('1863', context: context);
+  getId() async {
+    var id = await DeviceId.getID;
+    print("DeviceId.getID");
+    print(id);
   }
 
   @override
@@ -129,9 +183,6 @@ class HomePageState extends State<HomePage> {
             LoginUser.shared?.userId! ?? application.idFromLocalProvider,
             context: context)
         : "";
-    // _updateAndGetUserProfile.getProfileData(
-    //         "1770",
-    //         context: context);
     setState(() {});
   }
 
@@ -149,29 +200,16 @@ class HomePageState extends State<HomePage> {
     _refreshController.dispose();
     categorySearchController.dispose();
     locationController.dispose();
-    locationController.clear();
+    // locationController.clear();
     startDateController.dispose();
     endDateController.dispose();
-    categorySearchController.dispose();
-    locationController.dispose();
+    // categorySearchController.dispose();
+    // locationController.dispose();
     super.dispose();
   }
 
   void _onLoading() {
     page += 1;
-    if (application.filterAnywhereProvider != null) {
-      _fetchEventData.getEventData(
-          page,
-          context,
-          application.filterTimeProvider ?? filterByTime,
-          context,
-          klatitude ?? geoLoc?.latitude,
-          klongitude ?? geoLoc?.longitude,
-          categorySearchController.text,
-          startDateController.text,
-          endDateController.text,
-          context);
-    }
     if (mounted) setState(() {});
     _refreshController.loadComplete();
   }
@@ -189,8 +227,8 @@ class HomePageState extends State<HomePage> {
       application.filterCategoryProvider,
       application.filterTimeProvider,
       application.filterAnywhereProvider,
-      klatitude ?? geoLoc?.latitude,
-      klongitude ?? geoLoc?.longitude,
+      klatitude,
+      klongitude,
       categorySearchController.text,
       startDateController.text,
       endDateController.text,
@@ -219,23 +257,18 @@ class HomePageState extends State<HomePage> {
   String? dropText;
   bool? dropTextColorHandler;
   Position? geoLoc;
+  final Location location = Location();
 
   setLocation() async {
-    geoLoc = await Geolocator.getCurrentPosition();
-    print("geoLoc");
-    print(geoLoc);
-    print(geoLoc?.latitude);
-    print(geoLoc?.longitude);
-    print("geoLoc lat long");
-    setState(() {
-      if (geoLoc != null) {
-        application.filterAnywhereProvider = 'קרוב אליי';
-      } else {
-        application.filterAnywhereProvider = 'בכל מקום';
-      }
-    });
-
-    return geoLoc;
+    PermissionStatus permissionRequestedResult =
+        await location.requestPermission();
+    if (permissionRequestedResult == PermissionStatus.granted) {
+      geoLoc = await Geolocator.getCurrentPosition();
+      klatitude = geoLoc!.latitude;
+      klongitude = geoLoc!.longitude;
+      application.filterAnywhereProvider = filterData1[1];
+      setState(() {});
+    }
   }
 
   TextEditingController startDateController = TextEditingController();
@@ -261,24 +294,7 @@ class HomePageState extends State<HomePage> {
           profileData: _updateAndGetUserProfile.getUserData,
         ),
         body: StreamBuilder(
-          initialData:
-              //  application.filterAnywhereProvider != null ?
-              _fetchEventData.getEventData(
-                  page,
-                  application.filterCategoryProvider,
-                  application.filterTimeProvider,
-                  application.filterAnywhereProvider,
-                  klatitude ?? geoLoc?.latitude,
-                  klongitude ?? geoLoc?.longitude,
-                  categorySearchController.text,
-                  startDateController.text,
-                  endDateController.text,
-                  // ((application.filterAnywhereProvider == 'online') &&
-                  //         (application.showOnline == true))
-                  //     ? "online"selectedDropItems.length
-                  //     : "classic",
-
-                  context),
+          initialData: [],
           stream: streamController(),
           builder: (context, AsyncSnapshot snapshot) {
             return SmartRefresher(
@@ -419,14 +435,15 @@ class HomePageState extends State<HomePage> {
                               ],
                             ),
                             Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               // crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
+                                SizedBox(height: 60),
                                 Column(
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 20.0),
+                                          horizontal: 10.0),
                                       child: Column(
                                         children: [
                                           const Text(
@@ -445,23 +462,26 @@ class HomePageState extends State<HomePage> {
                                             ),
                                           ),
                                           const SizedBox(height: 10),
-                                          const Text(
+                                          Text(
                                             'גלו סדנאות, הרצאות, הופעות,',
                                             textAlign: TextAlign.center,
                                             textDirection: TextDirection.rtl,
-                                            style: ktextStyleWhiteLarge,
+                                            style: ktextStyleWhiteLarge
+                                                .copyWith(fontSize: 19),
                                             // maxLines: 1,
                                           ),
-                                          const Text(
+                                          Text(
                                             ' אירוחים קולינריים ומפגשים חברתיים',
                                             textAlign: TextAlign.center,
-                                            style: ktextStyleWhiteLarge,
+                                            style: ktextStyleWhiteLarge
+                                                .copyWith(fontSize: 19),
                                           ),
                                           Text(
                                             'בסלונים ומרחבים מסביבכם',
                                             textAlign: TextAlign.center,
                                             style:
                                                 ktextStyleWhiteLarge.copyWith(
+                                                    fontSize: 19,
                                                     fontWeight:
                                                         FontWeight.w900),
                                             // maxLines: 1,
@@ -1131,35 +1151,44 @@ class HomePageState extends State<HomePage> {
                                   itemBuilder: (context, index) {
                                     return InkWell(
                                       onTap: () {
-                                        setState(() {
-                                          selectFilter1 = index;
-                                          application.filterAnywhereProvider =
-                                              filterData1[index].replaceAll(
-                                                  'אונליין / זום', 'online');
-                                          application.showOnline = !showOnline;
-                                          page = 1;
-                                        });
+                                        debugPrint("filter 1.0");
+
+                                        selectFilter1 = index;
+                                        application.filterAnywhereProvider =
+                                            filterData1[index].replaceAll(
+                                                'אונליין / זום', 'online');
+                                        application.showOnline = !showOnline;
+                                        page = 1;
 
                                         if (filterData1[index] == 'בכל מקום') {
-                                          setState(() {
-                                            application.filterCategoryProvider =
-                                                '';
-                                            // application.filterTimeProvider =
-                                            //     '';
-                                            application.filterAnywhereProvider =
-                                                'בכל מקום';
-                                            categorySearchController.text = '';
-                                            endDateController.text = '';
-                                            startDateController.text = '';
-                                            klatitude = null;
-                                            klongitude = null;
-                                            page = 1;
-                                          });
+                                          debugPrint("filter 1.1");
+                                          application.filterCategoryProvider =
+                                              '';
+                                          // application.filterTimeProvider =
+                                          //     '';
+                                          application.filterAnywhereProvider =
+                                              'בכל מקום';
+
+                                          categorySearchController.text = '';
+                                          endDateController.text = '';
+                                          startDateController.text = '';
+                                          klatitude = null;
+                                          klongitude = null;
+                                          page = 1;
                                         }
                                         if (filterData1[index] == 'קרוב אליי') {
+                                          application.filterAnywhereProvider =
+                                              'קרוב אליי';
+                                          debugPrint("filter 1.2");
+                                          debugPrint("print location near");
+                                          debugPrint("${geoLoc}");
+                                          debugPrint("${geoLoc!.latitude}");
+                                          debugPrint("${geoLoc!.longitude}");
+                                          debugPrint("location near");
                                           klatitude = geoLoc!.latitude;
                                           klongitude = geoLoc!.longitude;
                                         }
+                                        setState(() {});
                                       },
                                       child: filterData1[index] == 'עיר מסויימת'
                                           ? Padding(
@@ -1257,55 +1286,33 @@ class HomePageState extends State<HomePage> {
                                   ),
                                 ),
                               ),
-                              // Text("(ניתן לבחור ביותר מקטגורייה אחת)"),
-                              // Text(
-                              //     "כדאי לדעת: את כל הפעילויות ניתן להזמין גם כאירוע פרטי"),
-
                               Wrap(
-                                // alignment: WrapAlignment.start,
-                                // crossAxisAlignment: WrapCrossAlignment.start,
-                                // runAlignment: WrapAlignment.start,
                                 spacing: 5,
                                 runSpacing: 8,
                                 children: List.generate(
                                   filterData.length,
                                   (index) => InkWell(
                                     onTap: () {
-                                      setState(() {
-                                        selectFilter = index;
-                                        application.filterTimeProvider =
-                                            filterData[index];
+                                      selectFilter = index;
+                                      application.filterTimeProvider =
+                                          filterData[index];
 
-                                        realvalue = application
-                                            .filterTimeProvider!
-                                            .replaceAll(
-                                                'ב-7 ימים הקרובים', 'this_week')
-                                            .replaceAll('היום', 'today')
-                                            .replaceAll('מחר', 'tomorrow')
-                                            .replaceAll(
-                                                'בכל זמן', 'this_week_end')
-                                            .replaceAll(
-                                                'בשבוע הבא', 'next_week')
-                                            .replaceFirst('תאריך מסויים',
-                                                'specific_date');
+                                      realvalue = application
+                                          .filterTimeProvider!
+                                          .replaceAll(
+                                              'ב-7 ימים הקרובים', 'this_week')
+                                          .replaceAll('היום', 'today')
+                                          .replaceAll('מחר', 'tomorrow')
+                                          .replaceAll(
+                                              'בכל זמן', 'this_week_end')
+                                          .replaceAll('בשבוע הבא', 'next_week')
+                                          .replaceFirst(
+                                              'תאריך מסויים', 'specific_date');
 
-                                        page = 1;
-                                      });
-
+                                      page = 1;
                                       application.filterTimeProvider =
                                           realvalue;
-
-                                      _fetchEventDataFilter.getEventData(
-                                          1,
-                                          '',
-                                          realvalue,
-                                          '',
-                                          '',
-                                          '',
-                                          '',
-                                          '',
-                                          '',
-                                          context);
+                                      setState(() {});
                                     },
                                     child: Container(
                                       padding: EdgeInsets.symmetric(
@@ -1515,11 +1522,8 @@ class HomePageState extends State<HomePage> {
                                       //   value = !value!;
                                       //   dropItemsHandler[index] = value!;
                                       // });
-                                      print(dropItems);
-                                      print("data check of category");
-                                      print(!selectedDropItems
-                                          .contains(dropItems[index]));
-                                      print(dropItems[index]);
+                                      page = 1;
+
                                       value = !value!;
                                       dropItemsHandler[index] = value!;
                                       if (!selectedDropItems
@@ -1528,8 +1532,6 @@ class HomePageState extends State<HomePage> {
                                             0, dropItems[index]);
                                         setState(() {});
 
-                                        print(selectedDropItems.toString());
-                                        print("selectedDropItems.toString()");
                                         String realValue = selectedDropItems
                                             .toString()
                                             .replaceAll('[', '')
@@ -1551,13 +1553,11 @@ class HomePageState extends State<HomePage> {
                                             .replaceAll(
                                                 'פעילות לילדים', 'kids');
 
-                                        print(realValue);
-                                        print("realValue 2");
                                         application.filterCategoryProvider =
                                             realValue;
-                                        await _fetchEventDataFilter
-                                            .getEventData(1, realValue, '', '',
-                                                '', '', '', '', '', context);
+                                        // await _fetchEventDataFilter
+                                        //     .getEventData(1, realValue, '', '',
+                                        //         '', '', '', '', '', context);
                                       } else {
                                         selectedDropItems
                                             .remove(dropItems[index]);
@@ -1583,13 +1583,12 @@ class HomePageState extends State<HomePage> {
                                                 'סדנת יצירה', 'workshop')
                                             .replaceAll(
                                                 'פעילות לילדים', 'kids');
-                                        print(realValue);
-                                        print("realValue 1");
+
                                         application.filterCategoryProvider =
                                             realValue;
-                                        await _fetchEventDataFilter
-                                            .getEventData(1, realValue, '', '',
-                                                '', '', '', '', '', context);
+                                        // await _fetchEventDataFilter
+                                        //     .getEventData(1, realValue, '', '',
+                                        //         '', '', '', '', '', context);
                                       }
                                       setState(() {});
 
@@ -1861,15 +1860,14 @@ class HomePageState extends State<HomePage> {
                       : SliverList(
                           delegate: SliverChildBuilderDelegate(
                             (BuildContext context, int index) {
-                              final items = _fetchEventData.data;
+                              // final items = _fetchEventData.data;
                               if (snapshot.data.length == 0 &&
                                   snapshot.connectionState ==
                                       ConnectionState.done) {
                                 return Text('data');
                               } else {
-                                return 
-                                EventCard(
-                                  datum: items[index],
+                                return EventCard(
+                                  datum: snapshot.data[index],
                                   email: _updateAndGetUserProfile
                                       .getUserData?.data?.authorEmail,
                                   name: _updateAndGetUserProfile

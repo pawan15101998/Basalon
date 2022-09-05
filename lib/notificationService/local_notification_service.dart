@@ -1,7 +1,5 @@
 import 'package:basalon/main.dart';
-import 'package:basalon/screens/home_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class LocalNotificationService {
@@ -19,17 +17,16 @@ class LocalNotificationService {
       onSelectNotification: (String? id) async {
         print("onSelectNotification");
 
-          print("Router Value1234 $id");
+        print("Router Value1234 $id");
 
-          // Navigator.of(context).push(
-          //   MaterialPageRoute(
-          //     builder: (context) => DemoScreen(
-          //       id: id,
-          //     ),
-          //   ),
-          // );
+        // Navigator.of(context).push(
+        //   MaterialPageRoute(
+        //     builder: (context) => DemoScreen(
+        //       id: id,
+        //     ),
+        //   ),
+        // );
         navigatorKey.currentState?.pushNamed('/home_screen');
-
       },
     );
   }

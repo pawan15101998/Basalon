@@ -3,9 +3,7 @@
 //   List<Data>? data;
 //   int? countEvent;
 //   Null? error;
-
 //   HomeData({this.success, this.data, this.countEvent, this.error});
-
 //   HomeData.fromJson(Map<String, dynamic> json) {
 //     success = json['success'];
 //     if (json['data'] != null) {
@@ -17,7 +15,6 @@
 //     countEvent = json['count_event'];
 //     error = json['error'];
 //   }
-
 //   Map<String, dynamic> toJson() {
 //     final Map<String, dynamic> data = new Map<String, dynamic>();
 //     data['success'] = this.success;
@@ -182,7 +179,7 @@ class HomeData {
     if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {
-        // print(v);
+        // ome(v);
         // print("chetan json data check");
 
         data!.add(new Data.fromJson(v));

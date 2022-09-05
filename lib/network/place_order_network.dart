@@ -130,7 +130,7 @@ class PlaceOrderNetwork {
     print(userId);
     print('userId');
     try {
-      EasyLoading.show();
+      //EasyLoading.show();
       final response = await ApiProvider.post(
         url: 'place_order',
         body: {
@@ -229,7 +229,6 @@ class PlaceOrderNetwork {
           ],
         ),
       );
-    
     } catch (e) {
       print('${e} failed order');
       EasyLoading.dismiss();

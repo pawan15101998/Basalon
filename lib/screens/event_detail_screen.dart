@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print, import_of_legacy_library_into_null_safe, must_be_immutable
 
 import 'dart:async';
 
@@ -29,7 +29,6 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../blocs/application_bloc.dart';
 import '../services/constant.dart';
 import '../utils/utils.dart';
-import '../widgets/comment_card.dart';
 import '../widgets/date_helper.dart';
 import '../widgets/feedback_card.dart';
 import '../widgets/image_previews.dart';
@@ -101,8 +100,6 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
   @override
   void initState() {
     _fetchEventData.getEventDetailData();
-    // TODO: implement initState
-    // fetchEvents();
     super.initState();
     streamController.close();
     print('print 1');
@@ -133,7 +130,6 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
     print('print 2');
   }
 
-  String? _dropDownValue;
   List items = [];
   late final p = _fetchEventData.eventData?.data;
   final categoryList = kDateTimeList;
@@ -1070,7 +1066,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                                   'שתפו פעילות',
                                                   style: ktextStyleBold,
                                                 ),
-                                                SizedBox(width:10)
+                                                SizedBox(width: 10)
                                               ],
                                             ),
                                           ),
@@ -1318,7 +1314,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                         //     );
                         //   },
                         // ),
-                     
+
                         if (isUserLogin(application.isUserLogin))
                           SliverList(
                             delegate: SliverChildBuilderDelegate(

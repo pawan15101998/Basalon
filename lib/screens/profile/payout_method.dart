@@ -193,7 +193,7 @@
 //               const SizedBox(height: 25),
 //               GestureDetector(
 //                 onTap: () async {
-//                   EasyLoading.show();
+//                   //EasyLoading.show();
 //                   await _userProfile.updateBankDetails(
 //                       LoginUser.shared?.userId! ??
 //                           application.idFromLocalProvider,

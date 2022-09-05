@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, prefer_const_constructors
+// ignore_for_file: avoid_print, prefer_const_constructors, must_be_immutable
 
 import 'package:basalon/blocs/application_bloc.dart';
 import 'package:basalon/firebase_options.dart';
@@ -34,6 +34,24 @@ void main() async {
   runApp(MyApp(
     isFirstTime: isFirstTime,
   ));
+  configLoading();
+}
+
+void configLoading() {
+  EasyLoading.instance
+    ..displayDuration = const Duration(milliseconds: 2000)
+    ..indicatorType = EasyLoadingIndicatorType.fadingCircle
+    ..loadingStyle = EasyLoadingStyle.dark
+    ..indicatorSize = 45.0
+    ..radius = 5
+    ..userInteractions = false
+    ..progressColor = Colors.black
+    ..backgroundColor = Colors.black
+    ..indicatorColor = Colors.black
+    ..textColor = Colors.black
+    ..maskColor = Colors.black
+    ..userInteractions = true
+    ..dismissOnTap = false;
 }
 
 var userIdFromLocal;

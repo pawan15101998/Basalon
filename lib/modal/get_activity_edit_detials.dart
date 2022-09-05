@@ -483,7 +483,7 @@
 class GetUserActivityEditDetails {
   int? success;
   Data? data;
-  Null? error;
+  dynamic error;
 
   GetUserActivityEditDetails({this.success, this.data, this.error});
 

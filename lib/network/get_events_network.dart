@@ -3,14 +3,12 @@ import 'package:basalon/modal/event_category_model.dart';
 import 'package:basalon/modal/get_event_detail_data.dart';
 import 'package:basalon/modal/home_data.dart';
 import 'package:basalon/screens/home_page.dart';
-import 'package:basalon/screens/home_screen.dart';
 import 'package:basalon/services/api_provider/api_provider.dart';
 import 'package:basalon/services/constant.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:location/location.dart';
 
 class FetchEventData {
   FetchEventData({
@@ -50,15 +48,11 @@ class FetchEventData {
 
   Future getEventData(page, filterByCategory, filterByTime, filterByAnyWhere,
       mapLat, mapLng, keyword, startDate, endDate, BuildContext context) async {
-    //print(filterByAnyWhere);
-    print("filterByCategory");
-    print(mapLat);
-    print(mapLng);
-    print(filterByCategory);
-    //print("nksajlkmsakl");
-
+    print(filterByAnyWhere);
+    print("filterByAnyWhere");
     try {
-      EasyLoading.show();
+      configLoading();
+      //EasyLoading.show();
       final response = await ApiProvider.post(url: 'get_events', body: {
         "paged": "$page",
         "keyword": keyword != "" || keyword != null ? "$keyword" : "",
@@ -76,7 +70,45 @@ class FetchEventData {
         "start_date": "$startDate",
         "end_date": "$endDate",
         "time":
-            "${filterByTime == 'specific_date' ? "this_week" : filterByTime ?? "this_week"}",
+            "${filterByTime == 'specific_date' ? "this_week" : filterByTime ?? " "}",
+        // "sort": filterByAnyWhere == 'online'
+        //     ? 'start-date'
+        //     : (filterByAnyWhere == 'בכל מקום' || filterByCategory == 'אירוח קולינרי')
+        //       ? 'start-date'
+        //         : ((filterByAnyWhere == 'קרוב אליי' ||
+        //                     filterByAnyWhere == 'עיר מסויימת') ||
+        //                 mapLng != null)
+        //             ? 'near'
+        //             : '',
+        "sort": (filterByAnyWhere == 'עיר מסויימת' ||
+                filterByAnyWhere == 'קרוב אליי' ||
+                application.filterAnywhereProvider == 'קרוב אליי')
+            ? "near"
+            : (filterByAnyWhere == 'בכל מקום')
+                ? 'start-date'
+                : '',
+        "event_type": filterByAnyWhere == 'online' ? 'online' : 'classic',
+        "el_data_taxonomy_custom[]": "",
+        "show_featured": "",
+      });
+      print({
+        "paged": "$page",
+        "keyword": keyword != "" || keyword != null ? "$keyword" : "",
+        "category": "${filterByCategory ?? ''}",
+        "map_lat": (filterByAnyWhere == 'עיר מסויימת' ||
+                filterByAnyWhere == 'בכל מקום' ||
+                filterByAnyWhere == 'קרוב אליי')
+            ? '$mapLat'
+            : null,
+        "map_lng": (filterByAnyWhere == 'עיר מסויימת' ||
+                filterByAnyWhere == 'בכל מקום' ||
+                filterByAnyWhere == 'קרוב אליי')
+            ? '$mapLng'
+            : null,
+        "start_date": "$startDate",
+        "end_date": "$endDate",
+        "time":
+            "${filterByTime == 'specific_date' ? "this_week" : filterByTime ?? " "}",
         // "sort": filterByAnyWhere == 'online'
         //     ? 'start-date'
         //     : (filterByAnyWhere == 'בכל מקום' || filterByCategory == 'אירוח קולינרי')
@@ -105,7 +137,6 @@ class FetchEventData {
       //print(mapLat);
 
       final result = HomeData.fromJson(response['body']);
-      EasyLoading.dismiss();
 
       //print('uiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
       //print(result);
@@ -120,6 +151,8 @@ class FetchEventData {
         return errorAlertMessage('no event found', '', context);
       } else {
         //print("snbdj2");
+        print("chetan check page");
+        print(page);
         if (page > 1) {
           //print("snbdj3");
           data = [...data, ...?result.data];
@@ -134,6 +167,7 @@ class FetchEventData {
           //print(data);
           //print("snbdj8");
         }
+        EasyLoading.dismiss();
       }
     } catch (e) {
       EasyLoading.dismiss();
@@ -190,7 +224,7 @@ class FetchEventData {
   Future postFeedbackEventDetails(context, userId,
       {content, rating, eventId}) async {
     try {
-      final response = await ApiProvider.post(url: 'add_comment', body: {
+      await ApiProvider.post(url: 'add_comment', body: {
         'user_id': '$userId',
         'event_id': '$eventId',
         'rating': '$rating',
@@ -214,8 +248,7 @@ class FetchEventData {
     content,
   ) async {
     try {
-      final response =
-          await ApiProvider.post(url: 'email_send_to_author', body: {
+      await ApiProvider.post(url: 'email_send_to_author', body: {
         'event_id': '$eventId',
         'name_customer': '$name',
         'email_customer': '$email',

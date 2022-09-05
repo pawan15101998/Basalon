@@ -31,7 +31,7 @@
 // if (granted!=true) {
 //   requestLocationPermission();
 // }
-// debugPrint('requestContactsPermission $granted');
+// debugprint('requestContactsPermission $granted');
 // return granted;
 // }
 // /*Show dialog if GPS not enabled and open settings location*/

@@ -442,7 +442,8 @@ class _MarkerEventCardState extends State<MarkerEventCard> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           (widget.datum.ticketRest.isNotEmpty &&
-                                  int.parse(widget.datum.ticketRest.replaceAll(new RegExp(r'[^0-9]'), '')) <
+                                  int.parse(widget.datum.ticketRest.replaceAll(
+                                          new RegExp(r'[^0-9]'), '')) <
                                       10)
                               ? Container(
                                   margin: EdgeInsets.only(left: 5),
@@ -452,19 +453,18 @@ class _MarkerEventCardState extends State<MarkerEventCard> {
                                       border: Border.all(
                                           color: MyColors.topOrange, width: 2)),
                                   child: Center(
-                                    child:  RichText(
-                                          text: TextSpan(
-                                              style: ktextStyleBoldSmall,
-                                              text: '  נותרו ',
-                                              children: [
-                                            // TextSpan(text: widget.datum.ticketRest),
-                                        // if( widget.datum.ticketRest != '' && int.parse(widget.datum.ticketRest.replaceAll(new RegExp(r'[^0-9]'), '')) < 10)
-                                       TextSpan(
-                                                text:
-                                                    '${widget.datum.ticketRest.replaceAll(new RegExp(r'[^0-9]'), '')}'),
-                                            TextSpan(text: ' מקומות  '),
-                                          ])
-                                          ),
+                                    child: RichText(
+                                        text: TextSpan(
+                                            style: ktextStyleBoldSmall,
+                                            text: '  נותרו ',
+                                            children: [
+                                          // TextSpan(text: widget.datum.ticketRest),
+                                          // if( widget.datum.ticketRest != '' && int.parse(widget.datum.ticketRest.replaceAll(new RegExp(r'[^0-9]'), '')) < 10)
+                                          TextSpan(
+                                              text:
+                                                  '${widget.datum.ticketRest.replaceAll(new RegExp(r'[^0-9]'), '')}'),
+                                          TextSpan(text: ' מקומות  '),
+                                        ])),
                                   ),
                                 )
                               : SizedBox(),
@@ -482,8 +482,8 @@ class _MarkerEventCardState extends State<MarkerEventCard> {
                                 left: 10, right: 6, top: 5, bottom: 5),
                             child: Text(
                               // (widget.datum.ticketRest.isNotEmpty)
-                                  '${widget.datum.priceJk}',
-                                  //  '₪34',
+                              '${widget.datum.priceJk}',
+                              //  '₪34',
                               // '₪${ datum.noOfTicket[0].priceTicket}',
                               style: ktextStyleWhite,
                             ),

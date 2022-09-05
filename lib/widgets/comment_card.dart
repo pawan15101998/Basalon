@@ -43,7 +43,6 @@ class _CommentCardState extends State<CommentCard> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            
             Container(
               padding: EdgeInsets.all(15),
               decoration: BoxDecoration(

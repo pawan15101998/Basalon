@@ -5,7 +5,6 @@ import 'package:basalon/modal/get_user_data.dart';
 import 'package:basalon/network/geolocator.dart';
 import 'package:basalon/network/google_map.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:multi_image_picker2/multi_image_picker2.dart';
 import 'package:shared_preferences/shared_preferences.dart';

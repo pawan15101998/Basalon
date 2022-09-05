@@ -7,7 +7,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+// import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../../blocs/application_bloc.dart';
 import '../../constant/login_user.dart';
@@ -86,7 +86,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       if (widget.isAppleLogin) {
         data['user_id'] = widget.userId!;
       }
-      String registerUrl = widget.isAppleLogin ? "ios_user_update_profile" : "user_register";
+      String registerUrl =
+          widget.isAppleLogin ? "ios_user_update_profile" : "user_register";
       response = await dio.post(
         'https://basalon.co.il/wp-json/wp/v2/$registerUrl',
         data: FormData.fromMap(data),
@@ -106,10 +107,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       ''');
       EasyLoading.dismiss();
 
-      
       if (response.data['success'] == 200) {
         // ignore: avoid_print
-        int id = int.parse((widget.isAppleLogin?response.data['data'][0]['ID']:response.data['data']['user_id']).toString());
+        int id = int.parse((widget.isAppleLogin
+                ? response.data['data'][0]['ID']
+                : response.data['data']['user_id'])
+            .toString());
         print(id);
         SharedPreferences sharedPreferences =
             await SharedPreferences.getInstance();
@@ -202,83 +205,91 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 // ),
 
                 const SizedBox(height: 25),
-                if (!widget.isAppleLogin)
+                // if (!widget.isAppleLogin)
+                //   Padding(
+                //     padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                //     child: SignInWithAppleButton(
+                //       text: "היכנס עם אפל",
+                //       onPressed: () async {
+                //         final credential =
+                //             await SignInWithApple.getAppleIDCredential(
+                //           scopes: [
+                //             AppleIDAuthorizationScopes.email,
+                //             AppleIDAuthorizationScopes.fullName,
+                //           ],
+                //           webAuthenticationOptions: WebAuthenticationOptions(
+                //             clientId:
+                //                 'de.lunaone.flutter.signinwithappleexample.service',
 
-Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                  child: SignInWithAppleButton(
-                    text: "היכנס עם אפל",
-                    onPressed: () async {
-                      final credential =
-                          await SignInWithApple.getAppleIDCredential(
-                        scopes: [
-                          AppleIDAuthorizationScopes.email,
-                          AppleIDAuthorizationScopes.fullName,
-                        ],
-                        webAuthenticationOptions: WebAuthenticationOptions(
-                          // TODO: Set the `clientId` and `redirectUri` arguments to the values you entered in the Apple Developer portal during the setup
-                          clientId:
-                              'de.lunaone.flutter.signinwithappleexample.service',
+                //             redirectUri:
+                //                 // For web your redirect URI needs to be the host of the "current page",
+                //                 // while for Android you will be using the API server that redirects back into your app via a deep link
+                //                 // kIsWeb
+                //                 // ? Uri.parse('https://${window.location.host}/')
+                //                 Uri.parse(
+                //               'https://flutter-sign-in-with-apple-example.glitch.me/callbacks/sign_in_with_apple',
+                //             ),
+                //           ),
+                //         );
 
-                          redirectUri:
-                              // For web your redirect URI needs to be the host of the "current page",
-                              // while for Android you will be using the API server that redirects back into your app via a deep link
-                              // kIsWeb
-                              // ? Uri.parse('https://${window.location.host}/')
-                              Uri.parse(
-                            'https://flutter-sign-in-with-apple-example.glitch.me/callbacks/sign_in_with_apple',
-                          ),
-                        ),
-                      );
+                //         var response =
+                //             await _loginRegisterNetwork.registerAppleData(
+                //                 credential.identityToken,
+                //                 credential.userIdentifier);
+                //         print(response);
+                //         print(response['status'] == 200);
+                //         print(
+                //             response['body']['data'][0]['user_nicename'] == '');
+                //         print(response['body']['data'][0]['user_nicename']);
+                //         print(response['body']['data'][0]['user_nicename'] ==
+                //             null);
+                //         print(response['status'] == 200 &&
+                //             (response['body']['data'][0]['user_nicename'] ==
+                //                     '' ||
+                //                 response['body']['data'][0]['user_nicename'] ==
+                //                     null));
+                //         if (response['status'] == 200) {
+                //           if ((response['body']['data'][0]['user_nicename'] ==
+                //                   '' ||
+                //               response['body']['data'][0]['user_nicename'] ==
+                //                   null)) {
+                //             Navigator.push(
+                //                 context,
+                //                 MaterialPageRoute(
+                //                     builder: (context) => RegistrationScreen(
+                //                           isAppleLogin: true,
+                //                           userId: int.parse(response['body']
+                //                                   ['data'][0]['ID']
+                //                               .toString()),
+                //                         )));
+                //             return;
+                //           }
 
-                      var response =
-                          await _loginRegisterNetwork.registerAppleData(
-                              credential.identityToken,
-                              credential.userIdentifier);
-                      print(response);
-                      print(response['status'] == 200);
-                      print(response['body']['data'][0]['user_nicename']=='');
-                      print(response['body']['data'][0]['user_nicename']);
-                      print(response['body']['data'][0]['user_nicename']==null);       
-print(response['status'] == 200 &&
-                          (response['body']['data'][0]['user_nicename'] == '' ||
-                              response['body']['data'][0]['user_nicename'] == null));
-                      if(response['status'] == 200){
+                //           var id = int.parse(
+                //               response['body']['data'][0]['ID'].toString());
+                //           //  user_email
+                //           //display_name
+                //           LoginUser(
+                //             userName: response['body']['data'][0]
+                //                 ['display_name'],
+                //             email: response['body']['data'][0]['user_email'],
+                //             userId: id,
+                //           );
+                //           SharedPreferences sharedPreferences =
+                //               await SharedPreferences.getInstance();
+                //           sharedPreferences.setInt('loginId', id);
+                //           LoginUser.shared?.userId =
+                //               sharedPreferences.getInt('loginId');
+                //           application.isUserLogin = true;
+                //           Navigator.of(context).pushAndRemoveUntil(
+                //               MaterialPageRoute(
+                //                   builder: (context) => HomeScreen()),
+                //               (Route<dynamic> route) => false);
+                //         }
+                //       },
+                //     ),
+                //   ),
 
-                      if (
-                          (response['body']['data'][0]['user_nicename'] == '' ||
-                              response['body']['data'][0]['user_nicename'] == null)) {    
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => RegistrationScreen(
-                                      isAppleLogin: true,
-                                      userId: int.parse(response['body']['data'][0]['ID'].toString()),
-                                    )));
-                        return;
-                      }
-                     
-                      var id = int.parse(response['body']['data'][0]['ID'].toString());
-                      //  user_email
-                      //display_name
-                       LoginUser(
-                            userName: response['body']['data'][0]['display_name'],
-                            email: response['body']['data'][0]['user_email'],
-                            userId: id,
-                          );
-                      SharedPreferences sharedPreferences =
-                          await SharedPreferences.getInstance();
-                      sharedPreferences.setInt('loginId', id);
-                      LoginUser.shared?.userId =
-                          sharedPreferences.getInt('loginId');
-        application.isUserLogin = true;
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => HomeScreen()),
-            (Route<dynamic> route) => false);  
-                      }
-                    },
-                  ),
-                ),
                 const SizedBox(height: 25),
                 if (!widget.isAppleLogin)
                   SizedBox(
@@ -496,7 +507,7 @@ print(response['status'] == 200 &&
                           confirmPasswordController.text) {
                         errorAlertMessage('Both password should be same!');
                       } else {
-                        EasyLoading.show();
+                        //EasyLoading.show();
                         registerData();
                       }
                     },

@@ -1,7 +1,6 @@
 import 'package:basalon/modal/package_model.dart';
 import 'package:basalon/screens/home_screen.dart';
 import 'package:basalon/services/api_provider/api_provider.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
@@ -11,8 +10,9 @@ import '../blocs/application_bloc.dart';
 class PackageNetwork {
   PackageModel? packageModel;
 
-  Future getPackage(userID,context) async {
-    late final application = Provider.of<ApplicationBloc>(context, listen: false);
+  Future getPackage(userID, context) async {
+    late final application =
+        Provider.of<ApplicationBloc>(context, listen: false);
 
     try {
       final response =
@@ -35,7 +35,7 @@ class PackageNetwork {
     return packageModel;
   }
 
-  Future renewPackage(userId,BuildContext context,packageId) async {
+  Future renewPackage(userId, BuildContext context, packageId) async {
     try {
       final response = await ApiProvider.post(url: 'register_package', body: {
         "user_id": "$userId",
@@ -46,7 +46,8 @@ class PackageNetwork {
       print(packageId);
       print(response);
       EasyLoading.dismiss();
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> HomeScreen()));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => HomeScreen()));
     } catch (e) {
       print('nhi hua package registed !!!!!!!!!!!!!!!1');
       print(e);

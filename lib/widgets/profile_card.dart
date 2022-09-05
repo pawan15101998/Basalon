@@ -1,14 +1,11 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print
-
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print, must_be_immutable
 import 'package:basalon/network/get_events_network.dart';
 import 'package:basalon/screens/activity/receiving_activity_screen.dart';
 import 'package:basalon/services/constant.dart';
 import 'package:basalon/services/my_color.dart';
 import 'package:basalon/widgets/custom_buttons.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../blocs/application_bloc.dart';
 
 class ProfileCard extends StatefulWidget {

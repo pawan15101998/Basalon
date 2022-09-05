@@ -71,7 +71,7 @@ class _UserProfileState extends State<UserProfile> {
     fillDetail();
     print("jbdcxxnzc,ndk");
     print(LoginUser.shared?.userId);
-    // EasyLoading.show();
+    // //EasyLoading.show();
     // getProfileData();
     // _updateAndGetUserProfile.getProfileData(
     //     LoginUser.shared?.userId! ?? application.idFromLocalProvider);
@@ -403,7 +403,7 @@ class _UserProfileState extends State<UserProfile> {
                   const SizedBox(height: 25),
                   GestureDetector(
                     onTap: () async {
-                      EasyLoading.show();
+                      //EasyLoading.show();
                       // getUpdateUserData();
                       await _updateAndGetUserProfile.getUpdateUserData(
                           LoginUser.shared?.userId! ??
@@ -595,7 +595,7 @@ class _UserProfileState extends State<UserProfile> {
                 onTap: () async {
                   print("kjsahdas");
                   print(LoginUser.shared?.userId!);
-                  EasyLoading.show();
+                  //EasyLoading.show();
                   await _userProfile.updateBankDetails(
                       LoginUser.shared?.userId! ??
                           application.idFromLocalProvider,

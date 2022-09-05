@@ -229,8 +229,6 @@
 
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
-
 Welcome welcomeFromJson(String str) => Welcome.fromJson(json.decode(str));
 
 String welcomeToJson(Welcome data) => json.encode(data.toJson());
@@ -248,7 +246,7 @@ class Welcome {
 
   factory Welcome.fromJson(Map<String, dynamic> json) {
     print("json data checking 0");
-    debugPrint("chetan ${json['data']}");
+    print(json);
     print("json data checking 1");
     return Welcome(
       success: json["success"],

@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print
 
+import 'package:appsflyer_sdk/appsflyer_sdk.dart';
 import 'package:basalon/modal/home_data.dart';
 import 'package:basalon/screens/activity/general_screen.dart';
 import 'package:basalon/screens/profile/contact_us.dart';
@@ -40,7 +41,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  ScrollController _scrollController = ScrollController();
   String? val;
   int? radiusVal = 50;
   bool showTopFilter = false;
@@ -51,21 +51,11 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedTabIndex = 3;
   int profileIndex = 10;
 
-  HomeData? homeData;
+  AppsflyerSdk? _appsflyerSdk;
+  Map? _deepLinkData;
+  Map? _gcd;
 
-  void _changeIndex(int index) {
-    if (index == 0) {
-      isSelected = true;
-    }
-    if (index != 0) {
-      isSelected = false;
-      profileIndex = 10;
-    }
-    setState(() {
-      _selectedTabIndex = index;
-      // print("index..." + index.toString());
-    });
-  }
+  HomeData? homeData;
 
   Container dropDown() {
     return Container(
@@ -275,23 +265,13 @@ class _HomeScreenState extends State<HomeScreen> {
         application.isUserLogin = true;
       });
     }
-
-    print(
-        'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk${application.idFromLocalProvider}');
   }
 
   @override
   void initState() {
     // showTopFilter =
     super.initState();
-    print('home screen home screen home screen');
     getValidationData().whenComplete(() async {
-      print(
-          'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk${application.idFromLocalProvider}');
-      print(
-          'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk${application.cardNumberProvider}');
-      print(
-          'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk${application.cardHolderProvider}');
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
@@ -305,6 +285,55 @@ class _HomeScreenState extends State<HomeScreen> {
       // MaterialPageRoute(
       //     builder: (context) =>
       //         finalEmail == null ? WelcomeScreen() : HomePage())));
+    });
+   
+    final AppsFlyerOptions options = AppsFlyerOptions(
+        afDevKey: 'hWwUS2NSsbHdzNzVUTEt4',
+        appId: 'il.co.basalon',
+        showDebug: true,
+        timeToWaitForATTUserAuthorization: 15);
+    _appsflyerSdk = AppsflyerSdk(options);
+    _appsflyerSdk!.onAppOpenAttribution((res) {
+      print("onAppOpenAttribution res: " + res.toString());
+      setState(() {
+        _deepLinkData = res;
+      });
+    });
+    _appsflyerSdk!.onInstallConversionData((res) {
+      print("onInstallConversionData res: " + res.toString());
+      setState(() {
+        _gcd = res;
+      });
+    });
+    _appsflyerSdk!.onDeepLinking((DeepLinkResult dp) {
+      switch (dp.status) {
+        case Status.FOUND:
+          print(dp.deepLink?.toString());
+          print("deep link value: ${dp.deepLink?.deepLinkValue}");
+          break;
+        case Status.NOT_FOUND:
+          print("deep link not found");
+          break;
+        case Status.ERROR:
+          print("deep link error: ${dp.error}");
+          break;
+        case Status.PARSE_ERROR:
+          print("deep link status parsing error");
+          break;
+      }
+      print("onDeepLinking res: " + dp.toString());
+      setState(() {
+        _deepLinkData = dp.toJson();
+      });
+    });
+    _appsflyerSdk!
+        .initSdk(
+            registerConversionDataCallback: true,
+            registerOnAppOpenAttributionCallback: false,
+            registerOnDeepLinkingCallback: true)
+        .then((value) {
+      print("value of appflyer");
+      print(value);
     });
   }
 
@@ -320,241 +349,243 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        extendBody: true,
-        appBar: _selectedTabIndex == 2
-            ? PreferredSize(
-                preferredSize: const Size(80, 40),
-                child: Align(
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 15, top: 10),
-                    child: Text('My Favorites',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 22)),
+    return Center(
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          extendBody: true,
+          appBar: _selectedTabIndex == 2
+              ? PreferredSize(
+                  preferredSize: const Size(80, 40),
+                  child: Align(
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 15, top: 10),
+                      child: Text('My Favorites',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 22)),
+                    ),
+                    alignment: Alignment.topRight,
                   ),
-                  alignment: Alignment.topRight,
-                ),
-              )
-            : null,
-        body: SizedBox(
-            //color: MyColors.homeBackGroundColor,
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            child: changeWidget()),
-        // bottomNavigationBar: Theme(
-        //   data: ThemeData(
-        //     splashFactory: NoSplash.splashFactory,
-        //     highlightColor: Colors.transparent,
-        //     hoverColor: Colors.transparent,
-        //   ),
-        //   child: Container(
-        //       height: 70,
-        //       decoration: BoxDecoration(
-        //         boxShadow: [
-        //           BoxShadow(
-        //               color: Colors.black45, blurRadius: 20, spreadRadius: 5)
-        //         ],
-        //         color: Colors.white,
-        //         borderRadius: BorderRadius.only(
-        //           topLeft: Radius.circular(30.0),
-        //           topRight: Radius.circular(30.0),
-        //         ),
-        //       ),
-        //       child: Row(
-        //         children: [
-        //           GestureDetector(
-        //             onTap: () {
-        //               showModalBottomSheet(
-        //                 backgroundColor: Colors.transparent,
-        //                 context: context,
-        //                 builder: (BuildContext context) {
-        //                   return Container(
-        //                     height:
-        //                         MediaQuery.of(context).copyWith().size.height *
-        //                             0.3,
-        //                     child: AccountModal(context),
-        //                   );
-        //                 },
-        //               );
-        //               setState(() {
-        //                 showModal = !showModal;
-        //               });
-        //             },
-        //             child: Container(
-        //               margin: EdgeInsets.only(left: 10),
-        //               child: Column(
-        //                 mainAxisAlignment: MainAxisAlignment.center,
-        //                 children: [
-        //                   Container(
-        //                     width: 50.0,
-        //                     height: 28.0,
-        //                     decoration: BoxDecoration(
-        //                       borderRadius: BorderRadius.circular(15),
-        //                       color:
-        //                           // showModal
-        //                           //     ? MyColors.topOrange.withOpacity(0.3)
-        //                           //     :
-        //                           Colors.transparent,
-        //                     ),
-        //                     child: Center(
-        //                       child: Padding(
-        //                         padding:
-        //                             const EdgeInsets.only(bottom: 3, top: 3),
-        //                         child:
-        //                             // SvgPicture.asset(
-        //                             //     'assets/icons/account-hover.svg')
-        //                             SvgPicture.asset('assets/icons/user.svg'),
-        //                       ),
-        //                     ),
-        //                   ),
-        //                   Text(
-        //                     'Account',
-        //                     style: TextStyle(
-        //                       fontSize: 12,
-        //                       // color:
-        //                       //     showModal ? MyColors.topOrange : Colors.black,
-        //                     ),
-        //                   ),
-        //                 ],
-        //               ),
-        //             ),
-        //           ),
-        //           Expanded(
-        //             child: BottomNavigationBar(
-        //               backgroundColor: Colors.transparent,
-        //               currentIndex: _selectedTabIndex,
-        //               onTap: _changeIndex,
-        //               elevation: 0.0,
-        //               type: BottomNavigationBarType.fixed,
-        //               selectedFontSize: 13,
-        //               unselectedFontSize: 13,
-        //               selectedItemColor: MyColors.topOrange,
-        //               unselectedItemColor: Colors.black,
-        //               showUnselectedLabels: true,
-        //               showSelectedLabels: true,
-        //               items: [
-        //                 BottomNavigationBarItem(
-        //                   icon: Container(
-        //                     width: 50.0,
-        //                     height: 28.0,
-        //                     decoration: BoxDecoration(
-        //                       borderRadius: BorderRadius.circular(15),
-        //                       color: _selectedTabIndex == 0
-        //                           ? MyColors.topOrange.withOpacity(0.3)
-        //                           : Colors.transparent,
-        //                     ),
-        //                     child: Center(
-        //                       child: Padding(
-        //                         padding:
-        //                             const EdgeInsets.only(bottom: 3, top: 3),
-        //                         child: _selectedTabIndex == 0
-        //                             ? SvgPicture.asset(
-        //                                 'assets/icons/orders-hover.svg')
-        //                             : SvgPicture.asset(
-        //                                 'assets/icons/orders.svg'),
-        //                       ),
-        //                     ),
-        //                   ),
-        //                   // label: 'Orders',
-        //                   label: 'Orders',
-        //                 ),
-        //                 BottomNavigationBarItem(
-        //                   icon: Container(
-        //                     // padding: EdgeInsets.symmetric(horizontal: 5.0),
-        //                     width: 50.0,
-        //                     height: 28.0,
-        //                     decoration: BoxDecoration(
-        //                       borderRadius: BorderRadius.circular(15),
-        //                       color: _selectedTabIndex == 1
-        //                           ? MyColors.topOrange.withOpacity(0.3)
-        //                           : Colors.transparent,
-        //                     ),
-        //                     child: Center(
-        //                       child: Padding(
-        //                         padding:
-        //                             const EdgeInsets.only(bottom: 3, top: 3),
-        //                         child: _selectedTabIndex == 1
-        //                             ? SvgPicture.asset(
-        //                                 'assets/icons/add-event-hover.svg')
-        //                             : SvgPicture.asset(
-        //                                 'assets/icons/add-event.svg'),
-        //                       ),
-        //                     ),
-        //                   ),
-        //                   label: 'Add Event',
-        //                 ),
-        //                 BottomNavigationBarItem(
-        //                   icon: Container(
-        //                     // padding: EdgeInsets.only(bottom: 20),
-        //                     width: 50.0,
-        //                     height: 28.0,
-        //                     decoration: BoxDecoration(
-        //                       borderRadius: BorderRadius.circular(15),
-        //                       color: _selectedTabIndex == 2
-        //                           ? MyColors.topOrange.withOpacity(0.3)
-        //                           : Colors.transparent,
-        //                     ),
-        //                     child: Center(
-        //                       child: Padding(
-        //                         padding:
-        //                             const EdgeInsets.only(bottom: 3, top: 3),
-        //                         child: _selectedTabIndex == 2
-        //                             ? SvgPicture.asset(
-        //                                 'assets/icons/favorite-hover.svg')
-        //                             : SvgPicture.asset(
-        //                                 'assets/icons/favorite.svg'),
-        //                       ),
-        //                     ),
-        //                   ),
-        //                   label: 'Favorites',
-        //                 ),
-        //                 BottomNavigationBarItem(
-        //                   // tooltip: '',
-        //                   // backgroundColor: Colors.red,
-        //                   icon: Container(
-        //                     width: 50.0,
-        //                     height: 28.0,
-        //                     decoration: BoxDecoration(
-        //                       borderRadius: BorderRadius.circular(15),
-        //                       color: _selectedTabIndex == 3
-        //                           ? MyColors.topOrange.withOpacity(0.3)
-        //                           : Colors.transparent,
-        //                     ),
-        //                     child: Center(
-        //                       child: Padding(
-        //                         padding:
-        //                             const EdgeInsets.only(bottom: 3, top: 3),
-        //                         child: _selectedTabIndex == 3
-        //                             ? SvgPicture.asset(
-        //                                 'assets/icons/home-hover.svg')
-        //                             : SvgPicture.asset('assets/icons/home.svg'),
-        //                       ),
-        //                     ),
-        //                   ),
-        //                   // label: 'HomePage',
-        //                   label: 'HomePage',
-        //                 ),
-        //               ],
-        //             ),
-        //           ),
-        //         ],
-        //       )),
-        // ),
-        // bottomNavigationBar: Container(
-        //   color: MyColors.dropdownColor.withOpacity(1),
-        //   child: Row(
-        //     // mainAxisSize: MainAxisSize.min,
-        //     // mainAxisAlignment: MainAxisAlignment.center,
-        //     // crossAxisAlignment: CrossAxisAlignment.center,
-        //     children: [
-        //       DropButton(text1: 'איפה?', text2: 'בכל מקום'),
-        //       DropButton(text1: 'מתי?', text2: 'בכל עת'),
-        //       DropButton(text1: 'מה?', text2: 'כל החוויות')
-        //     ],
-        //   ),
-        // ),
+                )
+              : null,
+          body: SizedBox(
+              //color: MyColors.homeBackGroundColor,
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              child: changeWidget()),
+          // bottomNavigationBar: Theme(
+          //   data: ThemeData(
+          //     splashFactory: NoSplash.splashFactory,
+          //     highlightColor: Colors.transparent,
+          //     hoverColor: Colors.transparent,
+          //   ),
+          //   child: Container(
+          //       height: 70,
+          //       decoration: BoxDecoration(
+          //         boxShadow: [
+          //           BoxShadow(
+          //               color: Colors.black45, blurRadius: 20, spreadRadius: 5)
+          //         ],
+          //         color: Colors.white,
+          //         borderRadius: BorderRadius.only(
+          //           topLeft: Radius.circular(30.0),
+          //           topRight: Radius.circular(30.0),
+          //         ),
+          //       ),
+          //       child: Row(
+          //         children: [
+          //           GestureDetector(
+          //             onTap: () {
+          //               showModalBottomSheet(
+          //                 backgroundColor: Colors.transparent,
+          //                 context: context,
+          //                 builder: (BuildContext context) {
+          //                   return Container(
+          //                     height:
+          //                         MediaQuery.of(context).copyWith().size.height *
+          //                             0.3,
+          //                     child: AccountModal(context),
+          //                   );
+          //                 },
+          //               );
+          //               setState(() {
+          //                 showModal = !showModal;
+          //               });
+          //             },
+          //             child: Container(
+          //               margin: EdgeInsets.only(left: 10),
+          //               child: Column(
+          //                 mainAxisAlignment: MainAxisAlignment.center,
+          //                 children: [
+          //                   Container(
+          //                     width: 50.0,
+          //                     height: 28.0,
+          //                     decoration: BoxDecoration(
+          //                       borderRadius: BorderRadius.circular(15),
+          //                       color:
+          //                           // showModal
+          //                           //     ? MyColors.topOrange.withOpacity(0.3)
+          //                           //     :
+          //                           Colors.transparent,
+          //                     ),
+          //                     child: Center(
+          //                       child: Padding(
+          //                         padding:
+          //                             const EdgeInsets.only(bottom: 3, top: 3),
+          //                         child:
+          //                             // SvgPicture.asset(
+          //                             //     'assets/icons/account-hover.svg')
+          //                             SvgPicture.asset('assets/icons/user.svg'),
+          //                       ),
+          //                     ),
+          //                   ),
+          //                   Text(
+          //                     'Account',
+          //                     style: TextStyle(
+          //                       fontSize: 12,
+          //                       // color:
+          //                       //     showModal ? MyColors.topOrange : Colors.black,
+          //                     ),
+          //                   ),
+          //                 ],
+          //               ),
+          //             ),
+          //           ),
+          //           Expanded(
+          //             child: BottomNavigationBar(
+          //               backgroundColor: Colors.transparent,
+          //               currentIndex: _selectedTabIndex,
+          //               onTap: _changeIndex,
+          //               elevation: 0.0,
+          //               type: BottomNavigationBarType.fixed,
+          //               selectedFontSize: 13,
+          //               unselectedFontSize: 13,
+          //               selectedItemColor: MyColors.topOrange,
+          //               unselectedItemColor: Colors.black,
+          //               showUnselectedLabels: true,
+          //               showSelectedLabels: true,
+          //               items: [
+          //                 BottomNavigationBarItem(
+          //                   icon: Container(
+          //                     width: 50.0,
+          //                     height: 28.0,
+          //                     decoration: BoxDecoration(
+          //                       borderRadius: BorderRadius.circular(15),
+          //                       color: _selectedTabIndex == 0
+          //                           ? MyColors.topOrange.withOpacity(0.3)
+          //                           : Colors.transparent,
+          //                     ),
+          //                     child: Center(
+          //                       child: Padding(
+          //                         padding:
+          //                             const EdgeInsets.only(bottom: 3, top: 3),
+          //                         child: _selectedTabIndex == 0
+          //                             ? SvgPicture.asset(
+          //                                 'assets/icons/orders-hover.svg')
+          //                             : SvgPicture.asset(
+          //                                 'assets/icons/orders.svg'),
+          //                       ),
+          //                     ),
+          //                   ),
+          //                   // label: 'Orders',
+          //                   label: 'Orders',
+          //                 ),
+          //                 BottomNavigationBarItem(
+          //                   icon: Container(
+          //                     // padding: EdgeInsets.symmetric(horizontal: 5.0),
+          //                     width: 50.0,
+          //                     height: 28.0,
+          //                     decoration: BoxDecoration(
+          //                       borderRadius: BorderRadius.circular(15),
+          //                       color: _selectedTabIndex == 1
+          //                           ? MyColors.topOrange.withOpacity(0.3)
+          //                           : Colors.transparent,
+          //                     ),
+          //                     child: Center(
+          //                       child: Padding(
+          //                         padding:
+          //                             const EdgeInsets.only(bottom: 3, top: 3),
+          //                         child: _selectedTabIndex == 1
+          //                             ? SvgPicture.asset(
+          //                                 'assets/icons/add-event-hover.svg')
+          //                             : SvgPicture.asset(
+          //                                 'assets/icons/add-event.svg'),
+          //                       ),
+          //                     ),
+          //                   ),
+          //                   label: 'Add Event',
+          //                 ),
+          //                 BottomNavigationBarItem(
+          //                   icon: Container(
+          //                     // padding: EdgeInsets.only(bottom: 20),
+          //                     width: 50.0,
+          //                     height: 28.0,
+          //                     decoration: BoxDecoration(
+          //                       borderRadius: BorderRadius.circular(15),
+          //                       color: _selectedTabIndex == 2
+          //                           ? MyColors.topOrange.withOpacity(0.3)
+          //                           : Colors.transparent,
+          //                     ),
+          //                     child: Center(
+          //                       child: Padding(
+          //                         padding:
+          //                             const EdgeInsets.only(bottom: 3, top: 3),
+          //                         child: _selectedTabIndex == 2
+          //                             ? SvgPicture.asset(
+          //                                 'assets/icons/favorite-hover.svg')
+          //                             : SvgPicture.asset(
+          //                                 'assets/icons/favorite.svg'),
+          //                       ),
+          //                     ),
+          //                   ),
+          //                   label: 'Favorites',
+          //                 ),
+          //                 BottomNavigationBarItem(
+          //                   // tooltip: '',
+          //                   // backgroundColor: Colors.red,
+          //                   icon: Container(
+          //                     width: 50.0,
+          //                     height: 28.0,
+          //                     decoration: BoxDecoration(
+          //                       borderRadius: BorderRadius.circular(15),
+          //                       color: _selectedTabIndex == 3
+          //                           ? MyColors.topOrange.withOpacity(0.3)
+          //                           : Colors.transparent,
+          //                     ),
+          //                     child: Center(
+          //                       child: Padding(
+          //                         padding:
+          //                             const EdgeInsets.only(bottom: 3, top: 3),
+          //                         child: _selectedTabIndex == 3
+          //                             ? SvgPicture.asset(
+          //                                 'assets/icons/home-hover.svg')
+          //                             : SvgPicture.asset('assets/icons/home.svg'),
+          //                       ),
+          //                     ),
+          //                   ),
+          //                   // label: 'HomePage',
+          //                   label: 'HomePage',
+          //                 ),
+          //               ],
+          //             ),
+          //           ),
+          //         ],
+          //       )),
+          // ),
+          // bottomNavigationBar: Container(
+          //   color: MyColors.dropdownColor.withOpacity(1),
+          //   child: Row(
+          //     // mainAxisSize: MainAxisSize.min,
+          //     // mainAxisAlignment: MainAxisAlignment.center,
+          //     // crossAxisAlignment: CrossAxisAlignment.center,
+          //     children: [
+          //       DropButton(text1: 'איפה?', text2: 'בכל מקום'),
+          //       DropButton(text1: 'מתי?', text2: 'בכל עת'),
+          //       DropButton(text1: 'מה?', text2: 'כל החוויות')
+          //     ],
+          //   ),
+          // ),
+        ),
       ),
     );
   }

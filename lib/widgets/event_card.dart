@@ -70,8 +70,6 @@ class EventCardState extends State<EventCard> {
   bool showShareMenu = false;
 
   Future<void> share() async {
-    print('object---');
-
     await FlutterShare.share(
         title: 'Basalon',
         text: 'Click to open Event',
@@ -82,14 +80,11 @@ class EventCardState extends State<EventCard> {
 
   bool isCategoryContain(List<CategoryData> data) {
     for (var item in data) {
-      print(item.name?.contains('סדנה'));
-      print("category item name");
       if (item.name!.contains('סדנ') ||
           item.name!.contains('גו-נפש') ||
           item.name!.contains('מזון')) {
         return true;
       }
-      print(item.name);
     }
     return false;
   }
@@ -306,16 +301,8 @@ class EventCardState extends State<EventCard> {
 
   @override
   Widget build(BuildContext context) {
-    print("jksjnsd");
-    print(widget.datum.ticketRest);
-    print(widget.datum.averageRating ?? 0);
-    print('dateSplit dateSplit dateSplit');
-    print('${widget.datum.thumbnailEvent}');
-    print('dateSplit dateSplit dateSplit');
-    print(dateSplit);
     widget.datum.categoryData = widget.datum.categoryData.reversed.toList();
     return FutureBuilder(builder: (context, snapshot) {
-      print(snapshot.connectionState);
       return Container(
         margin: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
         padding: const EdgeInsets.all(1),
@@ -585,9 +572,8 @@ class EventCardState extends State<EventCard> {
                                             // color: MyColors.topOrange,
                                             color: Colors.amber.shade700,
                                           ),
-                                          onRatingUpdate: (rating) {
-                                            print(rating);
-                                          },
+                                          ignoreGestures: true,
+                                          onRatingUpdate: (double value) {},
                                         )
                                       ],
                                     ),
@@ -853,8 +839,13 @@ class EventCardState extends State<EventCard> {
                                         style: TextStyle(
                                             fontSize: 16, color: Colors.black)),
                                   ),
-                                  FaIcon(FontAwesomeIcons.ticket,
-                                      color: MyColors.topOrange)
+                                  Transform.rotate(
+                                      angle: 180,
+                                      child: FaIcon(
+                                        FontAwesomeIcons.ticket,
+                                        color: MyColors.topOrange,
+                                        size: 18,
+                                      ))
                                 ],
                               ),
                             ),

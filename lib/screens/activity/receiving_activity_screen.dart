@@ -1,10 +1,10 @@
+// ignore_for_file: must_be_immutable, unused_field
+
 import 'package:basalon/network/create_event_network.dart';
 import 'package:basalon/screens/home_screen.dart';
 import 'package:basalon/screens/preview/preview_event_detail.dart';
 import 'package:basalon/services/constant.dart';
-import 'package:basalon/services/my_color.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../blocs/application_bloc.dart';
@@ -425,7 +425,7 @@ class ReceivingPaymentFields extends StatelessWidget {
               onChanged: onChange,
               onTap: onTap,
               validator: (value) {
-                if (value!.isEmpty || value == null) {
+                if (value == null || value.isEmpty) {
                   return '*field is required';
                 } else {
                   return null;
