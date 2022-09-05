@@ -73,7 +73,10 @@ class ApiProvider {
     if (!await Connection.isConnected()) {
       return {'status': 'No Connection', 'body': 'No Internet Connection'};
     }
-
+    print("${constant.url}$url");
+    print(constant.auth_key);
+    print(constant.client_service);
+    print("chetan checking");
     var _response = await dio.post(
       '${constant.url}$url',
       data: formData,

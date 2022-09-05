@@ -32,7 +32,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>FacebookAppID</key>
 	<string>604143361013658</string>
 	<key>FacebookClientToken</key>
@@ -58,13 +58,13 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Access camera is needed to capture photo for user</string>
+	<string>Access is needed to upload the profile and event's images.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Access location is needed for fetching events around you</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Access location is needed for fetching events around you</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Access storage is needed to upload files and photos by user</string>
+	<string>Access is needed to upload the profile and event's images.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

@@ -16,13 +16,14 @@ class UpdateAndGetUserProfile {
         Provider.of<ApplicationBloc>(context, listen: false);
 
     try {
-      print("debug1");
+      print("userID");
+      print(userID);
       // 'https://basalon.co.il/wp-json/wp/v2/get_user_profile',
       final response = await ApiProvider.post(
           url: 'get_user_profile', body: {'user_id': '$userID'});
-
       print("debug2");
-
+print(response['body']);
+print("chetan debug");
       final result = GetUserData.fromJson(response['body']);
       print('----------------get_user_profileget_user_profile');
       print(response['status']);

@@ -116,7 +116,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 18.0),
                   child: SignInWithAppleButton(
-                    text: "היכנס עם אפל",
+                    text: "היכנס עם Apple",
                     onPressed: () async {
                       final credential =
                           await SignInWithApple.getAppleIDCredential(
@@ -125,21 +125,12 @@ class _SignInScreenState extends State<SignInScreen> {
                           AppleIDAuthorizationScopes.fullName,
                         ],
                         webAuthenticationOptions: WebAuthenticationOptions(
-                          // TODO: Set the `clientId` and `redirectUri` arguments to the values you entered in the Apple Developer portal during the setup
-                          clientId:
-                              'de.lunaone.flutter.signinwithappleexample.service',
-
-                          redirectUri:
-                              // For web your redirect URI needs to be the host of the "current page",
-                              // while for Android you will be using the API server that redirects back into your app via a deep link
-                              // kIsWeb
-                              // ? Uri.parse('https://${window.location.host}/')
-                              Uri.parse(
+                          clientId:'de.lunaone.flutter.signinwithappleexample.service',
+                          redirectUri: Uri.parse(
                             'https://flutter-sign-in-with-apple-example.glitch.me/callbacks/sign_in_with_apple',
                           ),
                         ),
                       );
-
                       var response =
                           await _loginRegisterNetwork.registerAppleData(
                               credential.identityToken,

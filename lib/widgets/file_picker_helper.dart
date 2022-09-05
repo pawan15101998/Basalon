@@ -12,7 +12,6 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:multi_image_picker2/multi_image_picker2.dart';
 
-
 FutureOr<FilePickerResult?> getFilePicker() async {
   FilePickerResult? result = await FilePicker.platform
       .pickFiles(type: FileType.custom, allowedExtensions: ['pdf']);
@@ -33,46 +32,38 @@ FutureOr<FilePickerResult?> getMultipleFilePicker() async {
   }
 }
 
-
-
+final picker = ImagePicker();
 
 Future<List<dynamic>> pickPicture({
   //required bool isGallery,
   required BuildContext context,
 }) async {
+  print("picking image");
   try {
-
-    final picker = ImagePicker();
+    print('try');
     final imagePicker = await picker.pickImage(
-      source:  ImageSource.gallery,
-      maxWidth: 600,
+      source: ImageSource.gallery,
     );
-
     if (imagePicker == null) {
       throw 'Image is not selected!!';
     }
     File image = File(imagePicker.path);
-  final a = await imagePicker.readAsBytes();
-
-print('ye rhi image');
-print(image);
-print('aaaaaaa${imagePicker.path}');
+    final a = await imagePicker.readAsBytes();
+    print('ye rhi image');
+    print(image);
+    print('aaaaaaa${imagePicker.path}');
     Uint8List compressedImage = await compressFile(image);
-
     String filename = image.path.split('/').last;
     print('eerrr$filename');
-
-
-    // });
     return [image, filename];
   } catch (error) {
+    print("error catching");
+    print(error.toString());
     return [];
-   // showErrorDialogue(error.toString(), context);
-    
+    // showErrorDialogue(error.toString(), context);
+
   }
 }
-
-
 
 // * compress file **
 Future<Uint8List> compressFile(File file) async {
@@ -87,5 +78,3 @@ Future<Uint8List> compressFile(File file) async {
   }
   return result;
 }
-
-

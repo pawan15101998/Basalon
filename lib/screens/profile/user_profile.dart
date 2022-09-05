@@ -124,6 +124,7 @@ class _UserProfileState extends State<UserProfile> {
         'application.getUserDataProfileProvider?.data?.authorImage?.isNotEmpty');
     print(application.getUserDataProfileProvider?.data?.authorImage);
     print(application.imageFromFacebook);
+    print("chetan image");
     return Consumer(
       builder: (context, model, child) {
         return Expanded(
@@ -146,7 +147,7 @@ class _UserProfileState extends State<UserProfile> {
                                 imgfile!,
                                 height: 150,
                                 width: 150,
-                                fit: BoxFit.contain,
+                                fit: BoxFit.cover,
                               )
                             : Image.network(
                                 (application.getUserDataProfileProvider?.data?.authorImage !=
@@ -182,15 +183,19 @@ class _UserProfileState extends State<UserProfile> {
                           )),
                       GestureDetector(
                         onTap: () async {
-                          var fileList =
-                              await pickPicture(context: context).then((value) {
+                          print("image pick");
+                          try {
+                            var value = await pickPicture(context: context);
                             if (value.isNotEmpty) {
                               setState(() {
                                 imgfile = value[0];
                                 imgData = value[1];
                               });
                             }
-                          });
+                          } catch (e) {
+                            print("error ghat");
+                            print(e);
+                          }
                         },
                         child: Container(
                           height: 50,

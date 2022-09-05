@@ -56,6 +56,44 @@ class FetchEventData {
     print(filterByCategory);
     print("nksajlkmsakl");
     try {
+      print("chetans object");
+      print({
+        "paged": "$page",
+        "keyword": keyword != "" || keyword != null ? "$keyword" : "",
+        "category": "${filterByCategory ?? ''}",
+        "map_lat": (filterByAnyWhere == 'עיר מסויימת' ||
+                filterByAnyWhere == 'בכל מקום' ||
+                filterByAnyWhere == 'קרוב אליי')
+            ? '$mapLat'
+            : null,
+        "map_lng": (filterByAnyWhere == 'עיר מסויימת' ||
+                filterByAnyWhere == 'בכל מקום' ||
+                filterByAnyWhere == 'קרוב אליי')
+            ? '$mapLng'
+            : null,
+        "start_date": "$startDate",
+        "end_date": "$endDate",
+        "time":
+            "${filterByTime == 'specific_date' ? "this_week" : filterByTime ?? "this_week"}",
+        // "sort": filterByAnyWhere == 'online'
+        //     ? 'start-date'
+        //     : (filterByAnyWhere == 'בכל מקום' || filterByCategory == 'אירוח קולינרי')
+        //       ? 'start-date'
+        //         : ((filterByAnyWhere == 'קרוב אליי' ||
+        //                     filterByAnyWhere == 'עיר מסויימת') ||
+        //                 mapLng != null)
+        //             ? 'near'
+        //             : '',
+        "sort": (filterByAnyWhere == 'עיר מסויימת' ||
+                filterByAnyWhere == 'קרוב אליי' ||
+                application.filterAnywhereProvider == 'קרוב אליי')
+            ? "near"
+            : (filterByAnyWhere == 'בכל מקום')
+                ? 'start-date'
+                : '',
+        "event_type": filterByAnyWhere == 'online' ? 'online' : 'classic',
+        "el_data_taxonomy_custom[]": "",
+        "show_featured": ""});
       final response = await ApiProvider.post(url: 'get_events', body: {
         "paged": "$page",
         "keyword": keyword != "" || keyword != null ? "$keyword" : "",
@@ -94,56 +132,52 @@ class FetchEventData {
         "el_data_taxonomy_custom[]": "",
         "show_featured": "",
       });
-      print("dklsxjkl");
-      print(application.filterAnywhereProvider);
+      // print("dklsxjkl");
+      // print(response);
+      // print(application.filterAnywhereProvider);
       // print(filterByAnyWhere);
-      print(filterByTime);
+      // print(filterByTime);
 
-      print(mapLat);
+      // print(mapLat);
 
       final result = HomeData.fromJson(response['body']);
       print('uiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
-      print(result);
-      print(filterByCategory);
-      print(filterByAnyWhere);
-      print(mapLat);
-      print(response['status']);
 
       print("ajb");
       if (response['status'] == 401) {
-        print("snbdj1");
+        // print("snbdj1");
         return errorAlertMessage('no event found', '', context);
       } else {
-        print("snbdj2");
+        // print("snbdj2");
         if (page > 1) {
-          print("snbdj3");
+          // print("snbdj3");
           data = [...data, ...?result.data];
-          print("snbdj4");
-          print("result.,data");
-          print("snbdj5");
-          print(result.data);
-          print("snbdj6");
+          // print("snbdj4")
+          // print("result.,data");
+          // print("snbdj5");
+          // print(result.data);
+          // print("snbdj6");
         } else {
-          print("snbdj7");
+          // print("snbdj7");
           data = result.data!;
-          print(data);
-          print("snbdj8");
+          // print(data);
+          // print("snbdj8");
         }
       }
     } catch (e) {
-      print('homepage events nhi aaye ERROR!${e}');
-      print("snbdj9");
-      print(keyword);
+      // print('homepage events nhi aaye ERROR!${e}');
+      // print("snbdj9");
+      // print(keyword);
       if (keyword != null && keyword != '') {
         data = [];
-        print("snbdj10");
+        // print("snbdj10");
       }
-      print("snbdj11");
+      // print("snbdj11");
       data = [];
-      print("snbdj12");
+      // print("snbdj12");
     }
-    print("snbdj13");
-    print(data);
+    // print("snbdj13");
+    // print(data);
     return data;
   }
 
