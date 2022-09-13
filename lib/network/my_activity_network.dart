@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:basalon/modal/get_activity_edit_detials.dart';
 import 'package:basalon/modal/get_user_activity.dart';
 import 'package:basalon/services/api_provider/api_provider.dart';
 import 'package:flutter/cupertino.dart';
@@ -42,27 +39,24 @@ class GetUserActivity {
     return myActivity;
   }
 
-  Future getUserEditActivityDetails(eventId, BuildContext context)
-   async {
-    late final application =
-        Provider.of<ApplicationBloc>(context, listen: false);
-    var result;
+  Future getUserEditActivityDetails(eventId, BuildContext context) async {
+    Provider.of<ApplicationBloc>(context, listen: false);
     print(eventId);
     print('okokokok');
     print(eventId);
     try {
       final response =
-          await ApiProvider.post(url: 'get_user_event_detail', body:{
+          await ApiProvider.post(url: 'get_user_event_detail', body: {
         "id": "$eventId",
       });
-      // print('response'); 
+      // print('response');
       // print(response);
-      var  apiResponse =   Map<String, dynamic>.from(response['body']);
+      var apiResponse = Map<String, dynamic>.from(response['body']);
       print("kdjhaskjdbkjsa");
       print(apiResponse);
       print(apiResponse.runtimeType);
       print("9999");
-      
+
       // result = GetUserActivityEditDetails.fromJson(apiResponse);
       // result =  Map<String, dynamic>.from(apiResponse['body']);
       // application.myActivityEditPage = result;

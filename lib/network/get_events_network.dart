@@ -3,13 +3,12 @@ import 'package:basalon/modal/event_category_model.dart';
 import 'package:basalon/modal/get_event_detail_data.dart';
 import 'package:basalon/modal/home_data.dart';
 import 'package:basalon/screens/home_page.dart';
-import 'package:basalon/screens/home_screen.dart';
 import 'package:basalon/services/api_provider/api_provider.dart';
 import 'package:basalon/services/constant.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:location/location.dart';
 
 class FetchEventData {
   FetchEventData({
@@ -39,9 +38,6 @@ class FetchEventData {
   Position? geoLoc;
   setLocation() async {
     geoLoc = await Geolocator.getCurrentPosition();
-    print(
-        '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++homepage');
-    print(geoLoc);
 
     // setState(() {
 
@@ -53,47 +49,10 @@ class FetchEventData {
   Future getEventData(page, filterByCategory, filterByTime, filterByAnyWhere,
       mapLat, mapLng, keyword, startDate, endDate, BuildContext context) async {
     print(filterByAnyWhere);
-    print(filterByCategory);
-    print("nksajlkmsakl");
+    print("filterByAnyWhere");
     try {
-      print("chetans object");
-      print({
-        "paged": "$page",
-        "keyword": keyword != "" || keyword != null ? "$keyword" : "",
-        "category": "${filterByCategory ?? ''}",
-        "map_lat": (filterByAnyWhere == 'עיר מסויימת' ||
-                filterByAnyWhere == 'בכל מקום' ||
-                filterByAnyWhere == 'קרוב אליי')
-            ? '$mapLat'
-            : null,
-        "map_lng": (filterByAnyWhere == 'עיר מסויימת' ||
-                filterByAnyWhere == 'בכל מקום' ||
-                filterByAnyWhere == 'קרוב אליי')
-            ? '$mapLng'
-            : null,
-        "start_date": "$startDate",
-        "end_date": "$endDate",
-        "time":
-            "${filterByTime == 'specific_date' ? "this_week" : filterByTime ?? "this_week"}",
-        // "sort": filterByAnyWhere == 'online'
-        //     ? 'start-date'
-        //     : (filterByAnyWhere == 'בכל מקום' || filterByCategory == 'אירוח קולינרי')
-        //       ? 'start-date'
-        //         : ((filterByAnyWhere == 'קרוב אליי' ||
-        //                     filterByAnyWhere == 'עיר מסויימת') ||
-        //                 mapLng != null)
-        //             ? 'near'
-        //             : '',
-        "sort": (filterByAnyWhere == 'עיר מסויימת' ||
-                filterByAnyWhere == 'קרוב אליי' ||
-                application.filterAnywhereProvider == 'קרוב אליי')
-            ? "near"
-            : (filterByAnyWhere == 'בכל מקום')
-                ? 'start-date'
-                : '',
-        "event_type": filterByAnyWhere == 'online' ? 'online' : 'classic',
-        "el_data_taxonomy_custom[]": "",
-        "show_featured": ""});
+      configLoading();
+      //EasyLoading.show();
       final response = await ApiProvider.post(url: 'get_events', body: {
         "paged": "$page",
         "keyword": keyword != "" || keyword != null ? "$keyword" : "",
@@ -111,7 +70,7 @@ class FetchEventData {
         "start_date": "$startDate",
         "end_date": "$endDate",
         "time":
-            "${filterByTime == 'specific_date' ? "this_week" : filterByTime ?? "this_week"}",
+            "${filterByTime == 'specific_date' ? "this_week" : filterByTime ?? " "}",
         // "sort": filterByAnyWhere == 'online'
         //     ? 'start-date'
         //     : (filterByAnyWhere == 'בכל מקום' || filterByCategory == 'אירוח קולינרי')
@@ -132,52 +91,101 @@ class FetchEventData {
         "el_data_taxonomy_custom[]": "",
         "show_featured": "",
       });
-      // print("dklsxjkl");
-      // print(response);
-      // print(application.filterAnywhereProvider);
-      // print(filterByAnyWhere);
-      // print(filterByTime);
+      print({
+        "paged": "$page",
+        "keyword": keyword != "" || keyword != null ? "$keyword" : "",
+        "category": "${filterByCategory ?? ''}",
+        "map_lat": (filterByAnyWhere == 'עיר מסויימת' ||
+                filterByAnyWhere == 'בכל מקום' ||
+                filterByAnyWhere == 'קרוב אליי')
+            ? '$mapLat'
+            : null,
+        "map_lng": (filterByAnyWhere == 'עיר מסויימת' ||
+                filterByAnyWhere == 'בכל מקום' ||
+                filterByAnyWhere == 'קרוב אליי')
+            ? '$mapLng'
+            : null,
+        "start_date": "$startDate",
+        "end_date": "$endDate",
+        "time":
+            "${filterByTime == 'specific_date' ? "this_week" : filterByTime ?? " "}",
+        // "sort": filterByAnyWhere == 'online'
+        //     ? 'start-date'
+        //     : (filterByAnyWhere == 'בכל מקום' || filterByCategory == 'אירוח קולינרי')
+        //       ? 'start-date'
+        //         : ((filterByAnyWhere == 'קרוב אליי' ||
+        //                     filterByAnyWhere == 'עיר מסויימת') ||
+        //                 mapLng != null)
+        //             ? 'near'
+        //             : '',
+        "sort": (filterByAnyWhere == 'עיר מסויימת' ||
+                filterByAnyWhere == 'קרוב אליי' ||
+                application.filterAnywhereProvider == 'קרוב אליי')
+            ? "near"
+            : (filterByAnyWhere == 'בכל מקום')
+                ? 'start-date'
+                : '',
+        "event_type": filterByAnyWhere == 'online' ? 'online' : 'classic',
+        "el_data_taxonomy_custom[]": "",
+        "show_featured": "",
+      });
+      //print("dklsxjkl");
+      //print(application.filterAnywhereProvider);
+      ////print(filterByAnyWhere);
+      //print(filterByTime);
 
-      // print(mapLat);
+      //print(mapLat);
 
       final result = HomeData.fromJson(response['body']);
-      print('uiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
 
-      print("ajb");
+      //print('uiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
+      //print(result);
+      //print(filterByCategory);
+      //print(filterByAnyWhere);
+      //print(mapLat);
+      //print(response['status']);
+
+      //print("ajb");
       if (response['status'] == 401) {
-        // print("snbdj1");
+        //print("snbdj1");
         return errorAlertMessage('no event found', '', context);
       } else {
-        // print("snbdj2");
+        //print("snbdj2");
+        print("chetan check page");
+        print(page);
         if (page > 1) {
-          // print("snbdj3");
+          //print("snbdj3");
           data = [...data, ...?result.data];
-          // print("snbdj4")
-          // print("result.,data");
-          // print("snbdj5");
-          // print(result.data);
-          // print("snbdj6");
+          //print("snbdj4");
+          //print("result.,data");
+          //print("snbdj5");
+          //print(result.data);
+          //print("snbdj6");
         } else {
-          // print("snbdj7");
+          //print("snbdj7");
           data = result.data!;
-          // print(data);
-          // print("snbdj8");
+          //print(data);
+          //print("snbdj8");
         }
+        EasyLoading.dismiss();
       }
     } catch (e) {
-      // print('homepage events nhi aaye ERROR!${e}');
-      // print("snbdj9");
-      // print(keyword);
+      EasyLoading.dismiss();
+
+      //print('homepage events nhi aaye ERROR!${e}');
+      //print("snbdj9");
+      //print(keyword);
       if (keyword != null && keyword != '') {
         data = [];
-        // print("snbdj10");
+        //print("snbdj10");
       }
-      // print("snbdj11");
+      //print("snbdj11");
       data = [];
-      // print("snbdj12");
+      //print("snbdj12");
     }
-    // print("snbdj13");
-    // print(data);
+    //print("snbdj13");
+    //print(data);
+
     return data;
   }
 
@@ -186,16 +194,14 @@ class FetchEventData {
       final response =
           await ApiProvider.post(url: 'get_event_detail', body: {"id": "$id"});
       final result = Welcome.fromJson(response['body']);
-      print('resultlkjlkjlkjlkjlkjlk');
+      //print('resultlkjlkjlkjlkjlkjlk');
 
-      print('${result.data?.gallery}');
+      //print('${result.data?.gallery}');
       eventData = result;
-      print(eventData?.data?.noOfTicket?[0].priceTicket);
+      //print(eventData?.data?.noOfTicket?[0].priceTicket);
       // cardData = eventData?.data?.relatedEvent;
     } catch (e) {
-      print(e);
-      print(
-          '${eventData}hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh');
+      //print(e);
     }
     return eventData;
   }
@@ -206,11 +212,11 @@ class FetchEventData {
       final result = FilterCategoryModel.fromJson(response['body']);
 
       filterCategoryModel = result;
-      print('ye chaliu category');
-      print(filterCategoryModel?.data);
+      //print('ye chaliu category');
+      //print(filterCategoryModel?.data);
     } catch (e) {
-      print('nhi chli categories');
-      print(e);
+      //print('nhi chli categories');
+      //print(e);
     }
     return filterCategoryModel;
   }
@@ -218,19 +224,17 @@ class FetchEventData {
   Future postFeedbackEventDetails(context, userId,
       {content, rating, eventId}) async {
     try {
-      final response = await ApiProvider.post(url: 'add_comment', body: {
+      await ApiProvider.post(url: 'add_comment', body: {
         'user_id': '$userId',
         'event_id': '$eventId',
         'rating': '$rating',
         'comment_content': '$commentContent',
       });
-      print(
-          'postFeedbackEventDetails postFeedbackEventDetails postFeedbackEventDetails postFeedbackEventDetails');
-      print(response);
+      //print(response);
       errorAlertMessage('Waiting for approval', '', context);
     } catch (e) {
-      print('postFeedbackEventDetails nhi chala sasura');
-      print(e);
+      //print('postFeedbackEventDetails nhi chala sasura');
+      //print(e);
     }
   }
 
@@ -244,8 +248,7 @@ class FetchEventData {
     content,
   ) async {
     try {
-      final response =
-          await ApiProvider.post(url: 'email_send_to_author', body: {
+      await ApiProvider.post(url: 'email_send_to_author', body: {
         'event_id': '$eventId',
         'name_customer': '$name',
         'email_customer': '$email',
@@ -253,13 +256,11 @@ class FetchEventData {
         'subject_customer': '$subject',
         'content': '$content',
       });
-      print(
-          'sendEmailToAuthor sendEmailToAuthor sendEmailToAuthor sendEmailToAuthor sendEmailToAuthor');
-      print(response);
+      //print(response);
       errorAlertMessage('Mail Sent Successfully!', '', context);
     } catch (e) {
-      print('postFeedbackEventDetails nhi chala sasura');
-      print(e);
+      //print('postFeedbackEventDetails nhi chala sasura');
+      //print(e);
     }
   }
 
@@ -337,8 +338,8 @@ class FetchEventData {
 //       });
 //
 //       final result = HomeData.fromJson(response['body']);
-//       print('uiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
-//       print(filterByAnyWhere);
+//      //print('uiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
+//      //print(filterByAnyWhere);
 //
 //       if (page > 1) {
 //         data = [...data, ...?result.data];
@@ -346,7 +347,7 @@ class FetchEventData {
 //         data = result.data!;
 //       }
 //     } catch (e) {
-//       print('homepage events nhi aaye ERROR!${e}');
+//      //print('homepage events nhi aaye ERROR!${e}');
 //       if (keyword != null && keyword != '') {
 //         data = [];
 //       }
@@ -359,14 +360,14 @@ class FetchEventData {
 //       final response =
 //       await ApiProvider.post(url: 'get_event_detail', body: {"id": "$id"});
 //       final result = Welcome.fromJson(response['body']);
-//       // print('resultlkjlkjlkjlkjlkjlk');
+//       ////print('resultlkjlkjlkjlkjlkjlk');
 //
-//       // print('${result.toJson()}');
+//       ////print('${result.toJson()}');
 //       eventData = result;
 //       // cardData = eventData?.data?.relatedEvent;
 //     } catch (e) {
-//       print(e);
-//       print(
+//      //print(e);
+//      //print(
 //           '${eventData}hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh');
 //     }
 //     return eventData;
@@ -378,11 +379,11 @@ class FetchEventData {
 //       final result = FilterCategoryModel.fromJson(response['body']);
 //
 //       filterCategoryModel = result;
-//       print('ye chaliu category');
-//       print(filterCategoryModel?.data);
+//      //print('ye chaliu category');
+//      //print(filterCategoryModel?.data);
 //     } catch (e) {
-//       print('nhi chli categories');
-//       print(e);
+//      //print('nhi chli categories');
+//      //print(e);
 //     }
 //     return filterCategoryModel;
 //   }
@@ -394,12 +395,12 @@ class FetchEventData {
 //         'rating': '$rating',
 //         'comment_content': '$commentContent',
 //       });
-//       print(
+//      //print(
 //           'postFeedbackEventDetails postFeedbackEventDetails postFeedbackEventDetails postFeedbackEventDetails');
-//       print(response);
+//      //print(response);
 //     } catch (e) {
-//       print('postFeedbackEventDetails nhi chala sasura');
-//       print(e);
+//      //print('postFeedbackEventDetails nhi chala sasura');
+//      //print(e);
 //     }
 //   }
 // }

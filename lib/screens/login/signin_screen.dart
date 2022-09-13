@@ -1,19 +1,16 @@
 // ignore_for_file: avoid_print
 
-import 'dart:io';
-
 import 'package:basalon/network/login_register_network.dart';
 import 'package:basalon/screens/home_screen.dart';
 import 'package:basalon/screens/login/registration_screen.dart';
 import 'package:basalon/widgets/custom_buttons.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-import 'package:http/http.dart' as http;
+// import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import '../../blocs/application_bloc.dart';
 import '../../constant/login_user.dart';
 import '../../modal/login_data.dart';
@@ -145,36 +142,25 @@ print(response['status'] == 200 &&
                               response['body']['data'][0]['user_nicename'] == null));
                       if(response['status'] == 200){
 
-                      if (
-                          (response['body']['data'][0]['user_nicename'] == '' ||
-                              response['body']['data'][0]['user_nicename'] == null)) {    
-                        Navigator.push(
-                            context,
+                        var id = int.parse(
+                            response['body']['data'][0]['ID'].toString());
+                        //  user_email
+                        //display_name
+                        LoginUser(
+                          userName: response['body']['data'][0]['display_name'],
+                          email: response['body']['data'][0]['user_email'],
+                          userId: id,
+                        );
+                        SharedPreferences sharedPreferences =
+                            await SharedPreferences.getInstance();
+                        sharedPreferences.setInt('loginId', id);
+                        LoginUser.shared?.userId =
+                            sharedPreferences.getInt('loginId');
+                        application.isUserLogin = true;
+                        Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
-                                builder: (context) => RegistrationScreen(
-                                      isAppleLogin: true,
-                                      userId: int.parse(response['body']['data'][0]['ID'].toString()),
-                                    )));
-                        return;
-                      }
-                     
-                      var id = int.parse(response['body']['data'][0]['ID'].toString());
-                      //  user_email
-                      //display_name
-                       LoginUser(
-                            userName: response['body']['data'][0]['display_name'],
-                            email: response['body']['data'][0]['user_email'],
-                            userId: id,
-                          );
-                      SharedPreferences sharedPreferences =
-                          await SharedPreferences.getInstance();
-                      sharedPreferences.setInt('loginId', id);
-                      LoginUser.shared?.userId =
-                          sharedPreferences.getInt('loginId');
-        application.isUserLogin = true;
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => HomeScreen()),
-            (Route<dynamic> route) => false);  
+                                builder: (context) => HomeScreen()),
+                            (Route<dynamic> route) => false);
                       }
                     },
                   ),
@@ -451,7 +437,7 @@ print(response['status'] == 200 &&
                     } else {
                       print(
                           'email is - ${emailController.text} and password is - ${passwordController.text}');
-                      EasyLoading.show();
+                      //EasyLoading.show();
                       // loginData();
                       print('ooooooooooooo');
 

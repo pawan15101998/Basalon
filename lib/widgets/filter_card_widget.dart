@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 class FilterCardWidget extends StatefulWidget {
   String text;
 
+  double? fontsize;
+
   Color? color;
-  FilterCardWidget({Key? key, required this.text, this.color})
+  FilterCardWidget({Key? key, required this.text, this.color, this.fontsize})
       : super(key: key);
 
   @override
@@ -22,7 +24,7 @@ class _FilterCardWidgetState extends State<FilterCardWidget> {
         widget.text,
         style: TextStyle(
           fontFamily: "Helvetica",
-          fontSize: 14,
+          fontSize: widget.fontsize ?? 14,
           fontWeight: FontWeight.w600,
           color: Colors.white,
         ),

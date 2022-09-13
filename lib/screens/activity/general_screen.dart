@@ -20,7 +20,6 @@ import 'package:provider/provider.dart';
 import 'package:translator/translator.dart';
 
 import '../../constant/login_user.dart';
-import '../../modal/get_activity_edit_detials.dart';
 import '../../network/create_event_network.dart';
 import '../../network/get_update_profile_network.dart';
 import '../../widgets/custom_icons.dart';
@@ -371,7 +370,6 @@ class _GeneralScreenState extends State<GeneralScreen> {
 
   dynamic locationLat;
   dynamic locationLng;
-  PlacesService _placesService = PlacesService();
 
   void setSourceAndDestinationMarkerIcons() async {
     sourceIcon = await BitmapDescriptor.fromAssetImage(
@@ -628,7 +626,6 @@ class _GeneralScreenState extends State<GeneralScreen> {
 
   Future<void> loadAssets() async {
     List<Asset> resultList = <Asset>[];
-    String error = 'No Error Detected';
 
     try {
       resultList = await MultiImagePicker.pickImages(
@@ -645,7 +642,7 @@ class _GeneralScreenState extends State<GeneralScreen> {
         ),
       );
     } on Exception catch (e) {
-      error = e.toString();
+      debugPrint("$e");
     }
 
     if (!mounted) return;
@@ -2487,7 +2484,7 @@ class _GeneralScreenState extends State<GeneralScreen> {
                         categoryController.text;
                     // application.previewImageProvider = imgfile;
                     // application.previewGalleryProvider = imagesList;
-                    EasyLoading.show();
+                    //EasyLoading.show();
                     await _createEventNetwork.postCreateEventsGeneral(
                         context,
                         LoginUser.shared?.userId! ??
@@ -2605,8 +2602,7 @@ class _GeneralScreenState extends State<GeneralScreen> {
                     child: MaterialButton(
                       height: 50,
                       onPressed: () async {
-                        var fileList =
-                            await pickPicture(context: context).then((value) {
+                        await pickPicture(context: context).then((value) {
                           print("value dsajhbsadh");
                           print(value);
                           if (value.isNotEmpty) {
@@ -2735,7 +2731,7 @@ class _GeneralScreenState extends State<GeneralScreen> {
 // print(multipartImageList);
 // return;
 
-                    EasyLoading.show();
+                    //EasyLoading.show();
                     await _createEventNetwork.postCreateEventsMedia(
                       context,
                       widget.id,
@@ -2978,7 +2974,7 @@ class _GeneralScreenState extends State<GeneralScreen> {
                     application.validate();
                     // _createEventNetwork.postCreateEventsTicket(context);
                     // _createEventNetwork.postCreateEventsTicketCoupon(context);
-                    EasyLoading.show();
+                    //EasyLoading.show();
                     await _createEventNetwork.postCreateEventsTicket(
                         context,
                         priceTicketControllerList,
@@ -3222,7 +3218,7 @@ class _GeneralScreenState extends State<GeneralScreen> {
                       validate();
                       print("auto wala chala");
 
-                      EasyLoading.show();
+                      //EasyLoading.show();
                       application.validate();
                       await _createEventNetwork.postCreateEventsCalender(
                         context,
@@ -3250,7 +3246,7 @@ class _GeneralScreenState extends State<GeneralScreen> {
                       );
                     } else {
                       print('mannuuaall!!!');
-                      EasyLoading.show();
+                      //EasyLoading.show();
                       application.validate();
                       await _createEventNetwork.postCreateEventsCalender(
                         context,
@@ -3277,7 +3273,7 @@ class _GeneralScreenState extends State<GeneralScreen> {
                         endTimeManual,
                       );
                     }
-                    // EasyLoading.show();
+                    // //EasyLoading.show();
                     // _createEventNetwork.postCreateEventsCalender(context);
                   },
                   color: const Color.fromRGBO(112, 168, 49, 1),
@@ -3476,7 +3472,7 @@ class _GeneralScreenState extends State<GeneralScreen> {
                           userDescriptionController.text;
                       application.previewAuthorImagerovider = imgfile;
                       validate();
-                      EasyLoading.show();
+                      //EasyLoading.show();
 
                       await updateaandgetuserprofile.getUpdateUserData(
                           LoginUser.shared?.userId! ??
@@ -3650,7 +3646,7 @@ class _GeneralScreenState extends State<GeneralScreen> {
                         //     bankNumberController.text.isNotEmpty &&
                         //     bankBranchController.text.isNotEmpty &&
                         //     bankNameController.text.isNotEmpty) {
-                        //   // EasyLoading.show();
+                        //   // //EasyLoading.show();
                         //   // await _createEventNetwork.postCreateEventsGeneral(
                         //   //     context,
                         //   //     LoginUser.shared?.userId! ??
@@ -3768,13 +3764,25 @@ class _GeneralScreenState extends State<GeneralScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              '${widget.id == null ? 'יצירת פעילות חדשה' : 'Edit Event'}',
-              textAlign: TextAlign.end,
-              style: ktextStyleLarge,
-            ),
+          Row(
+            mainAxisAlignment:MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        icon: Icon(
+                                          Icons.arrow_back_ios_new_outlined,
+                                        )),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  '${widget.id == null ? 'יצירת פעילות חדשה' : 'Edit Event'}',
+                  textAlign: TextAlign.end,
+                  style: ktextStyleLarge,
+                ),
+              ),
+            ],
           ),
           Divider(),
           Padding(

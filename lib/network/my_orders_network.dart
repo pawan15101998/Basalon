@@ -5,7 +5,7 @@ class GetMyOrders {
   MyOrders? myOrders;
   var ticketLink;
 
-  Future getMyOrders(userID,index) async {
+  Future getMyOrders(userID, index) async {
     try {
       final response = await ApiProvider.post(
         url: 'get_user_orders',
@@ -14,7 +14,6 @@ class GetMyOrders {
           "user_id": "$userID",
         },
       );
-
 
       final result = MyOrders.fromJson(response['body']);
       myOrders = result;
@@ -41,13 +40,14 @@ class GetMyOrders {
       );
       print(' aagye downloadEventTicketdownloadEventTicket!!!!!!!!!1');
       print(ticketLink = response['body']['data'][0]);
-
     } catch (e) {
-      print('nhi aaye downloadEventTicketdownloadEventTicketdownloadEventTicket!!!!!!!!!1');
+      print(
+          'nhi aaye downloadEventTicketdownloadEventTicketdownloadEventTicket!!!!!!!!!1');
       print(e);
     }
     return ticketLink;
   }
+
   Future userTicketEmail(bookingID) async {
     try {
       final response = await ApiProvider.post(
@@ -58,7 +58,6 @@ class GetMyOrders {
       );
       print(' aagye userTicketEmail!!!!!!!!!');
       print(response);
-
     } catch (e) {
       print('nhi aaye userTicketEmail!!!!!!!!!1');
       print(e);

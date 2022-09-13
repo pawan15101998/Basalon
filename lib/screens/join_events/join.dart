@@ -107,7 +107,6 @@ class _BookEventPageState extends State<BookEventPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     addCounts();
     print('uuuuuuuu');
@@ -890,8 +889,7 @@ class _BookEventPageState extends State<BookEventPage> {
                         !isUserLogin(application.isUserLogin)) {
                       await registerData();
                     }
-                  print(finalTotal);
-                  
+                    print(finalTotal);
 
                     if (finalTotal == 0) {
                       print('objecttttttttttttttttt');

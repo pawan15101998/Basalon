@@ -1,11 +1,9 @@
-import 'package:basalon/constant/login_user.dart';
 import 'package:basalon/screens/home_screen.dart';
 import 'package:basalon/services/api_provider/api_provider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
-import '../modal/get_activity_edit_detials.dart';
 
 class CreateEventNetwork {
   CreateEventNetwork({

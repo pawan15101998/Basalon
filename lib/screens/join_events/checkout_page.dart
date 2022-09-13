@@ -1,3 +1,5 @@
+// ignore_for_file: import_of_legacy_library_into_null_safe, must_be_immutable
+
 import 'package:basalon/network/place_order_network.dart';
 import 'package:basalon/screens/activity/receiving_activity_screen.dart';
 import 'package:basalon/services/constant.dart';
@@ -12,7 +14,6 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../blocs/application_bloc.dart';
-import '../../utils/utils.dart';
 
 class CheckoutPage extends StatefulWidget {
   CheckoutPage({
@@ -167,7 +168,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
   bool cardValueChange = false;
   @override
   void initState() {
-    // TODO: implement dispose
     super.initState();
     isClickable = true;
 
@@ -711,7 +711,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     await SharedPreferences.getInstance();
                 print(
                     '????????????????????????/*/*/*/*/*/*/*/**/*/*/*/*/*/*/*/');
-                EasyLoading.show();
+                //EasyLoading.show();
                 cardComApi();
                 setState(() {
                   isClickable = false;

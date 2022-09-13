@@ -99,14 +99,15 @@ class MapSampleState extends State<MapSample> {
 
   updateMarker(data) async {
     BitmapDescriptor customIcon = await BitmapDescriptor.fromAssetImage(
-      const ImageConfiguration(size: Size(50, 50), devicePixelRatio: 2.5),
-      'assets/LatestMapMarker16.png',
+      const ImageConfiguration(size: Size(50, 50), devicePixelRatio: 2.0),
+      'assets/LatestMapMarker4.png',
     );
     _markers.clear();
     for (int i = 0; i < data.length; i++) {
       _markers.add(
         Marker(
           icon: customIcon,
+    
           onTap: () {
             print("map datra");
             // print(data[1].mapAddress);
@@ -173,6 +174,7 @@ class MapSampleState extends State<MapSample> {
                   //     ),
                   //   ),
                   markers: Set<Marker>.of(_markers),
+                  
                   mapType: MapType.normal,
                   myLocationEnabled: true,
                   initialCameraPosition: CameraPosition(

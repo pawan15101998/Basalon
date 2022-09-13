@@ -28,7 +28,7 @@ class ReviewCards extends StatelessWidget {
           // Positioned(
           //   right: 10,
           //   top: 80,
-          //   child: Container(  
+          //   child: Container(
           //     width: 150,
           //     child: Text(
           //       '${relatedEvent.title}',

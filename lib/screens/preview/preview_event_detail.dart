@@ -377,18 +377,19 @@ class _PreviewEventDetailScreenState extends State<PreviewEventDetailScreen> {
                 childCount: 1, // 1000 list items
               ),
             ),
-
-            if(application.previewGalleryProvider !=null)
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  return ImagePreview(
-                    galleryImageFromPreview: application.previewGalleryProvider![index],
-                  );
-                },
-                childCount: application.previewGalleryProvider?.length, // 1000 list items
+            if (application.previewGalleryProvider != null)
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    return ImagePreview(
+                      galleryImageFromPreview:
+                          application.previewGalleryProvider![index],
+                    );
+                  },
+                  childCount: application
+                      .previewGalleryProvider?.length, // 1000 list items
+                ),
               ),
-            ),
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {

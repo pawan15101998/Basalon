@@ -1,7 +1,7 @@
 class MyActivity {
   int? success;
   List<Data>? data;
-  Null? error;
+  dynamic error;
 
   MyActivity({this.success, this.data, this.error});
 

@@ -32,17 +32,16 @@ FutureOr<FilePickerResult?> getMultipleFilePicker() async {
   }
 }
 
-final picker = ImagePicker();
-
 Future<List<dynamic>> pickPicture({
   //required bool isGallery,
   required BuildContext context,
 }) async {
   print("picking image");
   try {
-    print('try');
+    final picker = ImagePicker();
     final imagePicker = await picker.pickImage(
       source: ImageSource.gallery,
+      maxWidth: 600,
     );
     if (imagePicker == null) {
       throw 'Image is not selected!!';
@@ -55,6 +54,8 @@ Future<List<dynamic>> pickPicture({
     Uint8List compressedImage = await compressFile(image);
     String filename = image.path.split('/').last;
     print('eerrr$filename');
+
+    // });
     return [image, filename];
   } catch (error) {
     print("error catching");

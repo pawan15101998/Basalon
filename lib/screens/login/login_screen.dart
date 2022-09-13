@@ -44,7 +44,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Image.asset(kLogoImage,width: width/1.3,),
+                        Image.asset(
+                          kLogoImage,
+                          width: width / 1.3,
+                        ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -85,8 +88,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>
-                                        RegistrationScreen(isAppleLogin: false,)));
+                                    builder: (context) => RegistrationScreen(
+                                          isAppleLogin: false,
+                                        )));
                           },
                           text: 'הרשמה',
                           textStyle: TextStyle(fontSize: 20),
@@ -123,7 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>  HomeScreen()));
+                                    builder: (context) => HomeScreen()));
                             // Navigator.of(context).pushAndRemoveUntil( MaterialPageRoute(builder: (context) => const SignInScreen()),
                             //  (Route<dynamic> route) => false
                             // );
@@ -133,7 +137,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             style: ktextStyleWhite,
                           ),
                         ),
-                        SizedBox(height: 20,)
+                        SizedBox(
+                          height: 20,
+                        )
                       ],
                     ),
                   )

@@ -1,10 +1,10 @@
+// ignore_for_file: must_be_immutable, unused_field
+
 import 'package:basalon/network/create_event_network.dart';
 import 'package:basalon/screens/home_screen.dart';
 import 'package:basalon/screens/preview/preview_event_detail.dart';
 import 'package:basalon/services/constant.dart';
-import 'package:basalon/services/my_color.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../blocs/application_bloc.dart';
@@ -425,7 +425,7 @@ class ReceivingPaymentFields extends StatelessWidget {
               onChanged: onChange,
               onTap: onTap,
               validator: (value) {
-                if (value!.isEmpty || value == null) {
+                if (value == null || value.isEmpty) {
                   return '*field is required';
                 } else {
                   return null;
@@ -436,14 +436,15 @@ class ReceivingPaymentFields extends StatelessWidget {
               textAlignVertical: TextAlignVertical.top,
               // textAlign: TextAlign.end,
               controller: controller,
-              // style: TextStyle(
-              //     fontSize: 15, color: textColorPrimary ?? Colors.black),
+              style: TextStyle(color: textColorPrimary ?? Colors.black),
               decoration: InputDecoration(
                 border: isBorder == true
                     ? OutlineInputBorder(
                         borderRadius: BorderRadius.circular(14),
-                        borderSide: BorderSide(
-                            width: 0, color: Color.fromRGBO(216, 216, 216, 1)))
+                        borderSide: BorderSide.none,
+                        // (
+                        //     width: 0, color: Color.fromRGBO(216, 216, 216, 1))
+                      )
                     : null,
                 contentPadding: EdgeInsets.only(left: 10, right: 10, top: 12),
                 hintText: hintText,
@@ -452,6 +453,14 @@ class ReceivingPaymentFields extends StatelessWidget {
                 hintStyle: TextStyle(color: textColor ?? Colors.black),
                 prefixIcon: prefixIcon,
                 suffixIcon: suffixIcon,
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
               ),
             ),
           )

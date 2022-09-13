@@ -17,9 +17,8 @@ class FacebookSignInController extends ChangeNotifier {
         notifyListeners();
       }
     } on Exception catch (e) {
-      // TODO
-      print(e);
-      print("facrebok erroe");
+      debugPrint("$e");
+      debugPrint("facrebok erroe");
     }
   }
 

@@ -18,9 +18,6 @@ class ApiProvider {
     var dio = Dio();
     var _response;
 
-    print("Url:");
-    print(url);
-    print(constant.api);
     if (!await Connection.isConnected()) {
       return {'status': 'No Connection', 'body': 'No Internet Connection'};
     }
@@ -46,19 +43,14 @@ class ApiProvider {
     } else {
       queryParam['Auth-Key'] = constant.auth_key;
       // 'BdyRCBgXrI5PqGJc5oIWdUxd0zmjSEFQ9Ftv14rcplfWsdBU38hdjA3WaIDjBMlWtO1g6setNT4p1edBHNTRRoSg6Jl1vZJeTJSa';
-      print(constant.api);
       try {
         _response =
             await dio.get('${constant.url}$url', queryParameters: queryParam);
-
-        print("printing _response");
-        print(_response);
       } on DioError catch (e) {
         return {'status': e.response!.statusCode, 'body': e.response!.data};
       }
     }
 
-    print('api: ${constant.auth_key}');
     return {'status': _response.statusCode, 'body': _response.data};
   }
 
@@ -67,9 +59,6 @@ class ApiProvider {
       {String? url, Map<String, dynamic> body = const {}}) async {
     var dio = Dio();
     FormData formData = FormData.fromMap(body);
-    print('qwerty');
-    print(url);
-    print(body);
     if (!await Connection.isConnected()) {
       return {'status': 'No Connection', 'body': 'No Internet Connection'};
     }

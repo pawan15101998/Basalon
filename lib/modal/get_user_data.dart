@@ -119,7 +119,7 @@
 class GetUserData {
   int? success;
   Data? data;
-  Null? error;
+  dynamic error;
 
   GetUserData({this.success, this.data, this.error});
 

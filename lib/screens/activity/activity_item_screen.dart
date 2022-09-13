@@ -1097,7 +1097,7 @@
 //                     application.previewDateProvider =
 //                         dobtextEditingController.text;
 //                     validate();
-//                     // EasyLoading.show();
+//                     // //EasyLoading.show();
 //                     _createEventNetwork.postCreateEventsCalender(context);
 //                   },
 //                   color: const Color.fromRGBO(112, 168, 49, 1),

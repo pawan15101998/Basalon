@@ -1,12 +1,9 @@
 import 'dart:async';
+import 'package:appsflyer_sdk/appsflyer_sdk.dart';
 import 'package:basalon/network/get_events_network.dart';
 import 'package:basalon/network/package_network.dart';
 import 'package:basalon/services/constant.dart';
 import 'package:basalon/services/my_color.dart';
-import 'package:basalon/widgets/custom_buttons.dart';
-import 'package:basalon/widgets/dropdown_anywhere.dart';
-import 'package:basalon/widgets/dropdown_everywhere.dart';
-import 'package:basalon/widgets/dropdown_time.dart';
 import 'package:basalon/widgets/event_card.dart';
 import 'package:basalon/widgets/filter_card_widget.dart';
 import 'package:basalon/widgets/google_map.dart';
@@ -15,6 +12,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:translator/translator.dart';
@@ -23,9 +21,9 @@ import '../constant/login_user.dart';
 import '../network/get_update_profile_network.dart';
 import '../utils/utils.dart';
 import '../widgets/date_helper.dart';
-import '../widgets/dropDownButton1.dart';
 import '../widgets/side_drawer.dart';
 import 'activity/receiving_activity_screen.dart';
+import 'package:device_id/device_id.dart';
 
 class HomePage extends StatefulWidget {
   var categoryFilter;
@@ -47,8 +45,8 @@ class HomePageState extends State<HomePage> {
   bool showToolBar = false;
   bool showToolBarRow = false;
 
-  int selectFilter = 0;
-  int selectFilter1 = 0;
+  int selectFilter = 2;
+  int selectFilter1 = 1;
   int selectFilter2 = 0;
 
   bool loading = false;
@@ -77,12 +75,12 @@ class HomePageState extends State<HomePage> {
   PackageNetwork packageNetwork = PackageNetwork();
 
   List<dynamic> filterData = [
-    'מחר',
-    'ב-7 ימים הקרובים',
     'היום',
+    'ב-7 ימים הקרובים',
+    ' בכל זמן ',
     'תאריך מסויים',
-    'בשבוע הבא',
     'סוף השבוע',
+    ' מחר  ',
   ];
   List<dynamic> filterData1 = [
     'בכל מקום',
@@ -90,63 +88,106 @@ class HomePageState extends State<HomePage> {
     'אונליין / זום',
     'עיר מסויימת',
   ];
-
   String? realvalue;
   String? realvalue1;
 
+  AppsflyerSdk? _appsflyerSdk;
+  Map? _deepLinkData;
+  Map? _gcd;
+
   @override
   void initState() {
+    super.initState();
+    getId();
     Future.delayed(Duration(milliseconds: 100), () {
       setLocation();
     });
-    print('home page initstate');
-    print(application.getUserDataProfileProvider?.data?.authorImage);
 
     LoginUser.shared?.userId != null
         ? packageNetwork.getPackage(
             LoginUser.shared?.userId! ?? application.idFromLocalProvider,
             context)
         : "";
-    super.initState();
     _scrollViewController.addListener;
-    // _fetchEventData.getEventData(page,application.filterCategoryProvider, filterByTime);
     _fetchEventData.getEventCategories();
     locationSubscription = application.selectedLocation.stream.listen((place) {
-      print(place);
       if (place != null) {
         _goToPlace(place);
       }
     });
-    print(application.idFromLocalProvider);
-    print("TTTTTTTTTTTT");
-    print(LoginUser.shared?.userId);
 
     _updateAndGetUserProfile.getProfileData(
         LoginUser.shared?.userId! ?? application.idFromLocalProvider,
         context: context);
+    final AppsFlyerOptions options = AppsFlyerOptions(
+        afDevKey: 'hWwUS2NSsbHdzNzVUTEt4',
+        appId: 'il.co.basalon',
+        showDebug: true,
+        timeToWaitForATTUserAuthorization: 15);
+    _appsflyerSdk = AppsflyerSdk(options);
+    _appsflyerSdk!.onAppOpenAttribution((res) {
+      print("onAppOpenAttribution res: " + res.toString());
+      setState(() {
+        _deepLinkData = res;
+      });
+    });
+    _appsflyerSdk!.onInstallConversionData((res) {
+      print("onInstallConversionData res: " + res.toString());
+      setState(() {
+        _gcd = res;
+      });
+    });
+    _appsflyerSdk!.onDeepLinking((DeepLinkResult dp) {
+      switch (dp.status) {
+        case Status.FOUND:
+          print(dp.deepLink?.toString());
+          print("deep link value: ${dp.deepLink?.deepLinkValue}");
+          break;
+        case Status.NOT_FOUND:
+          print("deep link not found");
+          break;
+        case Status.ERROR:
+          print("deep link error: ${dp.error}");
+          break;
+        case Status.PARSE_ERROR:
+          print("deep link status parsing error");
+          break;
+      }
+      print("onDeepLinking res: " + dp.toString());
+      setState(() {
+        _deepLinkData = dp.toJson();
+      });
+    });
+    _appsflyerSdk!
+        .initSdk(
+            registerConversionDataCallback: true,
+            registerOnAppOpenAttributionCallback: false,
+            registerOnDeepLinkingCallback: true)
+        .then((value) {
+      print("value of appflyer");
+      print(value);
+    });
+  }
 
-    // _updateAndGetUserProfile.getProfileData('1863', context: context);
+  getId() async {
+    var id = await DeviceId.getID;
+    print("DeviceId.getID");
+    print(id);
   }
 
   @override
   void didChangeDependencies() {
-    print('didChangeDependencies');
     super.didChangeDependencies();
     LoginUser.shared?.userId != null
         ? _updateAndGetUserProfile.getProfileData(
             LoginUser.shared?.userId! ?? application.idFromLocalProvider,
             context: context)
         : "";
-    // _updateAndGetUserProfile.getProfileData(
-    //         "1770",
-    //         context: context);
     setState(() {});
   }
 
   @override
   void didUpdateWidget(covariant HomePage oldWidget) {
-    print('didUpdateWidget');
-
     super.didUpdateWidget(oldWidget);
     setState(() {});
   }
@@ -159,30 +200,16 @@ class HomePageState extends State<HomePage> {
     _refreshController.dispose();
     categorySearchController.dispose();
     locationController.dispose();
-    locationController.clear();
+    // locationController.clear();
     startDateController.dispose();
     endDateController.dispose();
-    categorySearchController.dispose();
-    locationController.dispose();
+    // categorySearchController.dispose();
+    // locationController.dispose();
     super.dispose();
   }
 
   void _onLoading() {
-    print("on lading chrla"); // monitor network fetch
     page += 1;
-    if (application.filterAnywhereProvider != null) {
-      _fetchEventData.getEventData(
-          page,
-          context,
-          application.filterTimeProvider ?? filterByTime,
-          context,
-          klatitude ?? geoLoc?.latitude,
-          klongitude ?? geoLoc?.longitude,
-          categorySearchController.text,
-          startDateController.text,
-          endDateController.text,
-          context);
-    }
     if (mounted) setState(() {});
     _refreshController.loadComplete();
   }
@@ -200,8 +227,8 @@ class HomePageState extends State<HomePage> {
       application.filterCategoryProvider,
       application.filterTimeProvider,
       application.filterAnywhereProvider,
-      klatitude ?? geoLoc?.latitude,
-      klongitude ?? geoLoc?.longitude,
+      klatitude,
+      klongitude,
       categorySearchController.text,
       startDateController.text,
       endDateController.text,
@@ -230,23 +257,18 @@ class HomePageState extends State<HomePage> {
   String? dropText;
   bool? dropTextColorHandler;
   Position? geoLoc;
+  final Location location = Location();
 
   setLocation() async {
-    geoLoc = await Geolocator.getCurrentPosition();
-
-    print(
-        '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++homepage');
-    print(geoLoc);
-
-    setState(() {
-      if (geoLoc != null) {
-        application.filterAnywhereProvider = 'קרוב אליי';
-      } else {
-        application.filterAnywhereProvider = 'בכל מקום';
-      }
-    });
-
-    return geoLoc;
+    PermissionStatus permissionRequestedResult =
+        await location.requestPermission();
+    if (permissionRequestedResult == PermissionStatus.granted) {
+      geoLoc = await Geolocator.getCurrentPosition();
+      klatitude = geoLoc!.latitude;
+      klongitude = geoLoc!.longitude;
+      application.filterAnywhereProvider = filterData1[1];
+      setState(() {});
+    }
   }
 
   TextEditingController startDateController = TextEditingController();
@@ -262,11 +284,6 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    print(filterData[0]);
-    print('----------------------');
-    print('network image');
-    print(application.getUserDataProfileProvider?.data?.authorImage);
-    print(application.getUserDataProfileProvider?.data?.authorImage);
     return SafeArea(
       child: Scaffold(
         extendBody: true,
@@ -277,24 +294,7 @@ class HomePageState extends State<HomePage> {
           profileData: _updateAndGetUserProfile.getUserData,
         ),
         body: StreamBuilder(
-          initialData:
-              //  application.filterAnywhereProvider != null ?
-              _fetchEventData.getEventData(
-                  page,
-                  application.filterCategoryProvider,
-                  application.filterTimeProvider,
-                  application.filterAnywhereProvider,
-                  klatitude ?? geoLoc?.latitude,
-                  klongitude ?? geoLoc?.longitude,
-                  categorySearchController.text,
-                  startDateController.text,
-                  endDateController.text,
-                  // ((application.filterAnywhereProvider == 'online') &&
-                  //         (application.showOnline == true))
-                  //     ? "online"selectedDropItems.length
-                  //     : "classic",
-
-                  context),
+          initialData: [],
           stream: streamController(),
           builder: (context, AsyncSnapshot snapshot) {
             return SmartRefresher(
@@ -348,7 +348,7 @@ class HomePageState extends State<HomePage> {
                     backgroundColor: Colors.black,
                     pinned: false,
                     //expandedHeight: MediaQuery.of(context).size.height * 0.6,
-                    expandedHeight: 260,
+                    expandedHeight: 300,
                     flexibleSpace: FlexibleSpaceBar(
                       collapseMode: CollapseMode.pin,
                       background: Container(
@@ -435,18 +435,19 @@ class HomePageState extends State<HomePage> {
                               ],
                             ),
                             Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               // crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
+                                SizedBox(height: 60),
                                 Column(
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 20.0),
+                                          horizontal: 10.0),
                                       child: Column(
                                         children: [
                                           const Text(
-                                            'אז... מה עושים היום?',
+                                            '?אז מה עושים היום',
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               shadows: <Shadow>[
@@ -459,24 +460,35 @@ class HomePageState extends State<HomePage> {
                                               fontWeight: FontWeight.bold,
                                               fontSize: 33.0,
                                             ),
-                                            textDirection: TextDirection.rtl,
                                           ),
                                           const SizedBox(height: 10),
-                                          const Text(
-                                            'גלו הרצאות, סדנאות, הופעות',
+                                          Text(
+                                            'גלו סדנאות, הרצאות, הופעות,',
                                             textAlign: TextAlign.center,
-                                            style: ktextStyleWhiteLarge,
+                                            textDirection: TextDirection.rtl,
+                                            style: ktextStyleWhiteLarge
+                                                .copyWith(fontSize: 19),
                                             // maxLines: 1,
                                           ),
-                                          const Text(
-                                            'וארוחות בסלון הקרוב אליכם',
+                                          Text(
+                                            ' אירוחים קולינריים ומפגשים חברתיים',
                                             textAlign: TextAlign.center,
-                                            style: ktextStyleWhiteLarge,
+                                            style: ktextStyleWhiteLarge
+                                                .copyWith(fontSize: 19),
+                                          ),
+                                          Text(
+                                            'בסלונים ומרחבים מסביבכם',
+                                            textAlign: TextAlign.center,
+                                            style:
+                                                ktextStyleWhiteLarge.copyWith(
+                                                    fontSize: 19,
+                                                    fontWeight:
+                                                        FontWeight.w900),
+                                            // maxLines: 1,
                                           ),
                                         ],
                                       ),
                                     ),
-
                                     SizedBox(height: 30),
                                     // application.filterAnywhereProvider ==
                                     //         'עיר מסויימת'
@@ -716,93 +728,90 @@ class HomePageState extends State<HomePage> {
                                 ),
                               ],
                             ),
-                            // if (application.searchResult != null &&
-                            //     application.searchResult?.length != 0 &&
-                            //     application.filterAnywhereProvider ==
-                            //         'עיר מסויימת' &&
-                            //     locationController.text.isNotEmpty)
-                            //   Positioned(
-                            //     top: 250,
-                            //     right: 0,
-                            //     left: 0,
-                            //     child: Container(
-                            //       margin: EdgeInsets.symmetric(horizontal: 20),
-                            //       decoration: const BoxDecoration(
-                            //         color: Colors.white,
-                            //         // boxShadow: [
-                            //         //   BoxShadow(
-                            //         //     color: Colors.grey,
-                            //         //     blurRadius: 15.0,
-                            //         //     // soften the shadow
-                            //         //     spreadRadius: 0.1,
-                            //         //     //extend the shadow
-                            //         ///     offset: Offset(
-                            //         //       15.icon
-                            //         //       // Move to right 10  horizontally
-                            //         //       15.0, // Move to bottom 10 Vertically
-                            //         //     ),
-                            //         //   )
-                            //         // ],
-                            //       ),
-                            //       height: 190,
-                            //       // width: double.infinity,
-                            //       child: ListView.separated(
-                            //           padding: const EdgeInsets.all(0),
-                            //           separatorBuilder: (context, index) =>
-                            //               const Divider(
-                            //                 color: Colors.grey,
-                            //               ),
-                            //           itemCount:
-                            //               application.searchResult!.length,
-                            //           itemBuilder: (context, index) {
-                            //             // translator
-                            //             //     .translate(
-                            //             //     application.searchResult?[index]
-                            //             //         .description,
-                            //             //     to: 'iw')
-                            //             //     .then((value) {
-                            //             //   translatedData = value;
-                            //             // });
-
-                            //             return ListTile(
-                            //               visualDensity: VisualDensity.compact,
-                            //               dense: true,
-                            //               contentPadding:
-                            //                   const EdgeInsets.symmetric(
-                            //                       vertical: 0, horizontal: 10),
-                            //               trailing: Icon(Icons.location_on),
-                            //               onTap: () async {
-                            //                 print('list tile dabao');
-
-                            //                 locationController.text =
-                            //                     // translatedData!.text;
-                            //                     application.searchResult?[index]
-                            //                         .description;
-                            //                 application.setSelectedLocation(
-                            //                     application.searchResult![index]
-                            //                         .placeId,
-                            //                     context);
-                            //                 setState(() {});
-                            //               },
-                            //               title: application
-                            //                           .searchResult?[index]
-                            //                           .description ==
-                            //                       null
-                            //                   ? CupertinoActivityIndicator()
-                            //                   : Text(
-                            //                       "${application.searchResult?[index].description}",
-                            //                       // "${translatedData?.text}",
-                            //                       style: TextStyle(
-                            //                           color: Colors.black,
-                            //                           fontSize: 11),
-                            //                       textDirection:
-                            //                           TextDirection.rtl,
-                            //                       textAlign: TextAlign.start,
-                            //                     ),
-                            //             );
-                            //           }),
-                            //     ),
-                            //   ),
+                            if (application.searchResult != null &&
+                                application.searchResult?.length != 0 &&
+                                application.filterAnywhereProvider ==
+                                    'עיר מסויימת' &&
+                                locationController.text.isNotEmpty)
+                              Positioned(
+                                top: 250,
+                                right: 0,
+                                left: 0,
+                                child: Container(
+                                  margin: EdgeInsets.symmetric(horizontal: 20),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    // boxShadow: [
+                                    //   BoxShadow(
+                                    //     color: Colors.grey,
+                                    //     blurRadius: 15.0,
+                                    //     // soften the shadow
+                                    //     spreadRadius: 0.1,
+                                    //     //extend the shadow
+                                    ///     offset: Offset(
+                                    //       15.icon
+                                    //       // Move to right 10  horizontally
+                                    //       15.0, // Move to bottom 10 Vertically
+                                    //     ),
+                                    //   )
+                                    // ],
+                                  ),
+                                  height: 190,
+                                  // width: double.infinity,
+                                  child: ListView.separated(
+                                      padding: const EdgeInsets.all(0),
+                                      separatorBuilder: (context, index) =>
+                                          const Divider(
+                                            color: Colors.grey,
+                                          ),
+                                      itemCount:
+                                          application.searchResult!.length,
+                                      itemBuilder: (context, index) {
+                                        // translator
+                                        //     .translate(
+                                        //     application.searchResult?[index]
+                                        //         .description,
+                                        //     to: 'iw')
+                                        //     .then((value) {
+                                        //   translatedData = value;
+                                        // });
+                                        return ListTile(
+                                          visualDensity: VisualDensity.compact,
+                                          dense: true,
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                  vertical: 0, horizontal: 10),
+                                          trailing: Icon(Icons.location_on),
+                                          onTap: () async {
+                                            locationController.text =
+                                                // translatedData!.text;
+                                                application.searchResult?[index]
+                                                    .description;
+                                            application.setSelectedLocation(
+                                                application.searchResult![index]
+                                                    .placeId,
+                                                context);
+                                            setState(() {});
+                                          },
+                                          title: application
+                                                      .searchResult?[index]
+                                                      .description ==
+                                                  null
+                                              ? CupertinoActivityIndicator()
+                                              : Text(
+                                                  "${application.searchResult?[index].description}",
+                                                  // "${translatedData?.text}",
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 11),
+                                                  textDirection:
+                                                      TextDirection.rtl,
+                                                  textAlign: TextAlign.start,
+                                                ),
+                                        );
+                                      }),
+                                ),
+                              ),
                             // if (showToolBar)
                             //   Positioned(
                             //       top: 80,
@@ -992,7 +1001,7 @@ class HomePageState extends State<HomePage> {
                             //                   child: ReceivingPaymentFields(
                             //                     controller:
                             //                         categorySearchController,
-                            //                     obscureText: false,
+                            //                     obscureText: false,`
                             //                     width: width / 2,
                             //                     hintText: 'חיפוש חופשי',
                             //                     textColor: Colors.grey,
@@ -1019,85 +1028,80 @@ class HomePageState extends State<HomePage> {
                             //           ],
                             //         ),
                             //       )),
-                            // if (application.searchResult != null &&
-                            //     application.searchResult?.length != 0 &&
-                            //     application.filterAnywhereProvider ==
-                            //         'עיר מסויימת' &&
-                            //     locationController.text.isNotEmpty)
-                            //   Container(
-                            //     margin: EdgeInsets.symmetric(horizontal: 8),
-                            //     decoration: const BoxDecoration(
-                            //       color: Colors.white,
-                            //       boxShadow: [
-                            //         BoxShadow(
-                            //           color: Colors.grey,
-                            //           blurRadius: 15.0,
-                            //           // soften the shadow
-                            //           spreadRadius: 1.0,
-                            //           //extend the shadow
-                            //           offset: Offset(
-                            //             15.0,
-                            //             // Move to right 10  horizontally
-                            //             15.0, // Move to bottom 10 Vertically
-                            //           ),
-                            //         )
-                            //       ],
-                            //     ),
-                            //     height: 150,
-                            //     // width: double.infinity,
+                            if (application.searchResult != null &&
+                                application.searchResult?.length != 0 &&
+                                application.filterAnywhereProvider ==
+                                    'עיר מסויימת' &&
+                                locationController.text.isNotEmpty)
+                              Container(
+                                margin: EdgeInsets.symmetric(horizontal: 8),
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey,
+                                      blurRadius: 15.0,
+                                      // soften the shadow
+                                      spreadRadius: 1.0,
+                                      //extend the shadow
+                                      offset: Offset(
+                                        15.0,
+                                        // Move to right 10  horizontally
+                                        15.0, // Move to bottom 10 Vertically
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                height: 150,
+                                // width: double.infinity,
 
-                            //     child: ListView.separated(
-                            //         padding: const EdgeInsets.all(0),
-                            //         separatorBuilder: (context, index) =>
-                            //             const Divider(
-                            //               color: Colors.grey,
-                            //             ),
-                            //         itemCount: application.searchResult!.length,
-                            //         itemBuilder: (context, index) {
-                            //           translator
-                            //               .translate(
-                            //                   application.searchResult?[index]
-                            //                       .description,
-                            //                   to: 'iw')
-                            //               .then((value) {
-                            //             translatedData = value;
-                            //           });
+                                child: ListView.separated(
+                                    padding: const EdgeInsets.all(0),
+                                    separatorBuilder: (context, index) =>
+                                        const Divider(
+                                          color: Colors.grey,
+                                        ),
+                                    itemCount: application.searchResult!.length,
+                                    itemBuilder: (context, index) {
+                                      translator
+                                          .translate(
+                                              application.searchResult?[index]
+                                                  .description,
+                                              to: 'iw')
+                                          .then((value) {
+                                        translatedData = value;
+                                      });
 
-                            //           return ListTile(
-                            //             dense: true,
-                            //             contentPadding:
-                            //                 const EdgeInsets.symmetric(
-                            //                     vertical: 0, horizontal: 10),
-                            //             trailing: Icon(Icons.location_on),
-                            //             onTap: () async {
-                            //               print('list tile dabao');
-
-                            //               print(application.previewLatProvider);
-                            //               print(application.previewLngProvider);
-
-                            //               locationController.text = application
-                            //                   .searchResult?[index].description;
-                            //               application.setSelectedLocation(
-                            //                   application
-                            //                       .searchResult![index].placeId,
-                            //                   context);
-                            //               setState(() {});
-                            //             },
-                            //             title: translatedData == null
-                            //                 ? CupertinoActivityIndicator()
-                            //                 : Text(
-                            //                     "${application.searchResult?[index].description}",
-                            //                     // "$translatedData",
-                            //                     style: TextStyle(
-                            //                         color: Colors.black,
-                            //                         fontSize: 11),
-                            //                     textDirection:
-                            //                         TextDirection.rtl,
-                            //                     textAlign: TextAlign.start,
-                            //                   ),
-                            //           );
-                            //         }),
-                            //   ),
+                                      return ListTile(
+                                        dense: true,
+                                        contentPadding:
+                                            const EdgeInsets.symmetric(
+                                                vertical: 0, horizontal: 10),
+                                        trailing: Icon(Icons.location_on),
+                                        onTap: () async {
+                                          locationController.text = application
+                                              .searchResult?[index].description;
+                                          application.setSelectedLocation(
+                                              application
+                                                  .searchResult![index].placeId,
+                                              context);
+                                          setState(() {});
+                                        },
+                                        title: translatedData == null
+                                            ? CupertinoActivityIndicator()
+                                            : Text(
+                                                "${application.searchResult?[index].description}",
+                                                // "$translatedData",
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 11),
+                                                textDirection:
+                                                    TextDirection.rtl,
+                                                textAlign: TextAlign.start,
+                                              ),
+                                      );
+                                    }),
+                              ),
                           ],
                         ),
                       ),
@@ -1117,14 +1121,13 @@ class HomePageState extends State<HomePage> {
                               SizedBox(
                                 height: 4,
                               ),
-
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 12.0),
                                 child: Directionality(
                                   textDirection: TextDirection.rtl,
                                   child: Text(
-                                    '1. איפה מבלים?',
+                                    ' 1. איפה תרצו',
                                     style: TextStyle(
                                       fontFamily: "Helvetica",
                                       fontSize: 20,
@@ -1148,38 +1151,44 @@ class HomePageState extends State<HomePage> {
                                   itemBuilder: (context, index) {
                                     return InkWell(
                                       onTap: () {
-                                        setState(() {
-                                          selectFilter1 = index;
+                                        debugPrint("filter 1.0");
 
-                                          application.filterAnywhereProvider =
-                                              filterData1[index].replaceAll(
-                                                  'אונליין / זום', 'online');
-                                          application.showOnline = !showOnline;
-                                          page = 1;
-                                        });
+                                        selectFilter1 = index;
+                                        application.filterAnywhereProvider =
+                                            filterData1[index].replaceAll(
+                                                'אונליין / זום', 'online');
+                                        application.showOnline = !showOnline;
+                                        page = 1;
 
                                         if (filterData1[index] == 'בכל מקום') {
-                                          print(
-                                              'chli kya condition ??????????/');
-                                          setState(() {
-                                            application.filterCategoryProvider =
-                                                '';
-                                            // application.filterTimeProvider =
-                                            //     '';
-                                            application.filterAnywhereProvider =
-                                                'בכל מקום';
-                                            categorySearchController.text = '';
-                                            endDateController.text = '';
-                                            startDateController.text = '';
-                                            klatitude = null;
-                                            klongitude = null;
-                                            page = 1;
-                                          });
-                                        }
-                                        if (filterData1[index] == 'קרוב אליי') {
+                                          debugPrint("filter 1.1");
+                                          application.filterCategoryProvider =
+                                              '';
+                                          // application.filterTimeProvider =
+                                          //     '';
+                                          application.filterAnywhereProvider =
+                                              'בכל מקום';
+
+                                          categorySearchController.text = '';
+                                          endDateController.text = '';
+                                          startDateController.text = '';
                                           klatitude = null;
                                           klongitude = null;
+                                          page = 1;
                                         }
+                                        if (filterData1[index] == 'קרוב אליי') {
+                                          application.filterAnywhereProvider =
+                                              'קרוב אליי';
+                                          debugPrint("filter 1.2");
+                                          debugPrint("print location near");
+                                          debugPrint("${geoLoc}");
+                                          debugPrint("${geoLoc!.latitude}");
+                                          debugPrint("${geoLoc!.longitude}");
+                                          debugPrint("location near");
+                                          klatitude = geoLoc!.latitude;
+                                          klongitude = geoLoc!.longitude;
+                                        }
+                                        setState(() {});
                                       },
                                       child: filterData1[index] == 'עיר מסויימת'
                                           ? Padding(
@@ -1202,14 +1211,30 @@ class HomePageState extends State<HomePage> {
                                                   controller:
                                                       locationController,
                                                   onChange: (v) {
-                                                    application.searchPlaces(v);
-                                                    print('eeeeeeeeeeeeeeee$v');
+                                                    setState(() {
+                                                      application.searchPlaces(
+                                                          locationController
+                                                              .text);
+                                                    });
+                                                  },
+                                                  onTap: () {
+                                                    application
+                                                            .filterAnywhereProvider =
+                                                        'עיר מסויימת';
                                                     setState(() {});
                                                   },
-                                                  onFieldSubmit: (v) {
-                                                    application.searchPlaces(v);
-                                                    print('eeeeeeeeeeeeeeee$v');
-                                                  },
+                                                  // onChange: (v) {
+                                                  //   locationController.text = v;
+                                                  //   application.searchPlaces(v);
+                                                  //   print('eeeeeeeeeeeeeeee$v');
+                                                  //   setState(() {});
+                                                  // },
+                                                  // onFieldSubmit: (v) {
+                                                  //   locationController.text = v;
+
+                                                  //   application.searchPlaces(v);
+                                                  //   print('eeeeeeeeeeeeeeee$v');
+                                                  // },
                                                   textColor: Colors.white,
                                                   obscureText: false,
                                                   hintText: 'הקלד/י עיר',
@@ -1234,6 +1259,7 @@ class HomePageState extends State<HomePage> {
                                           : Directionality(
                                               textDirection: TextDirection.rtl,
                                               child: FilterCardWidget(
+                                                fontsize: 15,
                                                 text: filterData1[index],
                                                 color: selectFilter1 == index
                                                     ? MyColors.lightRed
@@ -1260,85 +1286,134 @@ class HomePageState extends State<HomePage> {
                                   ),
                                 ),
                               ),
-                              // Text("(ניתן לבחור ביותר מקטגורייה אחת)"),
-                              // Text(
-                              //     "כדאי לדעת: את כל הפעילויות ניתן להזמין גם כאירוע פרטי"),
-                              GridView.builder(
-                                physics: ScrollPhysics(),
-                                itemCount: filterData.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return InkWell(
+                              Wrap(
+                                spacing: 5,
+                                runSpacing: 8,
+                                children: List.generate(
+                                  filterData.length,
+                                  (index) => InkWell(
                                     onTap: () {
-                                      print(filterData[index]);
-                                      print('filterData');
-                                      setState(() {
-                                        selectFilter = index;
-                                        application.filterTimeProvider =
-                                            filterData[index];
+                                      selectFilter = index;
+                                      application.filterTimeProvider =
+                                          filterData[index];
 
-                                        print(application.filterTimeProvider);
-                                        print('application');
+                                      realvalue = application
+                                          .filterTimeProvider!
+                                          .replaceAll(
+                                              'ב-7 ימים הקרובים', 'this_week')
+                                          .replaceAll('היום', 'today')
+                                          .replaceAll('מחר', 'tomorrow')
+                                          .replaceAll(
+                                              'בכל זמן', 'this_week_end')
+                                          .replaceAll('בשבוע הבא', 'next_week')
+                                          .replaceFirst(
+                                              'תאריך מסויים', 'specific_date');
 
-                                        realvalue = application
-                                            .filterTimeProvider!
-                                            .replaceAll(
-                                                'ב-7 ימים הקרובים', 'this_week')
-                                            .replaceAll('היום', 'today')
-                                            .replaceAll('מחר', 'tomorrow')
-                                            .replaceAll(
-                                                'סוף השבוע', 'this_week_end')
-                                            .replaceAll(
-                                                'בשבוע הבא', 'next_week')
-                                            .replaceFirst('תאריך מסויים',
-                                                'specific_date');
-
-                                        page = 1;
-                                      });
-
+                                      page = 1;
                                       application.filterTimeProvider =
                                           realvalue;
-
-                                      _fetchEventDataFilter.getEventData(
-                                          1,
-                                          '',
-                                          realvalue,
-                                          '',
-                                          '',
-                                          '',
-                                          '',
-                                          '',
-                                          '',
-                                          context);
-
-                                      print(application.filterTimeProvider);
-
-                                      print("qwerty$realvalue");
-
-                                      // application.filterTimeProvider = realvalue;
-
-                                      print(realvalue);
+                                      setState(() {});
                                     },
-                                    child: Directionality(
-                                      textDirection: TextDirection.rtl,
-                                      child: FilterCardWidget(
-                                        text: filterData[index],
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 14, vertical: 12),
+                                      decoration: BoxDecoration(
                                         color: selectFilter == index
                                             ? MyColors.lightRed
                                             : MyColors.lightBlue,
+                                        borderRadius: BorderRadius.circular(13),
+                                      ),
+                                      child: Text(
+                                        filterData[index].toString(),
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          fontFamily: "Helvetica",
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
-                                  );
-                                },
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 3,
-                                        crossAxisSpacing: 5,
-                                        // mainAxisSpacing: 5,
-                                        mainAxisExtent: 50,
-                                        childAspectRatio: 1),
-                                padding: EdgeInsets.symmetric(horizontal: 10),
-                                shrinkWrap: true,
+                                  ),
+                                ),
                               ),
+
+                              // GridView.builder(
+                              //   physics: ScrollPhysics(),
+                              //   itemCount: filterData.length,
+                              //   itemBuilder: (BuildContext context, int index) {
+                              //     return InkWell(
+                              //       onTap: () {
+                              //         print(filterData[index]);
+                              //         print('filterData');
+                              //         setState(() {
+                              //           selectFilter = index;
+                              //           application.filterTimeProvider =
+                              //               filterData[index];
+
+                              //           print(application.filterTimeProvider);
+                              //           print('application');
+
+                              //           realvalue = application
+                              //               .filterTimeProvider!
+                              //               .replaceAll(
+                              //                   'ב-7 ימים הקרובים', 'this_week')
+                              //               .replaceAll('היום', 'today')
+                              //               .replaceAll('מחר', 'tomorrow')
+                              //               .replaceAll(
+                              //                   'סוף השבוע', 'this_week_end')
+                              //               .replaceAll(
+                              //                   'בשבוע הבא', 'next_week')
+                              //               .replaceFirst('תאריך מסויים',
+                              //                   'specific_date');
+
+                              //           page = 1;
+                              //         });
+
+                              //         application.filterTimeProvider =
+                              //             realvalue;
+
+                              //         _fetchEventDataFilter.getEventData(
+                              //             1,
+                              //             '',
+                              //             realvalue,
+                              //             '',
+                              //             '',
+                              //             '',
+                              //             '',
+                              //             '',
+                              //             '',
+                              //             context);
+
+                              //         print(application.filterTimeProvider);
+
+                              //         print("qwerty$realvalue");
+
+                              //         // application.filterTimeProvider = realvalue;
+
+                              //         print(realvalue);
+                              //       },
+                              //       child: Directionality(
+                              //         textDirection: TextDirection.rtl,
+                              //         child: FilterCardWidget(
+                              //           fontsize: 15,
+                              //           text: filterData[index],
+                              //           color: selectFilter == index
+                              //               ? MyColors.lightRed
+                              //               : MyColors.lightBlue,
+                              //         ),
+                              //       ),
+                              //     );
+                              //   },
+                              //   gridDelegate:
+                              //       SliverGridDelegateWithFixedCrossAxisCount(
+                              //           crossAxisCount: 3,
+                              //           crossAxisSpacing: 5,
+                              //           // mainAxisSpacing: 5,
+                              //           mainAxisExtent: 50,
+                              //           childAspectRatio: 1),
+                              //   padding: EdgeInsets.symmetric(horizontal: 10),
+                              //   shrinkWrap: true,
+                              // ),
 
                               if (application.filterTimeProvider ==
                                   'specific_date')
@@ -1401,16 +1476,33 @@ class HomePageState extends State<HomePage> {
                                     const EdgeInsets.symmetric(vertical: 15.0),
                                 child: Directionality(
                                   textDirection: TextDirection.rtl,
-                                  child: Text(
-                                    '3. מה בתכנון?',
-                                    style: TextStyle(
-                                      fontFamily: "Helvetica",
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        '3. מה בתכנון?',
+                                        style: TextStyle(
+                                          fontFamily: "Helvetica",
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 3,
+                                      ),
+                                      Text(
+                                        '(ניתן לבחור ביותר מקטגורייה אחת)',
+                                        style: TextStyle(
+                                          fontFamily: "Helvetica",
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
+
+                              // if (showToolBar)
                               GridView.builder(
                                 physics: ScrollPhysics(),
                                 itemCount: dropItems.length,
@@ -1425,115 +1517,80 @@ class HomePageState extends State<HomePage> {
                                 shrinkWrap: true,
                                 itemBuilder: (context, index) {
                                   return InkWell(
-                                    onTap: () {
+                                    onTap: () async {
                                       // setState(() {
                                       //   value = !value!;
                                       //   dropItemsHandler[index] = value!;
                                       // });
+                                      page = 1;
 
                                       value = !value!;
                                       dropItemsHandler[index] = value!;
+                                      if (!selectedDropItems
+                                          .contains(dropItems[index])) {
+                                        selectedDropItems.insert(
+                                            0, dropItems[index]);
+                                        setState(() {});
 
-                                      print(value);
-                                      print('valueeeeeeeeeeeeeeeeeeeeeeeeeee');
-                                      print(dropItemsHandler[index]);
+                                        String realValue = selectedDropItems
+                                            .toString()
+                                            .replaceAll('[', '')
+                                            .replaceAll(']', '')
+                                            .replaceAll(', ', ',')
+                                            .replaceAll('הרצאה', 'lecture')
+                                            .replaceAll(
+                                                'אירוח קולינרי', 'meals')
+                                            .replaceAll('הופעה/מופע', 'show')
+                                            .replaceAll('הופעה', 'show')
+                                            .replaceAll('מפגש חברתי', 'group')
+                                            .replaceAll(
+                                                'סדנת בישול/אפיה', 'food')
+                                            .replaceAll('סדנת בישול', 'food')
+                                            .replaceAll(
+                                                'סדנת גוף/נפש', 'body-mind')
+                                            .replaceAll(
+                                                'סדנת יצירה', 'workshop')
+                                            .replaceAll(
+                                                'פעילות לילדים', 'kids');
 
-                                      print(
-                                          'objectttttttttttttttttttttttttttt');
-                                      print(value);
-                                      setState(() {
-                                        if (value == true) {
-                                          selectedDropItems
-                                              .add(dropItems[index]);
-                                          String realValue = selectedDropItems
-                                              .toString()
-                                              .replaceAll('[', '')
-                                              .replaceAll(']', '')
-                                              .replaceAll(', ', ',')
-                                              .replaceAll('הרצאה', 'lecture')
-                                              .replaceAll(
-                                                  'אירוח קולינרי', 'meals')
-                                              .replaceAll('הופעה/מופע', 'show')
-                                              .replaceAll('מפגש חברתי', 'group')
-                                              .replaceAll(
-                                                  'סדנת בישול/אפיה', 'food')
-                                              .replaceAll(
-                                                  'סדנת גוף/נפש', 'body-mind')
-                                              .replaceAll(
-                                                  'סדנת יצירה', 'workshop')
-                                              .replaceAll(
-                                                  'פעילות לילדים', 'kids');
-                                          application.filterCategoryProvider =
-                                              realValue;
+                                        application.filterCategoryProvider =
+                                            realValue;
+                                        // await _fetchEventDataFilter
+                                        //     .getEventData(1, realValue, '', '',
+                                        //         '', '', '', '', '', context);
+                                      } else {
+                                        selectedDropItems
+                                            .remove(dropItems[index]);
+                                        setState(() {});
 
-                                          _fetchEventDataFilter.getEventData(
-                                              1,
-                                              realValue,
-                                              '',
-                                              '',
-                                              '',
-                                              '',
-                                              '',
-                                              '',
-                                              '',
-                                              context);
+                                        String realValue = selectedDropItems
+                                            .toString()
+                                            .replaceAll('[', '')
+                                            .replaceAll(']', '')
+                                            .replaceAll(', ', ',')
+                                            .replaceAll('הרצאה', 'lecture')
+                                            .replaceAll(
+                                                'אירוח קולינרי', 'meals')
+                                            .replaceAll('הופעה/מופע', 'show')
+                                            .replaceAll('הופעה', 'show')
+                                            .replaceAll('מפגש חברתי', 'group')
+                                            .replaceAll(
+                                                'סדנת בישול/אפיה', 'food')
+                                            .replaceAll('סדנת בישול', 'food')
+                                            .replaceAll(
+                                                'סדנת גוף/נפש', 'body-mind')
+                                            .replaceAll(
+                                                'סדנת יצירה', 'workshop')
+                                            .replaceAll(
+                                                'פעילות לילדים', 'kids');
 
-                                          print(
-                                              '----------------------------------------');
-                                          print(selectedDropItems.length);
-                                          print(
-                                            realValue,
-                                          );
-                                          print(
-                                            'realValue',
-                                          );
-                                          print(selectedDropItems
-                                              .toString()
-                                              .replaceAll('[', '')
-                                              .replaceAll(']', '')
-                                              .replaceAll(', ', ','));
-                                        } else {
-                                          print('elseeeeeeeeeeeeeee');
-                                          // print(e);
-                                          selectedDropItems
-                                              .remove(dropItems[index]);
-                                          print(selectedDropItems.length);
-                                          String realValue = selectedDropItems
-                                              .toString()
-                                              .replaceAll('[', '')
-                                              .replaceAll(']', '')
-                                              .replaceAll(', ', ',')
-                                              .replaceAll('הרצאה', 'lecture')
-                                              .replaceAll(
-                                                  'אירוח קולינרי', 'meals')
-                                              .replaceAll('הופעה/מופע', 'show')
-                                              .replaceAll('מפגש חברתי', 'group')
-                                              .replaceAll(
-                                                  'סדנת בישול/אפיה', 'food')
-                                              .replaceAll(
-                                                  'סדנת גוף/נפש', 'body-mind')
-                                              .replaceAll(
-                                                  'סדנת יצירה', 'workshop')
-                                              .replaceAll(
-                                                  'פעילות לילדים', 'kids');
-                                          print(
-                                              'realValue realValue realValue realValue');
-                                          print(realValue);
-                                          application.filterCategoryProvider =
-                                              realValue;
-                                          _fetchEventDataFilter.getEventData(
-                                              1,
-                                              '',
-                                              '',
-                                              '',
-                                              '',
-                                              '',
-                                              '',
-                                              '',
-                                              '',
-                                              context);
-                                        }
-                                      });
+                                        application.filterCategoryProvider =
+                                            realValue;
+                                        // await _fetchEventDataFilter
+                                        //     .getEventData(1, realValue, '', '',
+                                        //         '', '', '', '', '', context);
+                                      }
+                                      setState(() {});
 
                                       // print(value);
                                       // setState(() {
@@ -1627,10 +1684,10 @@ class HomePageState extends State<HomePage> {
                                                 alignment:
                                                     Alignment.centerRight,
                                                 child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          right: 00),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(vertical: 4),
                                                   child: ReceivingPaymentFields(
+                                                    onTap: () {},
                                                     fillcolor:
                                                         MyColors.lightBlue,
                                                     controller:
@@ -1646,10 +1703,11 @@ class HomePageState extends State<HomePage> {
                                           : Directionality(
                                               textDirection: TextDirection.rtl,
                                               child: FilterCardWidget(
+                                                fontsize: 15,
                                                 text: dropItems[index],
                                                 color:
-                                                    dropItemsHandler[index] ==
-                                                            true
+                                                    selectedDropItems.contains(
+                                                            dropItems[index])
                                                         ? MyColors.lightRed
                                                         : MyColors.lightBlue,
                                               ),
@@ -1802,14 +1860,14 @@ class HomePageState extends State<HomePage> {
                       : SliverList(
                           delegate: SliverChildBuilderDelegate(
                             (BuildContext context, int index) {
-                              final items = _fetchEventData.data;
+                              // final items = _fetchEventData.data;
                               if (snapshot.data.length == 0 &&
                                   snapshot.connectionState ==
                                       ConnectionState.done) {
                                 return Text('data');
                               } else {
                                 return EventCard(
-                                  datum: items[index],
+                                  datum: snapshot.data[index],
                                   email: _updateAndGetUserProfile
                                       .getUserData?.data?.authorEmail,
                                   name: _updateAndGetUserProfile
@@ -2203,7 +2261,6 @@ class HomePageState extends State<HomePage> {
                             ),
                           );
                         }
-                        print('location floating');
                       },
                       child: Image.asset(
                         'assets/icons/map.png',
@@ -2227,9 +2284,6 @@ class HomePageState extends State<HomePage> {
   dynamic klongitude;
 
   Future<void> _goToPlace(place) async {
-    print('ye rhi place');
-    print(place.lat);
-    print(place.lng);
     setState(() {
       klatitude = place.lat;
       klongitude = place.lng;

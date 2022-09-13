@@ -5,7 +5,6 @@ import 'package:basalon/modal/get_user_data.dart';
 import 'package:basalon/network/geolocator.dart';
 import 'package:basalon/network/google_map.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:multi_image_picker2/multi_image_picker2.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -52,7 +51,6 @@ class ApplicationBloc with ChangeNotifier {
   dynamic previewAuthorDescriptionrovider;
   dynamic previewAuthorImagerovider;
 
-
   dynamic mapLat;
   dynamic mapLog;
 
@@ -78,8 +76,6 @@ class ApplicationBloc with ChangeNotifier {
 
   ApplicationBloc() {
     setCurrentLocation();
-    print(
-        'ApplicationBloc ApplicationBloc ApplicationBloc ApplicationBloc ApplicationBloc ApplicationBloc');
 
     Future.delayed(const Duration(seconds: 0), () async {
       final SharedPreferences sharedPreferences =
@@ -133,7 +129,7 @@ class ApplicationBloc with ChangeNotifier {
   }
 
   setSelectedLocation(String placeId, BuildContext context) async {
-    var place = await placesService.getPlace(placeId , context);
+    var place = await placesService.getPlace(placeId, context);
     selectedLocation.add(place);
     searchResult = null;
     notifyListeners();

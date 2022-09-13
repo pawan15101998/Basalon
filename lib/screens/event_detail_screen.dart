@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print, import_of_legacy_library_into_null_safe, must_be_immutable
 
 import 'dart:async';
 
@@ -14,6 +14,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_share/flutter_share.dart';
 // import 'package:flutter_social_content_share/flutter_social_content_share.dart';
@@ -22,12 +23,12 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:provider/provider.dart';
 import 'package:url_launcher/link.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../blocs/application_bloc.dart';
 import '../services/constant.dart';
 import '../utils/utils.dart';
-import '../widgets/comment_card.dart';
 import '../widgets/date_helper.dart';
 import '../widgets/feedback_card.dart';
 import '../widgets/image_previews.dart';
@@ -47,7 +48,9 @@ class EventDetailScreen extends StatefulWidget {
 }
 
 class _EventDetailScreenState extends State<EventDetailScreen> {
-  late FetchEventData _fetchEventData = FetchEventData(id: widget.id);
+  late FetchEventData _fetchEventData = FetchEventData(
+    id: widget.id,
+  );
   late ScrollController _scrollViewController = ScrollController();
   Welcome? eventData;
   String url = 'https://basalon.co.il/wp-json/wp/v2/get_event_detail';
@@ -97,8 +100,6 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
   @override
   void initState() {
     _fetchEventData.getEventDetailData();
-    // TODO: implement initState
-    // fetchEvents();
     super.initState();
     streamController.close();
     print('print 1');
@@ -129,7 +130,6 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
     print('print 2');
   }
 
-  String? _dropDownValue;
   List items = [];
   late final p = _fetchEventData.eventData?.data;
   final categoryList = kDateTimeList;
@@ -144,7 +144,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
 
   bookingDates() async {
     for (int i = 0;
-        i < _fetchEventData.eventData!.data!.bookingDates!.length;
+        i < (_fetchEventData.eventData?.data?.bookingDates?.length ?? 0);
         i++) {
       items.add(_fetchEventData.eventData!.data!.bookingDates?[i].option);
     }
@@ -392,12 +392,13 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                                     MainAxisAlignment.end,
                                                 children: [
                                                   Text(
-                                                    '(${_fetchEventData.eventData?.data?.numberComment})',
+                                                    '( ${_fetchEventData.eventData?.data?.numberComment} מדרגים )',
                                                     style: TextStyle(
                                                       color: Colors.grey,
-                                                      // fontFamily: 'Alef',
                                                       fontSize: 12,
                                                     ),
+                                                    textDirection:
+                                                        TextDirection.rtl,
                                                   ),
                                                   RatingBar.builder(
                                                     ignoreGestures: true,
@@ -425,50 +426,108 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                                 ],
                                               ),
                                             ),
-                                          if (_fetchEventData
-                                                  .eventData?.data?.date !=
+
+                                          SizedBox(
+                                            height: 10.0,
+                                          ),
+                                          if (_fetchEventData.eventData!.data
+                                                  ?.customView !=
                                               null)
-                                            Container(
-                                              margin:
-                                                  EdgeInsets.only(right: 10),
-                                              padding: EdgeInsets.symmetric(
-                                                  vertical: 10),
-                                              decoration: BoxDecoration(
-                                                  border: Border(
-                                                      bottom: BorderSide(
-                                                          color: Colors
-                                                              .grey.shade300,
-                                                          width: 0.5))),
-                                              child: Text(
-                                                '${_fetchEventData.eventData?.data?.date}',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 16,
-                                                ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 8.0, right: 10),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  Text('אנשים השתתפו'),
+                                                  SizedBox(
+                                                    width: 4,
+                                                  ),
+                                                  Text(
+                                                    _fetchEventData.eventData!
+                                                        .data!.customView
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                      color: Colors.grey,
+                                                      // fontFamily: 'Alef',
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 4,
+                                                  ),
+                                                  Icon(
+                                                    Icons.groups,
+                                                    size: 30,
+                                                    color: Colors.red[300],
+                                                  ),
+                                                ],
                                               ),
                                             ),
                                           SizedBox(
-                                            height: 15.0,
+                                            height: 10.0,
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 10),
                                             child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
+                                              mainAxisAlignment: _fetchEventData
+                                                          .eventData
+                                                          ?.data
+                                                          ?.ticketRest ==
+                                                      ''
+                                                  ? MainAxisAlignment.end
+                                                  : MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
-                                                Expanded(
-                                                  child: Text(
-                                                    '${_fetchEventData.eventData?.data?.mapAddress?.contains('New York, NY, USA') == false ? _fetchEventData.eventData?.data?.mapAddress : 'online'}',
-                                                    style: ktextStyle,
-                                                    textDirection:
-                                                        TextDirection.rtl,
+                                                if (_fetchEventData.eventData
+                                                        ?.data?.ticketRest !=
+                                                    '')
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                        color: Colors.red,
+                                                        border: Border.all(
+                                                            color: Colors.red)),
+                                                    margin:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 10),
+                                                    padding: EdgeInsets.all(6),
+                                                    child: Column(
+                                                      children: [
+                                                        Text(
+                                                          '${_fetchEventData.eventData?.data?.ticketRest ?? 0}',
+                                                          textDirection:
+                                                              TextDirection.rtl,
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 4,
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  children: [
+                                                    Text(
+                                                      '${_fetchEventData.eventData?.data?.mapAddress?.contains('New York, NY, USA') == false ? _fetchEventData.eventData?.data?.mapAddress : 'online'}',
+                                                      style: ktextStyle,
+                                                      textDirection:
+                                                          TextDirection.rtl,
+                                                    ),
+                                                    Icon(
+                                                      Icons
+                                                          .location_on_outlined,
+                                                      color: MyColors.topOrange,
+                                                    )
+                                                  ],
                                                 ),
-                                                Icon(
-                                                  Icons.location_on_outlined,
-                                                  color: MyColors.topOrange,
-                                                )
                                               ],
                                             ),
                                           ),
@@ -604,6 +663,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                                 GestureDetector(
                                                   onTap: () {
                                                     print('opopopop');
+
                                                     print(i);
                                                     setState(() {
                                                       if (_selectedIndex == i) {
@@ -712,7 +772,6 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                                         ?.data
                                                         ?.mapAddress);
 
-                                                        
                                                     Navigator.push(
                                                       context,
                                                       MaterialPageRoute(
@@ -758,6 +817,88 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                                         NoSplash.splashFactory,
                                                     minimumSize: Size(
                                                         double.infinity, 50))),
+                                          ),
+                                          SizedBox(
+                                            height: 20.0,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              InkWell(
+                                                  onTap: () async {
+                                                    var whatsapp =
+                                                        "+972 050-6871111";
+                                                    var whatsappAndroid = Uri.parse(
+                                                        "whatsapp://send?phone=$whatsapp");
+                                                    if (await canLaunchUrl(
+                                                        whatsappAndroid)) {
+                                                      await launchUrl(
+                                                          whatsappAndroid);
+                                                    } else {
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                        const SnackBar(
+                                                          content: Text(
+                                                              "WhatsApp is not installed on the device"),
+                                                        ),
+                                                      );
+                                                    }
+                                                  },
+                                                  child: Container(
+                                                    padding: EdgeInsets.only(
+                                                      bottom:
+                                                          3, // This can be the space you need between text and underline
+                                                    ),
+                                                    decoration: BoxDecoration(
+                                                        border: Border(
+                                                            bottom: BorderSide(
+                                                      color: Color(0xFF277BC0),
+                                                      width:
+                                                          1.0, // This would be the width of the underline
+                                                    ))),
+                                                    child: Text(
+                                                        "צרו קשר בוואטסאפ",
+                                                        style: TextStyle(
+                                                          fontSize: 15,
+                                                          color:
+                                                              Color(0xFF277BC0),
+                                                        )),
+                                                  )),
+                                              Text(" | ",
+                                                  style: TextStyle(
+                                                    fontSize: 20,
+                                                    color: Colors.blueGrey,
+                                                  )),
+                                              GestureDetector(
+                                                onTap: () async {
+                                                  await FlutterPhoneDirectCaller
+                                                      .callNumber(
+                                                          '050-6871111');
+                                                },
+                                                child: Container(
+                                                  padding: EdgeInsets.only(
+                                                    bottom:
+                                                        3, // This can be the space you need between text and underline
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                      border: Border(
+                                                          bottom: BorderSide(
+                                                    color: Color(0xFF277BC0),
+                                                    width:
+                                                        1.0, // This would be the width of the underline
+                                                  ))),
+                                                  child: Text(
+                                                      "או בטלפון 050-6871111 ",
+                                                      style: TextStyle(
+                                                        fontSize: 15,
+                                                        color:
+                                                            Color(0xFF277BC0),
+                                                      )),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                           SizedBox(
                                             height: 20.0,
@@ -904,7 +1045,9 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                                             height: 30,
                                                           )),
                                                 ),
-
+                                                SizedBox(
+                                                  width: 5,
+                                                ),
                                                 // IconButton(
                                                 //     onPressed: () {
                                                 //       print('whatsapp clicked.');
@@ -923,6 +1066,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                                   'שתפו פעילות',
                                                   style: ktextStyleBold,
                                                 ),
+                                                SizedBox(width: 10)
                                               ],
                                             ),
                                           ),
@@ -1093,83 +1237,84 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                             childCount: 1, // 1000 list items
                           ),
                         ),
-                        SliverList(
-                          delegate: SliverChildBuilderDelegate(
-                            (BuildContext context, int index) {
-                              return Container(
-                                color: Colors.white,
-                                padding:
-                                    const EdgeInsets.only(right: 20, top: 20),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      'משתתפים מספרים',
-                                      textAlign: TextAlign.right,
-                                      style: TextStyle(
-                                        fontSize: 22,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 20,
-                                      child: Divider(
-                                        thickness: 1,
-                                        color: Colors.red,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                            childCount: 1, // 1000 list items
-                          ),
-                        ),
+                        // SliverList(
+                        //   delegate: SliverChildBuilderDelegate(
+                        //     (BuildContext context, int index) {
+                        //       return Container(
+                        //         color: Colors.white,
+                        //         padding:
+                        //             const EdgeInsets.only(right: 20, top: 20),
+                        //         child: Column(
+                        //           crossAxisAlignment: CrossAxisAlignment.end,
+                        //           children: [
+                        //             Text(
+                        //               'משתתפים מספרים',
+                        //               textAlign: TextAlign.right,
+                        //               style: TextStyle(
+                        //                 fontSize: 22,
+                        //                 color: Colors.black,
+                        //                 fontWeight: FontWeight.bold,
+                        //               ),
+                        //             ),
+                        //             SizedBox(
+                        //               width: 20,
+                        //               child: Divider(
+                        //                 thickness: 1,
+                        //                 color: Colors.red,
+                        //               ),
+                        //             ),
+                        //           ],
+                        //         ),
+                        //       );
+                        //     },
+                        //     childCount: 1, // 1000 list items
+                        //   ),
+                        // ),
 
-                        StreamBuilder(
-                          stream: streamController.stream,
-                          builder: (BuildContext context,
-                              AsyncSnapshot<dynamic> snapshot) {
-                            return SliverList(
-                              delegate: SliverChildBuilderDelegate(
-                                (context, index) {
-                                  return _fetchEventData
-                                              .eventData!.data!.comments !=
-                                          null
-                                      ? CommentCard(
-                                          image: _fetchEventData
-                                              .eventData!
-                                              .data!
-                                              .comments![index]
-                                              .commentImageAuthor,
-                                          commentContent: _fetchEventData
-                                              .eventData!
-                                              .data!
-                                              .comments![index]
-                                              .commentContent!,
-                                          commentDate: intl.DateFormat(
-                                                  _fetchEventData
-                                                      .eventData!
-                                                      .data!
-                                                      .comments![index]
-                                                      .commentDate)
-                                              .format(DateTime.now()),
-                                          commentRating: _fetchEventData
-                                              .eventData!
-                                              .data!
-                                              .comments![index]
-                                              .averageRating!,
-                                          userEmail: widget.name,
-                                        )
-                                      : SizedBox();
-                                },
-                                childCount: _fetchEventData
-                                    .eventData!.data!.comments?.length,
-                              ),
-                            );
-                          },
-                        ),
+                        // StreamBuilder(
+                        //   stream: streamController.stream,
+                        //   builder: (BuildContext context,
+                        //       AsyncSnapshot<dynamic> snapshot) {
+                        //     return SliverList(
+                        //       delegate: SliverChildBuilderDelegate(
+                        //         (context, index) {
+                        //           return _fetchEventData
+                        //                       .eventData!.data!.comments !=
+                        //                   null
+                        //               ? CommentCard(
+                        //                   image: _fetchEventData
+                        //                       .eventData!
+                        //                       .data!
+                        //                       .comments![index]
+                        //                       .commentImageAuthor,
+                        //                   commentContent: _fetchEventData
+                        //                       .eventData!
+                        //                       .data!
+                        //                       .comments![index]
+                        //                       .commentContent!,
+                        //                   commentDate: intl.DateFormat(
+                        //                           _fetchEventData
+                        //                               .eventData!
+                        //                               .data!
+                        //                               .comments![index]
+                        //                               .commentDate)
+                        //                       .format(DateTime.now()),
+                        //                   commentRating: _fetchEventData
+                        //                       .eventData!
+                        //                       .data!
+                        //                       .comments![index]
+                        //                       .averageRating!,
+                        //                   userEmail: widget.name,
+                        //                 )
+                        //               : SizedBox();
+                        //         },
+                        //         childCount: _fetchEventData
+                        //             .eventData!.data!.comments?.length,
+                        //       ),
+                        //     );
+                        //   },
+                        // ),
+
                         if (isUserLogin(application.isUserLogin))
                           SliverList(
                             delegate: SliverChildBuilderDelegate(
