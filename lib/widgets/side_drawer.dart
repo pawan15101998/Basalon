@@ -12,6 +12,7 @@ import 'package:basalon/screens/terms_and_condition/privacy_policy.dart';
 import 'package:basalon/screens/terms_and_condition/terms_and_condition_screen.dart';
 import 'package:basalon/services/constant.dart';
 import 'package:basalon/services/my_color.dart';
+import 'package:basalon/utils/app_constants.dart';
 import 'package:basalon/widgets/custom_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -418,7 +419,7 @@ class _NavDrawerState extends State<NavDrawer> {
                           Icons.delete,
                           color: Colors.white,
                         ),
-                        textTile: 'יצירת קשר'),
+                        textTile: AppConstants.DELETE_ACCOUNT_TEXT),
                 ],
               ),
             ),

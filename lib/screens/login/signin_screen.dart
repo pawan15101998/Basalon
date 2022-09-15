@@ -113,7 +113,8 @@ class _SignInScreenState extends State<SignInScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 18.0),
                   child: SignInWithAppleButton(
-                    text: "היכנס עם Apple",
+                    height: 44,
+                    text: "Apple "+"היכנס עם",
                     onPressed: () async {
                       final credential =
                           await SignInWithApple.getAppleIDCredential(
@@ -168,86 +169,89 @@ print(response['status'] == 200 &&
                 const SizedBox(height: 25),
                 Padding(
                   padding: const EdgeInsets.all(18.0),
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      print('facebook login,,,,,,,,,,,');
-                      final result = await FacebookAuth.i.login(permissions: [
-                        "public_profile",
-                        "email",
-                      ]);
-                      if (result.status == LoginStatus.success) {
-                        final requestData = await FacebookAuth.i.getUserData(
-                            fields:
-                                "email, name, picture.height(200).width(200)");
+                  child: SizedBox(
+                    height: 44.0,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        print('facebook login,,,,,,,,,,,');
+                        final result = await FacebookAuth.i.login(permissions: [
+                          "public_profile",
+                          "email",
+                        ]);
+                        if (result.status == LoginStatus.success) {
+                          final requestData = await FacebookAuth.i.getUserData(
+                              fields:
+                                  "email, name, picture.height(200).width(200)");
 
-                        setState(() {
-                          userData = requestData;
-                          LoginUser(
-                            userName: userData!['name'],
-                            email: userData!['email'] != null
-                                ? userData!['email']
-                                : userData!['name'],
-                            userId: int.parse(userData!['id']),
-                          );
-                          // LoginUser.shared?.userId = int.parse(userData!['id']);
-                        });
+                          setState(() {
+                            userData = requestData;
+                            LoginUser(
+                              userName: userData!['name'],
+                              email: userData!['email'] != null
+                                  ? userData!['email']
+                                  : userData!['name'],
+                              userId: int.parse(userData!['id']),
+                            );
+                            // LoginUser.shared?.userId = int.parse(userData!['id']);
+                          });
 
-                        setState(() {
-                          application.imageFromFacebook =
-                              userData!['picture']['data']['url'];
-                          application.emailFromFacebook = userData!['email'];
-                          application.nameFromFacebook = userData!['name'];
-                          application.isUserLogin = true;
-                        });
-                        print(int.parse(userData!['id']));
-                        print(result.accessToken?.token);
-                        print(result.status);
-                        print(result.message);
-                        print('-------------------FACEBOOK----------------');
-                        SharedPreferences sharedPreferences =
-                            await SharedPreferences.getInstance();
-                        sharedPreferences.setString(
-                            'email',
-                            userData!['email'] != null
-                                ? userData!['email']
-                                : userData!['name']);
-                        sharedPreferences.setString('facebookName',
-                            userData!['name'] != null ? userData!['name'] : '');
-                        sharedPreferences.setString(
-                            'facebookImage',
-                            userData!['picture']['data']['url'] != null
-                                ? userData!['picture']['data']['url']
-                                : 'no image found ---------');
-                        // sharedPreferences.setInt(
-                        //     'loginId', int.parse(userData!['id']));
-                        await _loginRegisterNetwork.registerFbData(
-                            result.accessToken?.token,
-                            int.parse(userData!['id']));
+                          setState(() {
+                            application.imageFromFacebook =
+                                userData!['picture']['data']['url'];
+                            application.emailFromFacebook = userData!['email'];
+                            application.nameFromFacebook = userData!['name'];
+                            application.isUserLogin = true;
+                          });
+                          print(int.parse(userData!['id']));
+                          print(result.accessToken?.token);
+                          print(result.status);
+                          print(result.message);
+                          print('-------------------FACEBOOK----------------');
+                          SharedPreferences sharedPreferences =
+                              await SharedPreferences.getInstance();
+                          sharedPreferences.setString(
+                              'email',
+                              userData!['email'] != null
+                                  ? userData!['email']
+                                  : userData!['name']);
+                          sharedPreferences.setString('facebookName',
+                              userData!['name'] != null ? userData!['name'] : '');
+                          sharedPreferences.setString(
+                              'facebookImage',
+                              userData!['picture']['data']['url'] != null
+                                  ? userData!['picture']['data']['url']
+                                  : 'no image found ---------');
+                          // sharedPreferences.setInt(
+                          //     'loginId', int.parse(userData!['id']));
+                          await _loginRegisterNetwork.registerFbData(
+                              result.accessToken?.token,
+                              int.parse(userData!['id']));
 
-                        //Navigator.pushNamed(context, HomeScreen.route);
-                        Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                                builder: (context) => HomeScreen()),
-                            (Route<dynamic> route) => false);
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: const Color.fromRGBO(25, 119, 243, 1),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)),
-                      shadowColor: Colors.transparent,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 5),
-                          child: Image.asset("assets/images/facebook.png"),
-                        ),
-                        const Text('המשיכו עם פייסבוק',
-                            style: TextStyle(fontSize: 20))
-                      ],
+                          //Navigator.pushNamed(context, HomeScreen.route);
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                  builder: (context) => HomeScreen()),
+                              (Route<dynamic> route) => false);
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: const Color.fromRGBO(25, 119, 243, 1),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5)),
+                        shadowColor: Colors.transparent,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 5),
+                            child: Image.asset("assets/images/facebook.png"),
+                          ),
+                          const Text('המשיכו עם פייסבוק',
+                              style: TextStyle(fontSize: 20))
+                        ],
+                      ),
                     ),
                   ),
                 ),
