@@ -12,6 +12,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'notificationService/local_notification_service.dart';
+import 'package:sizer/sizer.dart';
 
 Future<void> backgroundHandler(RemoteMessage message) async {
   print(message.data.toString());
@@ -68,25 +69,29 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => ApplicationBloc(),
-      child: MaterialApp(
-        navigatorKey: navigatorKey,
-        localizationsDelegates: const [
-          GlobalMaterialLocalizations.delegate,
-        ],
-        supportedLocales: const [Locale('en'), Locale('iw')],
-        title: 'basalon',
-        debugShowCheckedModeBanner: false,
-        // home: HomeScreen(),
-        // home: SignInScreen(),
-        home: isFirstTime == true ? SplashScreen() : HomeScreen(),
-        // home: UserProfile(),
-        // home: GeneralScreen(),
-        // home: MapSample(),
-        // home: PackageScreen(),
-        builder: EasyLoading.init(),
-        routes: {
-          HomeScreen.route: (context) => HomeScreen(),
-        },
+      child: Sizer(
+        builder: (context, orientation, deviceType) {
+          return MaterialApp(
+            navigatorKey: navigatorKey,
+            localizationsDelegates: const [
+              GlobalMaterialLocalizations.delegate,
+            ],
+            supportedLocales: const [Locale('en'), Locale('iw')],
+            title: 'basalon',
+            debugShowCheckedModeBanner: false,
+            // home: HomeScreen(),
+            // home: SignInScreen(),
+            home: isFirstTime == true ? SplashScreen() : HomeScreen(),
+            // home: UserProfile(),
+            // home: GeneralScreen(),
+            // home: MapSample(),
+            // home: PackageScreen(),
+            builder: EasyLoading.init(),
+            routes: {
+              HomeScreen.route: (context) => HomeScreen(),
+            },
+          );
+        }
       ),
     );
   }

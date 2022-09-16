@@ -7,7 +7,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_flutter_platform_interface/src/types/marker_updates.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-
 import '../blocs/application_bloc.dart';
 import '../network/get_events_network.dart';
 import '../screens/activity/receiving_activity_screen.dart';
@@ -96,7 +95,6 @@ class MapSampleState extends State<MapSample> {
   //
   //   setState(() {});
   // }
-
   updateMarker(data) async {
     BitmapDescriptor customIcon = await BitmapDescriptor.fromAssetImage(
       const ImageConfiguration(size: Size(50, 50), devicePixelRatio: 2.0),
@@ -107,7 +105,6 @@ class MapSampleState extends State<MapSample> {
       _markers.add(
         Marker(
           icon: customIcon,
-    
           onTap: () {
             print("map datra");
             // print(data[1].mapAddress);

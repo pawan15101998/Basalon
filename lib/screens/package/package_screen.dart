@@ -77,8 +77,7 @@ class _PackageScreenState extends State<PackageScreen> {
                   height: 20,
                 ),
                 if (application.packageModel != null)
-                  for (var item
-                      in application.packageModel!.data!.packages!.reversed)
+                  for (var item in application.packageModel!.data!.packages!.reversed)
                     PackageCustomContainer(
                       text: item.title,
                       features: item.features,

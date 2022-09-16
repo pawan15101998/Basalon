@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:appsflyer_sdk/appsflyer_sdk.dart';
 import 'package:basalon/network/get_events_network.dart';
 import 'package:basalon/network/package_network.dart';
@@ -8,6 +9,7 @@ import 'package:basalon/widgets/event_card.dart';
 import 'package:basalon/widgets/filter_card_widget.dart';
 import 'package:basalon/widgets/google_map.dart';
 import 'package:basalon/widgets/scroll_to_hide.dart';
+import 'package:device_id/device_id.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -16,6 +18,7 @@ import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:translator/translator.dart';
+
 import '../blocs/application_bloc.dart';
 import '../constant/login_user.dart';
 import '../network/get_update_profile_network.dart';
@@ -23,11 +26,11 @@ import '../utils/utils.dart';
 import '../widgets/date_helper.dart';
 import '../widgets/side_drawer.dart';
 import 'activity/receiving_activity_screen.dart';
-import 'package:device_id/device_id.dart';
 
 class HomePage extends StatefulWidget {
   var categoryFilter;
   var userIdLocal;
+
   HomePage({this.categoryFilter});
 
   @override
@@ -107,7 +110,9 @@ class HomePageState extends State<HomePage> {
         ? packageNetwork.getPackage(
             LoginUser.shared?.userId! ?? application.idFromLocalProvider,
             context)
-        : "";
+        : packageNetwork.getPackage(
+            LoginUser.shared?.userId! ?? application.idFromLocalProvider,
+            context);
     _scrollViewController.addListener;
     _fetchEventData.getEventCategories();
     locationSubscription = application.selectedLocation.stream.listen((place) {
@@ -116,6 +121,7 @@ class HomePageState extends State<HomePage> {
       }
     });
 
+    print('Login User Id :: ${application.idFromLocalProvider}');
     _updateAndGetUserProfile.getProfileData(
         LoginUser.shared?.userId! ?? application.idFromLocalProvider,
         context: context);
@@ -178,11 +184,12 @@ class HomePageState extends State<HomePage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    /*print('Mukesh LoggedUserId user id yha se gya :: ${LoginUser.shared?.userId}');
     LoginUser.shared?.userId != null
         ? _updateAndGetUserProfile.getProfileData(
             LoginUser.shared?.userId! ?? application.idFromLocalProvider,
             context: context)
-        : "";
+        : "";*/
     setState(() {});
   }
 

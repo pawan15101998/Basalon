@@ -5,12 +5,14 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 
 import '../blocs/application_bloc.dart';
+import '../constant/login_user.dart';
 import '../modal/get_user_data.dart';
 
 class UpdateAndGetUserProfile {
   GetUserData? getUserData;
 
   Future getProfileData(userID, {context}) async {
+    debugPrint('Mukesh LoggedUserId user id : ${userID}');
     late final application =
         Provider.of<ApplicationBloc>(context, listen: false);
 
@@ -49,6 +51,7 @@ class UpdateAndGetUserProfile {
         // errorAlertMessage('No Data Found', 'Error!');
       } else {
         errorAlertMessage('User Data Updated!', 'Success!', context);
+        print('Mukesh LoggedUserId user id yha se gya 1111 :: ${userId}');
         getProfileData(userId);
       }
     } catch (e) {

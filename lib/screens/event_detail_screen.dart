@@ -17,6 +17,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_share/flutter_share.dart';
+
 // import 'package:flutter_social_content_share/flutter_social_content_share.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -29,6 +30,7 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../blocs/application_bloc.dart';
 import '../services/constant.dart';
 import '../utils/utils.dart';
+import '../widgets/comment_card.dart';
 import '../widgets/date_helper.dart';
 import '../widgets/feedback_card.dart';
 import '../widgets/image_previews.dart';
@@ -1212,7 +1214,6 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                             (BuildContext context, int index) {
                               print(p?.authorData?.authorImg);
                               print('hhhhhhhhhhhhhh');
-
                               return p?.authorData != null
                                   ? ProfileCard(
                                       showCircleAvatar: true,
@@ -1237,83 +1238,92 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                             childCount: 1, // 1000 list items
                           ),
                         ),
-                        // SliverList(
-                        //   delegate: SliverChildBuilderDelegate(
-                        //     (BuildContext context, int index) {
-                        //       return Container(
-                        //         color: Colors.white,
-                        //         padding:
-                        //             const EdgeInsets.only(right: 20, top: 20),
-                        //         child: Column(
-                        //           crossAxisAlignment: CrossAxisAlignment.end,
-                        //           children: [
-                        //             Text(
-                        //               'משתתפים מספרים',
-                        //               textAlign: TextAlign.right,
-                        //               style: TextStyle(
-                        //                 fontSize: 22,
-                        //                 color: Colors.black,
-                        //                 fontWeight: FontWeight.bold,
-                        //               ),
-                        //             ),
-                        //             SizedBox(
-                        //               width: 20,
-                        //               child: Divider(
-                        //                 thickness: 1,
-                        //                 color: Colors.red,
-                        //               ),
-                        //             ),
-                        //           ],
-                        //         ),
-                        //       );
-                        //     },
-                        //     childCount: 1, // 1000 list items
-                        //   ),
-                        // ),
+                        SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (BuildContext context, int index) {
+                              return Container(
+                                color: Colors.white,
+                                padding:
+                                    const EdgeInsets.only(right: 20, top: 20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      'משתתפים מספרים',
+                                      textAlign: TextAlign.right,
+                                      style: TextStyle(
+                                        fontSize: 22,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 20,
+                                      child: Divider(
+                                        thickness: 1,
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                            childCount: 1, // 1000 list items
+                          ),
+                        ),
 
-                        // StreamBuilder(
-                        //   stream: streamController.stream,
-                        //   builder: (BuildContext context,
-                        //       AsyncSnapshot<dynamic> snapshot) {
-                        //     return SliverList(
-                        //       delegate: SliverChildBuilderDelegate(
-                        //         (context, index) {
-                        //           return _fetchEventData
-                        //                       .eventData!.data!.comments !=
-                        //                   null
-                        //               ? CommentCard(
-                        //                   image: _fetchEventData
-                        //                       .eventData!
-                        //                       .data!
-                        //                       .comments![index]
-                        //                       .commentImageAuthor,
-                        //                   commentContent: _fetchEventData
-                        //                       .eventData!
-                        //                       .data!
-                        //                       .comments![index]
-                        //                       .commentContent!,
-                        //                   commentDate: intl.DateFormat(
-                        //                           _fetchEventData
-                        //                               .eventData!
-                        //                               .data!
-                        //                               .comments![index]
-                        //                               .commentDate)
-                        //                       .format(DateTime.now()),
-                        //                   commentRating: _fetchEventData
-                        //                       .eventData!
-                        //                       .data!
-                        //                       .comments![index]
-                        //                       .averageRating!,
-                        //                   userEmail: widget.name,
-                        //                 )
-                        //               : SizedBox();
-                        //         },
-                        //         childCount: _fetchEventData
-                        //             .eventData!.data!.comments?.length,
-                        //       ),
-                        //     );
-                        //   },
-                        // ),
+                        StreamBuilder(
+                          stream: streamController.stream,
+                          builder: (BuildContext context,
+                              AsyncSnapshot<dynamic> snapshot) {
+                            return SliverList(
+                              delegate: SliverChildBuilderDelegate(
+                                (context, index) {
+                                  print("Mukesh Event:::");
+                                  print(
+                                      "Mukesh Event::: ${_fetchEventData.eventData!.toString()}");
+                                  print(
+                                      "Mukesh Event::: ${_fetchEventData.eventData!.data!.toString()}");
+                                  print(
+                                      "Mukesh Event::: ${_fetchEventData.eventData!.data!.comments!.toString()}");
+                                  return widget.name == null
+                                      ? SizedBox()
+                                      : _fetchEventData
+                                                  .eventData!.data!.comments !=
+                                              null
+                                          ? CommentCard(
+                                              image: _fetchEventData
+                                                  .eventData!
+                                                  .data!
+                                                  .comments![index]
+                                                  .commentImageAuthor,
+                                              commentContent: _fetchEventData
+                                                  .eventData!
+                                                  .data!
+                                                  .comments![index]
+                                                  .commentContent!,
+                                              commentDate: intl.DateFormat(
+                                                      _fetchEventData
+                                                          .eventData!
+                                                          .data!
+                                                          .comments![index]
+                                                          .commentDate)
+                                                  .format(DateTime.now()),
+                                              commentRating: _fetchEventData
+                                                  .eventData!
+                                                  .data!
+                                                  .comments![index]
+                                                  .averageRating!,
+                                              userEmail: widget.name,
+                                            )
+                                          : SizedBox();
+                                },
+                                childCount: _fetchEventData
+                                    .eventData!.data!.comments?.length,
+                              ),
+                            );
+                          },
+                        ),
 
                         if (isUserLogin(application.isUserLogin))
                           SliverList(
@@ -1655,6 +1665,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                   horizontal: 20, vertical: 5),
                               child: ReceivingPaymentFields(
                                 controller: mobileController,
+                                maxLine: 1,
                                 obscureText: false,
                                 showRequired: false,
                                 hintText: 'מספר טלפון נייד',

@@ -303,6 +303,7 @@ class _GeneralScreenState extends State<GeneralScreen> {
         : firstnameController.text;
     _updateAndGetUserProfile.getProfileData(
         LoginUser.shared?.userId! ?? application.idFromLocalProvider);
+    print('Mukesh LoggedUserId user id yha se gya 33333 :: ${LoginUser.shared?.userId}');
     Future.delayed(const Duration(seconds: 2), () => fillDetail());
   }
 

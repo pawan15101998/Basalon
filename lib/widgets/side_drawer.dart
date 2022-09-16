@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:basalon/constant/login_user.dart';
 import 'package:basalon/network/login_register_network.dart';
 import 'package:basalon/screens/activity/general_screen.dart';
@@ -76,12 +78,12 @@ class _NavDrawerState extends State<NavDrawer> {
             Expanded(
               flex: 2,
               child: DrawerHeader(
-                decoration: BoxDecoration(
+                /* decoration: BoxDecoration(
                   image: DecorationImage(
                     fit: BoxFit.fill,
                     image: AssetImage('assets/images/cover.jpg'),
                   ),
-                ),
+                ),*/
                 child: Column(
                   children: [
                     Image.asset(
@@ -101,11 +103,13 @@ class _NavDrawerState extends State<NavDrawer> {
                                           ?.userActivePackage?.iD !=
                                       null) &&
                               isUserLogin(application.isUserLogin)) {
+                            debugPrint('Debug go from here 111111');
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => GeneralScreen()));
                           } else if (isUserLogin(application.isUserLogin)) {
+                            debugPrint('Debug go from here 2222222');
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -114,6 +118,7 @@ class _NavDrawerState extends State<NavDrawer> {
                                               ?.userActivePackage?.iD,
                                         )));
                           } else {
+                            debugPrint('Debug go from here 333333');
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(

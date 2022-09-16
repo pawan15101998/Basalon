@@ -252,6 +252,7 @@ class _HomeScreenState extends State<HomeScreen> {
     var obtainedCardYear = sharedPreferences.getString('cardYear');
     var obtainedCardCvv = sharedPreferences.getString('cardCvv');
     if (obtainedId != null) {
+      debugPrint('User ID :: '+obtainedId.toString());
       setState(() {
         application.idFromLocalProvider = obtainedId;
         application.imageFromFacebook = obtainedFacebookImg;

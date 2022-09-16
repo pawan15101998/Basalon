@@ -89,25 +89,25 @@ class _ReceivingActivityScreenState extends State<ReceivingActivityScreen> {
                       ],
                     )
 
-                    // RichText(
-                    //   textDirection: TextDirection.rtl,
-                    //   text: TextSpan(
-                    //       text: 'פרטי חשבון בנק',
-                    //       style: ktextStyleBoldMedium,
-                    //       children: [
-                    //         TextSpan(
-                    //             text: '(על מנת שנוכל להעביר לכם את התשלום)',
-                    //             style: TextStyle(
-                    //               fontWeight: FontWeight.w300,
-                    //               fontSize: 16,
-                    //             ))
-                    //       ]),
-                    // ),
+                  // RichText(
+                  //   textDirection: TextDirection.rtl,
+                  //   text: TextSpan(
+                  //       text: 'פרטי חשבון בנק',
+                  //       style: ktextStyleBoldMedium,
+                  //       children: [
+                  //         TextSpan(
+                  //             text: '(על מנת שנוכל להעביר לכם את התשלום)',
+                  //             style: TextStyle(
+                  //               fontWeight: FontWeight.w300,
+                  //               fontSize: 16,
+                  //             ))
+                  //       ]),
+                  // ),
 
-                    // Text(
-                    //     'פרטי חשבון בנק (על מנת שנוכל להעביר לכם את התשלום)',
-                    //     textAlign: TextAlign.end),
-                    ),
+                  // Text(
+                  //     'פרטי חשבון בנק (על מנת שנוכל להעביר לכם את התשלום)',
+                  //     textAlign: TextAlign.end),
+                ),
               ),
               const SizedBox(height: 20),
               Form(
@@ -298,10 +298,10 @@ class _ReceivingActivityScreenState extends State<ReceivingActivityScreen> {
                               color: const Color.fromRGBO(112, 168, 49, 1)),
                           child: const Center(
                               child: Text(
-                            ' תצוגה מקדימה של הפעילות',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.white, fontSize: 17),
-                          )),
+                                ' תצוגה מקדימה של הפעילות',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(color: Colors.white, fontSize: 17),
+                              )),
                         ),
                       ),
                     ),
@@ -328,10 +328,10 @@ class _ReceivingActivityScreenState extends State<ReceivingActivityScreen> {
                             color: const Color.fromRGBO(112, 168, 49, 1)),
                         child: const Center(
                             child: Text(
-                          'העברת פעילות לבדיקה',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.white, fontSize: 17),
-                        )),
+                              'העברת פעילות לבדיקה',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: Colors.white, fontSize: 17),
+                            )),
                       ),
                     ),
                   )
@@ -403,23 +403,23 @@ class ReceivingPaymentFields extends StatelessWidget {
         children: [
           showLabel == true
               ? Expanded(
-                  flex: 1,
-                  child: RichText(
-                    // textAlign: TextAlign.end,
-                    text: TextSpan(
-                        text: showRequired == true ? '*' : '',
-                        style: TextStyle(color: Colors.red),
-                        children: <TextSpan>[
-                          TextSpan(
-                              text: label,
-                              style: TextStyle(color: Colors.black)),
-                        ]),
-                  ),
-                )
+            flex: 1,
+            child: RichText(
+              // textAlign: TextAlign.end,
+              text: TextSpan(
+                  text: showRequired == true ? '*' : '',
+                  style: TextStyle(color: Colors.red),
+                  children: <TextSpan>[
+                    TextSpan(
+                        text: label,
+                        style: TextStyle(color: Colors.black)),
+                  ]),
+            ),
+          )
               : SizedBox(),
           Expanded(
             child: TextFormField(
-              textAlign: TextAlign.center,
+              textAlign: TextAlign.right,
               textDirection: TextDirection.rtl,
               onFieldSubmitted: onFieldSubmit,
               onChanged: onChange,
@@ -440,26 +440,29 @@ class ReceivingPaymentFields extends StatelessWidget {
               decoration: InputDecoration(
                 border: isBorder == true
                     ? OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(14),
-                        borderSide: BorderSide.none,
-                        // (
-                        //     width: 0, color: Color.fromRGBO(216, 216, 216, 1))
-                      )
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: BorderSide.none,
+                  // (
+                  //     width: 0, color: Color.fromRGBO(216, 216, 216, 1))
+                )
                     : null,
                 contentPadding: EdgeInsets.only(left: 10, right: 10, top: 12),
                 hintText: hintText,
+                hintTextDirection: TextDirection.rtl,
                 filled: true,
                 fillColor: fillcolor ?? Colors.white,
                 hintStyle: TextStyle(color: textColor ?? Colors.black),
                 prefixIcon: prefixIcon,
                 suffixIcon: suffixIcon,
                 enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide.none,
+                  borderRadius: BorderRadius.circular(6),
+                  borderSide: BorderSide(
+                      width: 1, color: Color.fromRGBO(216, 216, 216, 1)),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide.none,
+                  borderRadius: BorderRadius.circular(6),
+                  borderSide: BorderSide(
+                      width: 1, color: Color.fromRGBO(216, 216, 216, 1)),
                 ),
               ),
             ),
@@ -473,14 +476,14 @@ class ReceivingPaymentFields extends StatelessWidget {
 class ReceivingPaymentFieldColumn extends StatelessWidget {
   ReceivingPaymentFieldColumn(
       {this.label,
-      this.hintText,
-      required this.obscureText,
-      this.prefixIcon,
-      // this.height,
-      this.controller,
-      this.onChange,
-      this.onFieldSubmit,
-      this.showRequired});
+        this.hintText,
+        required this.obscureText,
+        this.prefixIcon,
+        // this.height,
+        this.controller,
+        this.onChange,
+        this.onFieldSubmit,
+        this.showRequired});
 
   final String? label;
 
@@ -536,8 +539,9 @@ class ReceivingPaymentFieldColumn extends StatelessWidget {
             style: TextStyle(fontSize: 15),
             decoration: InputDecoration(
               border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                      width: 0, color: Color.fromRGBO(216, 216, 216, 1))),
+                borderSide: BorderSide(
+                    width: 0, color: Color.fromRGBO(216, 216, 216, 1)),
+              ),
               contentPadding: EdgeInsets.only(left: 10, right: 10),
               hintText: hintText,
               prefixIcon: prefixIcon,

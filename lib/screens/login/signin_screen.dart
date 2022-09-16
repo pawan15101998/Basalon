@@ -5,11 +5,11 @@ import 'package:basalon/screens/home_screen.dart';
 import 'package:basalon/screens/login/registration_screen.dart';
 import 'package:basalon/widgets/custom_buttons.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+
 // import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import '../../blocs/application_bloc.dart';
 import '../../constant/login_user.dart';
@@ -114,7 +114,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 18.0),
                   child: SignInWithAppleButton(
                     height: 44,
-                    text: "Apple "+"היכנס עם",
+                    text: "Apple " + "היכנס עם",
                     onPressed: () async {
                       final credential =
                           await SignInWithApple.getAppleIDCredential(
@@ -123,7 +123,8 @@ class _SignInScreenState extends State<SignInScreen> {
                           AppleIDAuthorizationScopes.fullName,
                         ],
                         webAuthenticationOptions: WebAuthenticationOptions(
-                          clientId:'de.lunaone.flutter.signinwithappleexample.service',
+                          clientId:
+                              'de.lunaone.flutter.signinwithappleexample.service',
                           redirectUri: Uri.parse(
                             'https://flutter-sign-in-with-apple-example.glitch.me/callbacks/sign_in_with_apple',
                           ),
@@ -135,14 +136,15 @@ class _SignInScreenState extends State<SignInScreen> {
                               credential.userIdentifier);
                       print(response);
                       print(response['status'] == 200);
-                      print(response['body']['data'][0]['user_nicename']=='');
+                      print(response['body']['data'][0]['user_nicename'] == '');
                       print(response['body']['data'][0]['user_nicename']);
-                      print(response['body']['data'][0]['user_nicename']==null);       
-print(response['status'] == 200 &&
+                      print(
+                          response['body']['data'][0]['user_nicename'] == null);
+                      print(response['status'] == 200 &&
                           (response['body']['data'][0]['user_nicename'] == '' ||
-                              response['body']['data'][0]['user_nicename'] == null));
-                      if(response['status'] == 200){
-
+                              response['body']['data'][0]['user_nicename'] ==
+                                  null));
+                      if (response['status'] == 200) {
                         var id = int.parse(
                             response['body']['data'][0]['ID'].toString());
                         //  user_email
@@ -155,8 +157,7 @@ print(response['status'] == 200 &&
                         SharedPreferences sharedPreferences =
                             await SharedPreferences.getInstance();
                         sharedPreferences.setInt('loginId', id);
-                        LoginUser.shared?.userId =
-                            sharedPreferences.getInt('loginId');
+                        LoginUser.shared?.userId = sharedPreferences.getInt('loginId');
                         application.isUserLogin = true;
                         Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
@@ -214,8 +215,11 @@ print(response['status'] == 200 &&
                               userData!['email'] != null
                                   ? userData!['email']
                                   : userData!['name']);
-                          sharedPreferences.setString('facebookName',
-                              userData!['name'] != null ? userData!['name'] : '');
+                          sharedPreferences.setString(
+                              'facebookName',
+                              userData!['name'] != null
+                                  ? userData!['name']
+                                  : '');
                           sharedPreferences.setString(
                               'facebookImage',
                               userData!['picture']['data']['url'] != null
