@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:typed_data';
 import 'package:basalon/widgets/dropdown_anywhere.dart';
 import 'package:basalon/widgets/dropdown_time.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_flutter_platform_interface/src/types/marker_updates.dart';
@@ -15,6 +17,7 @@ import '../services/my_color.dart';
 import 'custom_buttons.dart';
 import 'info_window_hijack.dart';
 import 'marker_event_card.dart';
+import 'dart:ui' as ui;
 
 class MapSample extends StatefulWidget {
   MapSample({
@@ -64,6 +67,13 @@ class MapSampleState extends State<MapSample> {
     _customInfoWindowsController.dispose();
   }
 
+  Future<Uint8List> getBytesFromAsset(String path, int width) async {
+  ByteData data = await rootBundle.load(path);
+  ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(), targetWidth: width);
+  ui.FrameInfo fi = await codec.getNextFrame();
+  return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
+}
+
   // setCustomMarker(BuildContext context) async {
   //   BitmapDescriptor customIcon = await BitmapDescriptor.fromAssetImage(
   //     ImageConfiguration(size: Size(50, 50), devicePixelRatio: 2.5),
@@ -96,15 +106,16 @@ class MapSampleState extends State<MapSample> {
   //   setState(() {});
   // }
   updateMarker(data) async {
-    BitmapDescriptor customIcon = await BitmapDescriptor.fromAssetImage(
-      const ImageConfiguration(size: Size(50, 50), devicePixelRatio: 2.0),
-      'assets/LatestMapMarker4.png',
-    );
+    final Uint8List markerIcon = await getBytesFromAsset('assets/LatestMapMarker4.png', 100);
+    // BitmapDescriptor customIcon = await BitmapDescriptor.fromAssetImage(
+    //   const ImageConfiguration(size: Size(16, 16), devicePixelRatio: 2.0),
+    //   'assets/LatestMapMarker4.png',
+    // );
     _markers.clear();
     for (int i = 0; i < data.length; i++) {
       _markers.add(
         Marker(
-          icon: customIcon,
+          icon: BitmapDescriptor.fromBytes(markerIcon),
           onTap: () {
             print("map datra");
             // print(data[1].mapAddress);
