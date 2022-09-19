@@ -1433,6 +1433,8 @@ class HomePageState extends State<HomePage> {
                                           MainAxisAlignment.center,
                                       children: [
                                         ReceivingPaymentFields(
+                                          keyboardType: TextInputType.datetime,
+                                          textInputAction: TextInputAction.go,
                                           fillcolor: MyColors.lightBlue,
                                           hintText: 'החל מתאריך...',
                                           textColor: Colors.white,
@@ -1455,6 +1457,8 @@ class HomePageState extends State<HomePage> {
                                         ReceivingPaymentFields(
                                           fillcolor: MyColors.lightBlue,
                                           textColor: Colors.white,
+                                          keyboardType: TextInputType.datetime,
+                                          textInputAction: TextInputAction.go,
                                           hintText: 'עד תאריך...',
                                           width: 130,
                                           textColorPrimary: Colors.white,
@@ -1694,10 +1698,11 @@ class HomePageState extends State<HomePage> {
                                                   padding: const EdgeInsets
                                                       .symmetric(vertical: 4),
                                                   child: ReceivingPaymentFields(
-                                                    onTap: () {
-                                                    },
-                                                    textInputAction: TextInputAction.done,
-                                                    keyboardType: TextInputType.name,
+                                                    onTap: () {},
+                                                    textInputAction:
+                                                        TextInputAction.done,
+                                                    keyboardType:
+                                                        TextInputType.name,
                                                     fillcolor:
                                                         MyColors.lightBlue,
                                                     controller:
