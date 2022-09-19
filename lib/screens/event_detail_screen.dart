@@ -665,7 +665,6 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                                 GestureDetector(
                                                   onTap: () {
                                                     print('opopopop');
-
                                                     print(i);
                                                     setState(() {
                                                       if (_selectedIndex == i) {
@@ -683,6 +682,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                                     });
                                                     print(
                                                         'booking card $isSelected');
+
                                                     print(
                                                         'booking card $_selectedIndex');
                                                     print('booking card $i');

@@ -190,6 +190,7 @@ class FetchEventData {
   }
 
   Future getEventDetailData() async {
+    print("Mukesh Event Id : "+id.toString());
     try {
       final response =
           await ApiProvider.post(url: 'get_event_detail', body: {"id": "$id"});

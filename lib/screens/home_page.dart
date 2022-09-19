@@ -465,7 +465,7 @@ class HomePageState extends State<HomePage> {
                                               ],
                                               color: Colors.white,
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 33.0,
+                                              fontSize: 36.0,
                                             ),
                                           ),
                                           const SizedBox(height: 10),
@@ -1134,7 +1134,7 @@ class HomePageState extends State<HomePage> {
                                 child: Directionality(
                                   textDirection: TextDirection.rtl,
                                   child: Text(
-                                    ' 1. איפה תרצו',
+                                    ' 1. איפה תרצו?',
                                     style: TextStyle(
                                       fontFamily: "Helvetica",
                                       fontSize: 20,
@@ -1294,7 +1294,7 @@ class HomePageState extends State<HomePage> {
                                 ),
                               ),
                               Wrap(
-                                spacing: 5,
+                                spacing: 8,
                                 runSpacing: 8,
                                 children: List.generate(
                                   filterData.length,
@@ -1694,7 +1694,10 @@ class HomePageState extends State<HomePage> {
                                                   padding: const EdgeInsets
                                                       .symmetric(vertical: 4),
                                                   child: ReceivingPaymentFields(
-                                                    onTap: () {},
+                                                    onTap: () {
+                                                    },
+                                                    textInputAction: TextInputAction.done,
+                                                    keyboardType: TextInputType.name,
                                                     fillcolor:
                                                         MyColors.lightBlue,
                                                     controller:

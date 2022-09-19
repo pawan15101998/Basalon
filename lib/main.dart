@@ -43,7 +43,7 @@ void configLoading() {
     ..displayDuration = const Duration(milliseconds: 2000)
     ..indicatorType = EasyLoadingIndicatorType.fadingCircle
     ..loadingStyle = EasyLoadingStyle.dark
-    ..indicatorSize = 45.0
+    ..indicatorSize = 28.0
     ..radius = 5
     ..userInteractions = false
     ..progressColor = Colors.black
@@ -67,6 +67,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+   // debugPaintSizeEnabled = true;
     return ChangeNotifierProvider(
       create: (context) => ApplicationBloc(),
       child: Sizer(

@@ -367,6 +367,8 @@ class ReceivingPaymentFields extends StatelessWidget {
     this.showLabel,
     this.isFocus,
     this.fillcolor,
+    this.textInputAction,
+    this.keyboardType,
   });
 
   final String? label;
@@ -385,7 +387,8 @@ class ReceivingPaymentFields extends StatelessWidget {
   dynamic textColorPrimary;
   dynamic onChange;
   dynamic onFieldSubmit;
-
+  TextInputAction? textInputAction;
+  TextInputType? keyboardType;
   double? width;
   bool? isBorder;
   bool? showLabel = true;
@@ -419,6 +422,8 @@ class ReceivingPaymentFields extends StatelessWidget {
               : SizedBox(),
           Expanded(
             child: TextFormField(
+              textInputAction: textInputAction,
+              keyboardType: keyboardType,
               textAlign: TextAlign.right,
               textDirection: TextDirection.rtl,
               onFieldSubmitted: onFieldSubmit,

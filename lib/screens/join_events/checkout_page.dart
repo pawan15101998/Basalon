@@ -14,7 +14,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../blocs/application_bloc.dart';
-
+final navigatorKey = GlobalKey<NavigatorState>();
 class CheckoutPage extends StatefulWidget {
   CheckoutPage({
     required this.totalAmount,
@@ -88,18 +88,25 @@ class _CheckoutPageState extends State<CheckoutPage> {
     print(cardNumberController.text);
     var dio = Dio();
     try {
+      EasyLoading.show();
       Response response;
       var totalAmount = widget.totalAmount.fold(
           0,
           (previousValue, element) =>
               int.parse(previousValue.toString()) + element);
+      print('mukesh Total Amount :: $totalAmount');
+      print('mukesh Total Amount :: ${widget.totalAmount}');
+      print('mukesh Total Amount :: ${widget.initialPrice}');
+      if (totalAmount == 0) {
+        totalAmount = int.parse(widget.initialPrice);
+      }
       response = await dio.post(
         'https://secure.cardcom.solutions/Interface/Direct2.aspx?TerminalNumber=130735&Sum=$totalAmount&cardnumber=${cardValueChange == false ? temp : cardNumberController.text}&cardvalidityyear=$endTime&cardvaliditymonth=$startingTime&username=rq6xvee8hxRaDewuTQT7&Languages=en&coinid=1&codpage=65001&Cvv=${cvvController.text}&CardOwnerName=${holderController.text}',
         options: Options(contentType: Headers.formUrlEncodedContentType),
       );
       print(response);
       String status = response.data;
-      print(status);
+      print('Mukesh $status');
       print(widget.totalAmount.fold(
           0,
           (previousValue, element) =>
@@ -116,6 +123,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         errorAlertMessage(context, 'Invalid Credentials!');
       }
     } catch (e) {
+      EasyLoading.dismiss();
       print(e);
     }
   }
@@ -205,7 +213,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
     print(startingTime);
     print(widget.formattedDate);
     var counts = widget.numOfTicket.fold(
-        0,
+        1,
         (previousValue, element) =>
             int.parse(previousValue.toString()) + element);
     var finalPrice = widget.totalAmount.fold(
@@ -343,7 +351,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 i < widget.nOofTicketInstance!.length;
                                 i++)
                               checkoutDetails(":סוג כרטיס",
-                                  "${widget.nOofTicketInstance?[i].nameTicket}: ${widget.numOfTicket[i]}"),
+                                  "${widget.nOofTicketInstance?[i].nameTicket}: ${counts}"),
                             // checkoutDetails(":סוג כרטיס", "ילד מגיל 7-18 כמות: 2"),
                           ]),
                     ),

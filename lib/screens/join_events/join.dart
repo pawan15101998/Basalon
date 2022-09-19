@@ -214,6 +214,7 @@ class _BookEventPageState extends State<BookEventPage> {
       if (widget.noOfTicket![i].priceTicket != "")
         price.add(int.parse(widget.noOfTicket![i].priceTicket!));
     }
+    debugPrint('Mukesh check ticket Count:::'+ticketCount.toString());
   }
 
   late var totalPrice = finalPrice.fold(
@@ -459,6 +460,7 @@ class _BookEventPageState extends State<BookEventPage> {
                               print("add");
                               setState(() {
                                 if (ticketCount[i] < 10) ticketCount[i]++;
+                                debugPrint('Mukesh check ticket Count:::'+ticketCount.toString());
                               });
                               // addPrice();
                               setState(() {

@@ -538,16 +538,18 @@ class EventCardState extends State<EventCard> {
                                         Icon(
                                           Icons.groups,
                                           size: 30,
-                                          color: Colors.red[300],
+                                          color: Colors.black,
                                         ),
                                       ],
                                     ),
                                   ),
                                   Padding(
                                     padding:
-                                        const EdgeInsets.only(top: 8, right: 8),
+                                        const EdgeInsets.only(top: 0, right: 8),
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
                                         Text(
                                           '(${widget.datum.numberComment})',
@@ -582,8 +584,7 @@ class EventCardState extends State<EventCard> {
                               ),
 
                             Padding(
-                              padding:
-                                  const EdgeInsets.only(right: 10, top: 10),
+                              padding: const EdgeInsets.only(right: 7, top: 16),
                               child: SizedBox(
                                 child: Text('${widget.datum.title}',
                                     textDirection: TextDirection.rtl,
@@ -592,10 +593,9 @@ class EventCardState extends State<EventCard> {
                             ),
 
                             Padding(
-                              padding: const EdgeInsets.only(right: 10, top: 5),
+                              padding: const EdgeInsets.only(right: 7, top: 16),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
-                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.only(right: 10.0),
@@ -688,9 +688,7 @@ class EventCardState extends State<EventCard> {
                                 ],
                               ),
                             ),
-                            SizedBox(
-                              height: 3,
-                            ),
+
                             // Padding(
                             //   padding: const EdgeInsets.only(right: 8.0),
                             //   child: Row(
@@ -719,12 +717,10 @@ class EventCardState extends State<EventCard> {
                             //   ),
                             // ),
 
-                            SizedBox(
-                              height: 3,
-                            ),
                             if (removeIsrael != '')
                               Padding(
-                                padding: const EdgeInsets.only(right: 7),
+                                padding:
+                                    const EdgeInsets.only(right: 7, top: 16),
                                 child: Row(
                                   children: [
                                     SizedBox(width: 10),
@@ -828,13 +824,13 @@ class EventCardState extends State<EventCard> {
                                 ),
                               ),
                             Padding(
-                              padding: const EdgeInsets.only(right: 8.0),
+                              padding: const EdgeInsets.only(right: 7, top: 16),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   Container(
                                     margin: EdgeInsets.symmetric(
-                                        vertical: 10, horizontal: 8),
+                                        vertical: 2, horizontal: 8),
                                     child: Text('${widget.datum.markerPrice}',
                                         style: TextStyle(
                                             fontSize: 16, color: Colors.black)),
@@ -851,35 +847,43 @@ class EventCardState extends State<EventCard> {
                             ),
                             SizedBox(height: 15),
                             if (isCategoryContain(widget.datum.categoryData))
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    height: 35,
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 10),
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: MyColors.greenButton,
-                                            width: 2)),
-                                    child: Center(
-                                      child: RichText(
-                                          text: TextSpan(
-                                              style: ktextStyleBoldSmall,
-                                              text:
-                                                  'ניתן להזמין גם כסדנה פרטית לזוג או קבוצה בתאריך אחר',
-                                              children: [
-                                            // TextSpan(text: widget.datum.ticketRest),
-                                            // if( widget.datum.ticketRest != '' && int.parse(widget.datum.ticketRest.replaceAll(new RegExp(r'[^0-9]'), '')) < 10)
-                                          ])),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 7, right: 7),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Expanded(
+                                      child: Container(
+                                        height: 35,
+                                        padding:
+                                            EdgeInsets.symmetric(horizontal: 2),
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: MyColors.greenButton,
+                                                width: 2)),
+                                        child: Center(
+                                          child: RichText(
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              text: TextSpan(
+                                                  style: ktextStyleBoldSmall,
+                                                  text:
+                                                      'ניתן להזמין גם כסדנה פרטית לזוג או קבוצה בתאריך אחר',
+                                                  children: [
+                                                    // TextSpan(text: widget.datum.ticketRest),
+                                                    // if( widget.datum.ticketRest != '' && int.parse(widget.datum.ticketRest.replaceAll(new RegExp(r'[^0-9]'), '')) < 10)
+                                                  ])),
 
-                                      // Text(
-                                      //   'נותרו${widget.datum.noOfTicket[0].numberTotalTicket}מקומות',
-                                      //   style: ktextStyleBoldSmall,
-                                      // ),
+                                          // Text(
+                                          //   'נותרו${widget.datum.noOfTicket[0].numberTotalTicket}מקומות',
+                                          //   style: ktextStyleBoldSmall,
+                                          // ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             SizedBox(
                               height: 10,
