@@ -17,6 +17,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:sizer/sizer.dart';
 import 'package:translator/translator.dart';
 
 import '../blocs/application_bloc.dart';
@@ -1207,6 +1208,8 @@ class HomePageState extends State<HomePage> {
                                                 textDirection:
                                                     TextDirection.rtl,
                                                 child: ReceivingPaymentFields(
+                                                  borderRadius: 12,
+                                                  
                                                   fillcolor: MyColors.lightBlue,
                                                   isFocus: true,
                                                   textColorPrimary:
@@ -1427,12 +1430,14 @@ class HomePageState extends State<HomePage> {
                                 Directionality(
                                   textDirection: TextDirection.rtl,
                                   child: Padding(
-                                    padding: const EdgeInsets.only(right: 18),
+                                    padding: const EdgeInsets.only(top: 8,right: 18),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
                                         ReceivingPaymentFields(
+                                          textAlign: TextAlign.center,
+                                          borderRadius: 12,
                                           keyboardType: TextInputType.datetime,
                                           textInputAction: TextInputAction.go,
                                           fillcolor: MyColors.lightBlue,
@@ -1455,6 +1460,8 @@ class HomePageState extends State<HomePage> {
                                         ),
                                         SizedBox(width: 10),
                                         ReceivingPaymentFields(
+                                          textAlign: TextAlign.center,
+                                          borderRadius: 12,
                                           fillcolor: MyColors.lightBlue,
                                           textColor: Colors.white,
                                           keyboardType: TextInputType.datetime,
@@ -1698,6 +1705,8 @@ class HomePageState extends State<HomePage> {
                                                   padding: const EdgeInsets
                                                       .symmetric(vertical: 4),
                                                   child: ReceivingPaymentFields(
+                                                    borderRadius: 12.0,
+                                                    textAlign: TextAlign.center,
                                                     onTap: () {},
                                                     textInputAction:
                                                         TextInputAction.done,

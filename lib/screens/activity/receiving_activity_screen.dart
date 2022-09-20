@@ -370,6 +370,7 @@ class ReceivingPaymentFields extends StatelessWidget {
     this.textInputAction,
     this.keyboardType,
     this.borderRadius,
+    this.textAlign
   });
 
   final String? label;
@@ -395,6 +396,7 @@ class ReceivingPaymentFields extends StatelessWidget {
   bool? showLabel = true;
   bool? isFocus = false;
   double? borderRadius;
+  TextAlign? textAlign;
 
   @override
   Widget build(BuildContext context) {
@@ -426,7 +428,7 @@ class ReceivingPaymentFields extends StatelessWidget {
             child: TextFormField(
               textInputAction: textInputAction,
               keyboardType: keyboardType,
-              textAlign: TextAlign.right,
+              textAlign: textAlign != null ? textAlign! : TextAlign.right,
               textDirection: TextDirection.rtl,
               onFieldSubmitted: onFieldSubmit,
               onChanged: onChange,
