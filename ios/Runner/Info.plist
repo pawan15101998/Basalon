@@ -54,6 +54,9 @@
 		<string>fbauth</string>
 		<string>fbauth2</string>
 		<string>fb-messenger-api20140430</string>
+		<string>whatsapp</string>
+		<string>https</string>
+        <string>http</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>

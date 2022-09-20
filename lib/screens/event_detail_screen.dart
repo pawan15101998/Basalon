@@ -36,6 +36,7 @@ import '../widgets/feedback_card.dart';
 import '../widgets/image_previews.dart';
 import '../widgets/profile_card.dart';
 import 'join_events/join.dart';
+import 'dart:io';
 
 class EventDetailScreen extends StatefulWidget {
   static const String route = '/event_detail_screen';
@@ -169,6 +170,35 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
         linkUrl: '${_fetchEventData.eventData?.data?.shareLink}',
         chooserTitle: 'Example Chooser Title');
   }
+
+  openWhatsapp({required BuildContext context, required String text, required String number}) async{
+  var whatsapp =number;
+  var whatsappURl_android = "whatsapp://send?phone="+whatsapp+"&text=${text}";
+  var whatappURL_ios ="https://wa.me/$whatsapp?text=${Uri.parse("${text}")}";
+  if(Platform.isIOS){
+    // for iOS phone only
+    if( await canLaunchUrl(Uri.parse(whatappURL_ios))){
+       await launchUrl(Uri.parse(whatappURL_ios), mode: LaunchMode.externalNonBrowserApplication);
+    }else{
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: new Text("whatsapp no installed")));
+
+    }
+
+  }else{
+    // android , web
+    if( await canLaunchUrl(Uri.parse(whatsappURl_android))){
+      await launchUrl(Uri.parse(whatsappURl_android));
+    }else{
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: new Text("whatsapp no installed")));
+
+    }
+
+
+  }
+
+}
 
   late BookingDate? dynamicBookingDate =
       _fetchEventData.eventData!.data!.bookingDates![0];
@@ -829,24 +859,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                             children: [
                                               InkWell(
                                                   onTap: () async {
-                                                    var whatsapp =
-                                                        "+972 050-6871111";
-                                                    var whatsappAndroid = Uri.parse(
-                                                        "whatsapp://send?phone=$whatsapp");
-                                                    if (await canLaunchUrl(
-                                                        whatsappAndroid)) {
-                                                      await launchUrl(
-                                                          whatsappAndroid);
-                                                    } else {
-                                                      ScaffoldMessenger.of(
-                                                              context)
-                                                          .showSnackBar(
-                                                        const SnackBar(
-                                                          content: Text(
-                                                              "WhatsApp is not installed on the device"),
-                                                        ),
-                                                      );
-                                                    }
+                                                      openWhatsapp(context: context, number: "+9720506871111", text: "Hi...");
                                                   },
                                                   child: Container(
                                                     padding: EdgeInsets.only(
