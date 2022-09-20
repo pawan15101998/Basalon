@@ -44,6 +44,10 @@ class _PackageScreenState extends State<PackageScreen> {
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
         backgroundColor: Colors.black,
         title: Container(
           margin: EdgeInsets.only(top: 10),
