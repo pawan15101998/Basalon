@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print, import_of_legacy_library_into_null_safe, must_be_immutable
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:basalon/constant/login_user.dart';
 import 'package:basalon/modal/get_event_detail_data.dart';
@@ -36,7 +37,6 @@ import '../widgets/feedback_card.dart';
 import '../widgets/image_previews.dart';
 import '../widgets/profile_card.dart';
 import 'join_events/join.dart';
-import 'dart:io';
 
 class EventDetailScreen extends StatefulWidget {
   static const String route = '/event_detail_screen';
@@ -171,34 +171,33 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
         chooserTitle: 'Example Chooser Title');
   }
 
-  openWhatsapp({required BuildContext context, required String text, required String number}) async{
-  var whatsapp =number;
-  var whatsappURl_android = "whatsapp://send?phone="+whatsapp+"&text=${text}";
-  var whatappURL_ios ="https://wa.me/$whatsapp?text=${Uri.parse("${text}")}";
-  if(Platform.isIOS){
-    // for iOS phone only
-    if( await canLaunchUrl(Uri.parse(whatappURL_ios))){
-       await launchUrl(Uri.parse(whatappURL_ios), mode: LaunchMode.externalNonBrowserApplication);
-    }else{
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: new Text("whatsapp no installed")));
-
+  openWhatsapp(
+      {required BuildContext context,
+      required String text,
+      required String number}) async {
+    var whatsapp = number;
+    var whatsappURl_android =
+        "whatsapp://send?phone=" + whatsapp + "&text=${text}";
+    var whatappURL_ios = "https://wa.me/$whatsapp?text=${Uri.parse("${text}")}";
+    if (Platform.isIOS) {
+      // for iOS phone only
+      if (await canLaunchUrl(Uri.parse(whatappURL_ios))) {
+        await launchUrl(Uri.parse(whatappURL_ios),
+            mode: LaunchMode.externalNonBrowserApplication);
+      } else {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: new Text("whatsapp no installed")));
+      }
+    } else {
+      // android , web
+      if (await canLaunchUrl(Uri.parse(whatsappURl_android))) {
+        await launchUrl(Uri.parse(whatsappURl_android));
+      } else {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: new Text("whatsapp no installed")));
+      }
     }
-
-  }else{
-    // android , web
-    if( await canLaunchUrl(Uri.parse(whatsappURl_android))){
-      await launchUrl(Uri.parse(whatsappURl_android));
-    }else{
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: new Text("whatsapp no installed")));
-
-    }
-
-
   }
-
-}
 
   late BookingDate? dynamicBookingDate =
       _fetchEventData.eventData!.data!.bookingDates![0];
@@ -682,8 +681,6 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                           Row(
                                             textDirection: TextDirection.rtl,
                                             children: [
-                                              // for (var item in _fetchEventData
-                                              //     .eventData!.data!.bookingDates!)
                                               for (int i = 0;
                                                   i <
                                                       _fetchEventData
@@ -692,75 +689,100 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                                           .bookingDates!
                                                           .length;
                                                   i++)
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    print('opopopop');
-                                                    print(i);
-                                                    setState(() {
-                                                      if (_selectedIndex == i) {
-                                                        _selectedIndex = 0;
-                                                      } else {
-                                                        _selectedIndex = i;
-                                                      }
-                                                      isSelected = true;
+                                                Expanded(
+                                                  child: GestureDetector(
+                                                    onTap: () {
+                                                      print('opopopop');
+                                                      print(i);
+                                                      setState(() {
+                                                        if (_selectedIndex ==
+                                                            i) {
+                                                          _selectedIndex = 0;
+                                                        } else {
+                                                          _selectedIndex = i;
+                                                        }
+                                                        isSelected = true;
 
-                                                      dynamicBookingDate =
-                                                          _fetchEventData
-                                                              .eventData!
-                                                              .data!
-                                                              .bookingDates![i];
-                                                    });
-                                                    print(
-                                                        'booking card $isSelected');
+                                                        dynamicBookingDate =
+                                                            _fetchEventData
+                                                                .eventData!
+                                                                .data!
+                                                                .bookingDates![i];
+                                                      });
+                                                      print(
+                                                          'booking card $isSelected');
 
-                                                    print(
-                                                        'booking card $_selectedIndex');
-                                                    print('booking card $i');
-                                                  },
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                        border: Border.all(
-                                                            color: (i ==
-                                                                    _selectedIndex)
-                                                                ? Colors.red
-                                                                : Colors.grey
-                                                                    .shade300)),
-                                                    margin:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 10),
-                                                    padding: EdgeInsets.all(6),
-                                                    child: Column(
-                                                      children: [
-                                                        Text(
-                                                          '${_fetchEventData.eventData!.data!.bookingDates![i].date1}',
-                                                          textDirection:
-                                                              TextDirection.rtl,
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          // style: TextStyle(fontSize: 20),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 4,
-                                                        ),
-                                                        Text(
-                                                          '${_fetchEventData.eventData!.data!.bookingDates![i].date2}',
-                                                          textDirection:
-                                                              TextDirection.rtl,
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: ktextStyleBold,
-                                                        ),
-                                                        SizedBox(
-                                                          height: 4,
-                                                        ),
-                                                        Text(
-                                                          '${_fetchEventData.eventData!.data!.bookingDates![i].endTime} - ${_fetchEventData.eventData!.data!.bookingDates![i].startTime}',
-                                                          textDirection:
-                                                              TextDirection.rtl,
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                        ),
-                                                      ],
+                                                      print(
+                                                          'booking card $_selectedIndex');
+                                                      print('booking card $i');
+                                                    },
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                          border: Border.all(
+                                                              color: (i ==
+                                                                      _selectedIndex)
+                                                                  ? Colors.red
+                                                                  : Colors.grey
+                                                                      .shade300)),
+                                                      margin:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 10),
+                                                      padding:
+                                                          EdgeInsets.all(6),
+                                                      child: Column(
+                                                        children: [
+                                                          Text(
+                                                            '${_fetchEventData.eventData!.data!.bookingDates![i].date1}',
+                                                            textDirection:
+                                                                TextDirection
+                                                                    .rtl,
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            // style: TextStyle(fontSize: 20),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 4,
+                                                          ),
+                                                          Text(
+                                                            '${_fetchEventData.eventData!.data!.bookingDates![i].date2}',
+                                                            textDirection:
+                                                                TextDirection
+                                                                    .rtl,
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: _fetchEventData
+                                                                        .eventData!
+                                                                        .data!
+                                                                        .bookingDates![i]
+                                                                        .date2!
+                                                                        .length <
+                                                                    10
+                                                                ? ktextStyleBold
+                                                                    .copyWith(
+                                                                    fontSize:
+                                                                        width *
+                                                                            0.04,
+                                                                  )
+                                                                : ktextStyleBold
+                                                                    .copyWith(
+                                                                    fontSize:
+                                                                        width *
+                                                                            0.03,
+                                                                  ),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 4,
+                                                          ),
+                                                          Text(
+                                                            '${_fetchEventData.eventData!.data!.bookingDates![i].endTime} - ${_fetchEventData.eventData!.data!.bookingDates![i].startTime}',
+                                                            textDirection:
+                                                                TextDirection
+                                                                    .rtl,
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
@@ -859,8 +881,11 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                             children: [
                                               InkWell(
                                                   onTap: () async {
-
-                                                      openWhatsapp(context: context, number: "+9720506871111", text: "Hi...");
+                                                    openWhatsapp(
+                                                        context: context,
+                                                        number:
+                                                            "+9720506871111",
+                                                        text: "Hi...");
                                                   },
                                                   child: Container(
                                                     padding: EdgeInsets.only(
