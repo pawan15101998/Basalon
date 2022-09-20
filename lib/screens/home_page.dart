@@ -1438,7 +1438,8 @@ class HomePageState extends State<HomePage> {
                                         children: [
                                           ReceivingPaymentFields(
                                             borderRadius: 12.0,
-                                            keyboardType: TextInputType.datetime,
+                                            keyboardType:
+                                                TextInputType.datetime,
                                             textInputAction: TextInputAction.go,
                                             fillcolor: MyColors.lightBlue,
                                             hintText: 'החל מתאריך...',
@@ -1449,7 +1450,8 @@ class HomePageState extends State<HomePage> {
                                             controller: startDateController,
                                             onTap: () async {
                                               var date = await selectDate(
-                                                  isDob: true, context: context);
+                                                  isDob: true,
+                                                  context: context);
                                               if (date != "null") {
                                                 setState(() {
                                                   startDateController.text =
@@ -1463,7 +1465,8 @@ class HomePageState extends State<HomePage> {
                                             borderRadius: 12.0,
                                             fillcolor: MyColors.lightBlue,
                                             textColor: Colors.white,
-                                            keyboardType: TextInputType.datetime,
+                                            keyboardType:
+                                                TextInputType.datetime,
                                             textInputAction: TextInputAction.go,
                                             hintText: 'עד תאריך...',
                                             width: 130,
@@ -1472,7 +1475,8 @@ class HomePageState extends State<HomePage> {
                                             controller: endDateController,
                                             onTap: () async {
                                               var date = await selectDate(
-                                                  isDob: true, context: context);
+                                                  isDob: true,
+                                                  context: context);
                                               if (date != "null") {
                                                 setState(() {
                                                   endDateController.text =
