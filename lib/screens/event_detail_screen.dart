@@ -552,6 +552,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                                       textDirection:
                                                           TextDirection.rtl,
                                                     ),
+                                                    SizedBox(width: 8,),
                                                     Icon(
                                                       Icons
                                                           .location_on_outlined,
@@ -587,7 +588,10 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                                       FontAwesomeIcons.ticket,
                                                       color: MyColors.topOrange,
                                                       size: 18,
-                                                    ))
+                                                    ),),
+                                                    SizedBox(
+                                                  width: 4.0,
+                                                ),
                                               ],
                                             ),
                                           ),
@@ -689,100 +693,98 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                                           .bookingDates!
                                                           .length;
                                                   i++)
-                                                Expanded(
-                                                  child: GestureDetector(
-                                                    onTap: () {
-                                                      print('opopopop');
-                                                      print(i);
-                                                      setState(() {
-                                                        if (_selectedIndex ==
-                                                            i) {
-                                                          _selectedIndex = 0;
-                                                        } else {
-                                                          _selectedIndex = i;
-                                                        }
-                                                        isSelected = true;
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    print('opopopop');
+                                                    print(i);
+                                                    setState(() {
+                                                      if (_selectedIndex ==
+                                                          i) {
+                                                        _selectedIndex = 0;
+                                                      } else {
+                                                        _selectedIndex = i;
+                                                      }
+                                                      isSelected = true;
 
-                                                        dynamicBookingDate =
-                                                            _fetchEventData
-                                                                .eventData!
-                                                                .data!
-                                                                .bookingDates![i];
-                                                      });
-                                                      print(
-                                                          'booking card $isSelected');
+                                                      dynamicBookingDate =
+                                                          _fetchEventData
+                                                              .eventData!
+                                                              .data!
+                                                              .bookingDates![i];
+                                                    });
+                                                    print(
+                                                        'booking card $isSelected');
 
-                                                      print(
-                                                          'booking card $_selectedIndex');
-                                                      print('booking card $i');
-                                                    },
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                          border: Border.all(
-                                                              color: (i ==
-                                                                      _selectedIndex)
-                                                                  ? Colors.red
-                                                                  : Colors.grey
-                                                                      .shade300)),
-                                                      margin:
-                                                          EdgeInsets.symmetric(
-                                                              horizontal: 10),
-                                                      padding:
-                                                          EdgeInsets.all(6),
-                                                      child: Column(
-                                                        children: [
-                                                          Text(
-                                                            '${_fetchEventData.eventData!.data!.bookingDates![i].date1}',
-                                                            textDirection:
-                                                                TextDirection
-                                                                    .rtl,
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            // style: TextStyle(fontSize: 20),
-                                                          ),
-                                                          SizedBox(
-                                                            height: 4,
-                                                          ),
-                                                          Text(
-                                                            '${_fetchEventData.eventData!.data!.bookingDates![i].date2}',
-                                                            textDirection:
-                                                                TextDirection
-                                                                    .rtl,
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: _fetchEventData
-                                                                        .eventData!
-                                                                        .data!
-                                                                        .bookingDates![i]
-                                                                        .date2!
-                                                                        .length <
-                                                                    10
-                                                                ? ktextStyleBold
-                                                                    .copyWith(
-                                                                    fontSize:
-                                                                        width *
-                                                                            0.04,
-                                                                  )
-                                                                : ktextStyleBold
-                                                                    .copyWith(
-                                                                    fontSize:
-                                                                        width *
-                                                                            0.03,
-                                                                  ),
-                                                          ),
-                                                          SizedBox(
-                                                            height: 4,
-                                                          ),
-                                                          Text(
-                                                            '${_fetchEventData.eventData!.data!.bookingDates![i].endTime} - ${_fetchEventData.eventData!.data!.bookingDates![i].startTime}',
-                                                            textDirection:
-                                                                TextDirection
-                                                                    .rtl,
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                          ),
-                                                        ],
-                                                      ),
+                                                    print(
+                                                        'booking card $_selectedIndex');
+                                                    print('booking card $i');
+                                                  },
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                        border: Border.all(
+                                                            color: (i ==
+                                                                    _selectedIndex)
+                                                                ? Colors.red
+                                                                : Colors.grey
+                                                                    .shade300)),
+                                                    margin:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 10),
+                                                    padding:
+                                                        EdgeInsets.all(6),
+                                                    child: Column(
+                                                      children: [
+                                                        Text(
+                                                          '${_fetchEventData.eventData!.data!.bookingDates![i].date1}',
+                                                          textDirection:
+                                                              TextDirection
+                                                                  .rtl,
+                                                          textAlign: TextAlign
+                                                              .center,
+                                                          // style: TextStyle(fontSize: 20),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 4,
+                                                        ),
+                                                        Text(
+                                                          '${_fetchEventData.eventData!.data!.bookingDates![i].date2}',
+                                                          textDirection:
+                                                              TextDirection
+                                                                  .rtl,
+                                                          textAlign: TextAlign
+                                                              .center,
+                                                          style: _fetchEventData
+                                                                      .eventData!
+                                                                      .data!
+                                                                      .bookingDates![i]
+                                                                      .date2!
+                                                                      .length <
+                                                                  10
+                                                              ? ktextStyleBold
+                                                                  .copyWith(
+                                                                  fontSize:
+                                                                      width *
+                                                                          0.04,
+                                                                )
+                                                              : ktextStyleBold
+                                                                  .copyWith(
+                                                                  fontSize:
+                                                                      width *
+                                                                          0.03,
+                                                                ),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 4,
+                                                        ),
+                                                        Text(
+                                                          '${_fetchEventData.eventData!.data!.bookingDates![i].endTime} - ${_fetchEventData.eventData!.data!.bookingDates![i].startTime}',
+                                                          textDirection:
+                                                              TextDirection
+                                                                  .rtl,
+                                                          textAlign: TextAlign
+                                                              .center,
+                                                        ),
+                                                      ],
                                                     ),
                                                   ),
                                                 ),

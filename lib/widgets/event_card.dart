@@ -678,7 +678,7 @@ class EventCardState extends State<EventCard> {
                                         ]),
                                   ),
                                   SizedBox(
-                                    width: 6,
+                                    width: 12,
                                   ),
                                   Image.asset(
                                     'assets/icons/calendar.jpeg',
@@ -801,6 +801,9 @@ class EventCardState extends State<EventCard> {
                                                                   Colors.red)),
                                                     ])),
                                           ),
+                                          SizedBox(
+                                    width: 12,
+                                  ),
                                           // Expanded(
                                           //   child: Text(
                                           //     removeIsrael.replaceAll(
@@ -835,13 +838,15 @@ class EventCardState extends State<EventCard> {
                                         style: TextStyle(
                                             fontSize: 16, color: Colors.black)),
                                   ),
+                                  SizedBox(width: 2,),
                                   Transform.rotate(
                                       angle: 180,
                                       child: FaIcon(
                                         FontAwesomeIcons.ticket,
                                         color: MyColors.topOrange,
                                         size: 18,
-                                      ))
+                                      )),
+                                      SizedBox(width: 2,),
                                 ],
                               ),
                             ),

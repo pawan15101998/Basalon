@@ -97,6 +97,7 @@ class _FeedbackCardState extends State<FeedbackCard> {
               height: 10,
             ),
             ReceivingPaymentFields(
+              textInputAction: TextInputAction.done,
               controller: contentController,
               obscureText: false,
               maxLine: 6,
@@ -116,7 +117,8 @@ class _FeedbackCardState extends State<FeedbackCard> {
                     color: MyColors.topOrange,
                   ),
                   onPressed: () {
-                    _fetchEventData.postFeedbackEventDetails(
+                    if (contentController.text.toString() != "") {
+_fetchEventData.postFeedbackEventDetails(
                       context,
                       LoginUser.shared?.userId! ??
                           application.idFromLocalProvider,
@@ -131,6 +133,10 @@ class _FeedbackCardState extends State<FeedbackCard> {
 
                     setState(() {});
                     widget.function;
+                    } else {
+                      ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: new Text("Please Add Your Feedback or comment.")));
+                    }
                   }),
             ),
           ],
