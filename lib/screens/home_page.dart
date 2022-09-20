@@ -1209,7 +1209,7 @@ class HomePageState extends State<HomePage> {
                                                     TextDirection.rtl,
                                                 child: ReceivingPaymentFields(
                                                   borderRadius: 12,
-                                                  
+                                                  textAlign: TextAlign.center,
                                                   fillcolor: MyColors.lightBlue,
                                                   isFocus: true,
                                                   textColorPrimary:

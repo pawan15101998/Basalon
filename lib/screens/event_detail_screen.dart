@@ -503,11 +503,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 10),
                                             child: Row(
-                                              mainAxisAlignment: _fetchEventData
-                                                          .eventData
-                                                          ?.data
-                                                          ?.ticketRest ==
-                                                      ''
+                                              mainAxisAlignment: _fetchEventData.eventData?.data?.ticketRest == ''
                                                   ? MainAxisAlignment.end
                                                   : MainAxisAlignment
                                                       .spaceBetween,
@@ -546,16 +542,18 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.end,
                                                   children: [
-                                                    Text(
-                                                      '${_fetchEventData.eventData?.data?.mapAddress?.contains('New York, NY, USA') == false ? _fetchEventData.eventData?.data?.mapAddress : 'online'}',
-                                                      style: ktextStyle,
-                                                      textDirection:
-                                                          TextDirection.rtl,
+                                                    Container(
+                                                      width: width * 0.5,
+                                                      child: Text(
+                                                        '${_fetchEventData.eventData?.data?.mapAddress?.contains('New York, NY, USA') == false ? _fetchEventData.eventData?.data?.mapAddress : 'online'}',
+                                                        style: ktextStyle,
+                                                        textDirection:
+                                                            TextDirection.rtl,
+                                                      ),
                                                     ),
                                                     SizedBox(width: 8,),
                                                     Icon(
-                                                      Icons
-                                                          .location_on_outlined,
+                                                      Icons.location_on_outlined,
                                                       color: MyColors.topOrange,
                                                     )
                                                   ],
