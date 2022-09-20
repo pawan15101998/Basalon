@@ -106,7 +106,7 @@ class MapSampleState extends State<MapSample> {
   //   setState(() {});
   // }
   updateMarker(data) async {
-    final Uint8List markerIcon = await getBytesFromAsset('assets/LatestMapMarker4.png', 150);
+    final Uint8List markerIcon = await getBytesFromAsset('assets/LatestMapMarker4.png', 175);
     // BitmapDescriptor customIcon = await BitmapDescriptor.fromAssetImage(
     //   const ImageConfiguration(size: Size(16, 16), devicePixelRatio: 2.0),
     //   'assets/LatestMapMarker4.png',

@@ -1207,6 +1207,7 @@ class HomePageState extends State<HomePage> {
                                                 textDirection:
                                                     TextDirection.rtl,
                                                 child: ReceivingPaymentFields(
+                                                  borderRadius: 12.0,
                                                   fillcolor: MyColors.lightBlue,
                                                   isFocus: true,
                                                   textColorPrimary:
@@ -1294,6 +1295,7 @@ class HomePageState extends State<HomePage> {
                                 ),
                               ),
                               Wrap(
+                                alignment: WrapAlignment.spaceAround,
                                 spacing: 8,
                                 runSpacing: 8,
                                 children: List.generate(
@@ -1323,7 +1325,7 @@ class HomePageState extends State<HomePage> {
                                     },
                                     child: Container(
                                       padding: EdgeInsets.symmetric(
-                                          horizontal: 14, vertical: 12),
+                                          horizontal: 19, vertical: 12),
                                       decoration: BoxDecoration(
                                         color: selectFilter == index
                                             ? MyColors.lightRed
@@ -1424,58 +1426,63 @@ class HomePageState extends State<HomePage> {
 
                               if (application.filterTimeProvider ==
                                   'specific_date')
-                                Directionality(
-                                  textDirection: TextDirection.rtl,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(right: 18),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        ReceivingPaymentFields(
-                                          keyboardType: TextInputType.datetime,
-                                          textInputAction: TextInputAction.go,
-                                          fillcolor: MyColors.lightBlue,
-                                          hintText: 'החל מתאריך...',
-                                          textColor: Colors.white,
-                                          width: 130,
-                                          textColorPrimary: Colors.white,
-                                          obscureText: false,
-                                          controller: startDateController,
-                                          onTap: () async {
-                                            var date = await selectDate(
-                                                isDob: true, context: context);
-                                            if (date != "null") {
-                                              setState(() {
-                                                startDateController.text =
-                                                    convertSingleDate(date);
-                                              });
-                                            }
-                                          },
-                                        ),
-                                        SizedBox(width: 10),
-                                        ReceivingPaymentFields(
-                                          fillcolor: MyColors.lightBlue,
-                                          textColor: Colors.white,
-                                          keyboardType: TextInputType.datetime,
-                                          textInputAction: TextInputAction.go,
-                                          hintText: 'עד תאריך...',
-                                          width: 130,
-                                          textColorPrimary: Colors.white,
-                                          obscureText: false,
-                                          controller: endDateController,
-                                          onTap: () async {
-                                            var date = await selectDate(
-                                                isDob: true, context: context);
-                                            if (date != "null") {
-                                              setState(() {
-                                                endDateController.text =
-                                                    convertSingleDate(date);
-                                              });
-                                            }
-                                          },
-                                        ),
-                                      ],
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Directionality(
+                                    textDirection: TextDirection.rtl,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(right: 18),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          ReceivingPaymentFields(
+                                            borderRadius: 12.0,
+                                            keyboardType: TextInputType.datetime,
+                                            textInputAction: TextInputAction.go,
+                                            fillcolor: MyColors.lightBlue,
+                                            hintText: 'החל מתאריך...',
+                                            textColor: Colors.white,
+                                            width: 130,
+                                            textColorPrimary: Colors.white,
+                                            obscureText: false,
+                                            controller: startDateController,
+                                            onTap: () async {
+                                              var date = await selectDate(
+                                                  isDob: true, context: context);
+                                              if (date != "null") {
+                                                setState(() {
+                                                  startDateController.text =
+                                                      convertSingleDate(date);
+                                                });
+                                              }
+                                            },
+                                          ),
+                                          SizedBox(width: 10),
+                                          ReceivingPaymentFields(
+                                            borderRadius: 12.0,
+                                            fillcolor: MyColors.lightBlue,
+                                            textColor: Colors.white,
+                                            keyboardType: TextInputType.datetime,
+                                            textInputAction: TextInputAction.go,
+                                            hintText: 'עד תאריך...',
+                                            width: 130,
+                                            textColorPrimary: Colors.white,
+                                            obscureText: false,
+                                            controller: endDateController,
+                                            onTap: () async {
+                                              var date = await selectDate(
+                                                  isDob: true, context: context);
+                                              if (date != "null") {
+                                                setState(() {
+                                                  endDateController.text =
+                                                      convertSingleDate(date);
+                                                });
+                                              }
+                                            },
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -1698,6 +1705,7 @@ class HomePageState extends State<HomePage> {
                                                   padding: const EdgeInsets
                                                       .symmetric(vertical: 4),
                                                   child: ReceivingPaymentFields(
+                                                    borderRadius: 12.0,
                                                     onTap: () {},
                                                     textInputAction:
                                                         TextInputAction.done,

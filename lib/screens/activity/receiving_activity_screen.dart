@@ -369,6 +369,7 @@ class ReceivingPaymentFields extends StatelessWidget {
     this.fillcolor,
     this.textInputAction,
     this.keyboardType,
+    this.borderRadius,
   });
 
   final String? label;
@@ -393,6 +394,7 @@ class ReceivingPaymentFields extends StatelessWidget {
   bool? isBorder;
   bool? showLabel = true;
   bool? isFocus = false;
+  double? borderRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -460,12 +462,12 @@ class ReceivingPaymentFields extends StatelessWidget {
                 prefixIcon: prefixIcon,
                 suffixIcon: suffixIcon,
                 enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(6),
+                  borderRadius: BorderRadius.circular(borderRadius != null ? borderRadius! : 6.0),
                   borderSide: BorderSide(
                       width: 1, color: Color.fromRGBO(216, 216, 216, 1)),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(6),
+                  borderRadius: BorderRadius.circular(borderRadius != null ? borderRadius! : 6.0),
                   borderSide: BorderSide(
                       width: 1, color: Color.fromRGBO(216, 216, 216, 1)),
                 ),
