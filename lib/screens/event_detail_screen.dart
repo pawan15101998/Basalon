@@ -859,6 +859,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                             children: [
                                               InkWell(
                                                   onTap: () async {
+
                                                       openWhatsapp(context: context, number: "+9720506871111", text: "Hi...");
                                                   },
                                                   child: Container(

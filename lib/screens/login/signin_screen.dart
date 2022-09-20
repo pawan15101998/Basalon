@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print
 
+import 'dart:io';
+
 import 'package:basalon/network/login_register_network.dart';
 import 'package:basalon/screens/home_screen.dart';
 import 'package:basalon/screens/login/registration_screen.dart';
@@ -110,7 +112,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                 ),
                 const SizedBox(height: 25),
-                Padding(
+                if (Platform.isIOS) Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 18.0),
                   child: SignInWithAppleButton(
                     height: 44,
@@ -167,7 +169,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     },
                   ),
                 ),
-                const SizedBox(height: 25),
+                const SizedBox(height: 16),
                 Padding(
                   padding: const EdgeInsets.all(18.0),
                   child: SizedBox(
