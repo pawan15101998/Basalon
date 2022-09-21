@@ -345,7 +345,7 @@ class HomePageState extends State<HomePage> {
                 key: _contentKey,
                 controller: _scrollViewController,
                 physics: snapshot.connectionState == ConnectionState.waiting
-                    ? NeverScrollableScrollPhysics()
+                    ? null
                     : null,
                 slivers: [
                   SliverAppBar(
