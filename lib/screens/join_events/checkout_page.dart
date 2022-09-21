@@ -111,7 +111,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
           0,
           (previousValue, element) =>
               int.parse(previousValue.toString()) + element));
-              debugPrint("Hello Mukesh this is t");
+
       print(cardNumberController.text);
       print(endTime);
       print(startingTime);
@@ -119,7 +119,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
       print(status.split(' ').first.contains('ResponseCode=0'));
       if (status.split(' ').first.contains('ResponseCode=0')) {
         await _placeOrderNetwork.placeOrder(context, checkBoxValue);
-         EasyLoading.dismiss();
       } else {
         EasyLoading.dismiss();
         errorAlertMessage(context, 'Invalid Credentials!');
@@ -721,7 +720,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     await SharedPreferences.getInstance();
                 print(
                     '????????????????????????/*/*/*/*/*/*/*/**/*/*/*/*/*/*/*/');
-                //EasyLoading.show();
                 cardComApi();
                 setState(() {
                   isClickable = false;

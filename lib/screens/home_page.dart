@@ -1334,8 +1334,7 @@ class HomePageState extends State<HomePage> {
                                         borderRadius: BorderRadius.circular(13),
                                       ),
                                       child: Text(
-                                        filterData[index].toString(),
-                                        maxLines: 1,
+                                        filterData[index].toString(),                                        
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontSize: 15,

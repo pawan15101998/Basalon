@@ -131,12 +131,13 @@ class _BookEventPageState extends State<BookEventPage> {
 
   var registeredID;
   // static final facebookAppEvents = FacebookAppEvents();
+  var goToNextScreen = true;
 
   Future registerData() async {
     try {
+      EasyLoading.show();
       Response response;
       var dio = Dio();
-
       response = await dio.post(
         'https://basalon.co.il/wp-json/wp/v2/user_register',
         data: FormData.fromMap(
@@ -151,9 +152,11 @@ class _BookEventPageState extends State<BookEventPage> {
           "Auth-Key": "XkCRn9Y4PPmspuqYKolqbyhcDFhID7kl"
         }),
       );
+      debugPrint('Mukesh Register');
       print(response);
       EasyLoading.dismiss();
       if (response.data['success'] == 200) {
+        goToNextScreen = true;
         // ignore: avoid_print
         print('response.data  user_id user_id');
         print(response.data['data']['user_id']);
@@ -168,23 +171,30 @@ class _BookEventPageState extends State<BookEventPage> {
         application.isUserLogin = true;
         print(sharedPreferences.getInt('loginId'));
 
-        showDialog<String>(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-            title: const Text('Success'),
-            content: const Text('Registration is completed !!'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context, 'OK');
-                  Navigator.pop(context);
-                },
-                child: const Text('OK'),
-              ),
-            ],
-          ),
-        );
+        // showDialog<String>(
+        //   context: context,
+        //   builder: (BuildContext context) => AlertDialog(
+        //     title: const Text('Success'),
+        //     content: const Text('Registration is completed !!'),
+        //     actions: <Widget>[
+        //       TextButton(
+        //         onPressed: () {
+        //           Navigator.pop(context, 'OK');
+        //           Navigator.pop(context);
+        //         },
+        //         child: const Text('OK'),
+        //       ),
+        //     ],
+        //   ),
+        // );
+      } else if (response.data['success'] == 401) {
+        goToNextScreen = false;
+        debugPrint("Mukesh found Error");
+         print(response.data);
+       // print(response.body['error']['error']);
+         errorAlertMessage('Email or Username is allreay in System!');
       } else {
+        goToNextScreen = false;
         print('Invalid Invalid Invalid');
         errorAlertMessage('Invalid Credential!');
       }
@@ -639,6 +649,7 @@ class _BookEventPageState extends State<BookEventPage> {
                           ),
                           Container(
                             child: TextFormField(
+                              keyboardType: TextInputType.emailAddress,
                               controller: emailController,
                               textDirection: TextDirection.rtl,
                               cursorColor: Colors.black,
@@ -668,6 +679,8 @@ class _BookEventPageState extends State<BookEventPage> {
                             textAlign: TextAlign.end,
                           ),
                           TextFormField(
+                           // keyboardType: TextInputType.phone,
+                           // textInputAction: TextInputAction.done,
                             controller: phoneNoController,
                             textDirection: TextDirection.rtl,
                             cursorColor: Colors.black,
@@ -882,6 +895,9 @@ class _BookEventPageState extends State<BookEventPage> {
                   if (firstnameController.text.isEmpty) {
                     errorAlertMessage("Please enter firstname!");
                     validate();
+                  } if (lastnameController.text.isEmpty) {
+                    errorAlertMessage("Please enter lastname!");
+                    validate();
                   } else if (emailController.text.isEmpty) {
                     errorAlertMessage("Please enter email!");
                   } else if (phoneNoController.text.isEmpty) {
@@ -942,7 +958,8 @@ class _BookEventPageState extends State<BookEventPage> {
 
                       // PlaceOrderNetwork().placeOrder(context, showtitle);
                     } else {
-                      Navigator.push(
+                      if (goToNextScreen) {
+                        Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => CheckoutPage(
@@ -977,6 +994,12 @@ class _BookEventPageState extends State<BookEventPage> {
                           ),
                         ),
                       );
+                      } else {
+                        debugPrint("Null......");
+                        setState(() {
+                          goToNextScreen = true;
+                        });
+                      }
                     }
                   }
                 },
