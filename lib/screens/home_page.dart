@@ -17,7 +17,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:sizer/sizer.dart';
 import 'package:translator/translator.dart';
 
 import '../blocs/application_bloc.dart';
@@ -1325,8 +1324,9 @@ class HomePageState extends State<HomePage> {
                                       setState(() {});
                                     },
                                     child: Container(
+                                      width: width * 0.3,
                                       padding: EdgeInsets.symmetric(
-                                          horizontal: 14, vertical: 12),
+                                          horizontal: 2, vertical: 12),
                                       decoration: BoxDecoration(
                                         color: selectFilter == index
                                             ? MyColors.lightRed
@@ -1335,6 +1335,8 @@ class HomePageState extends State<HomePage> {
                                       ),
                                       child: Text(
                                         filterData[index].toString(),
+                                        maxLines: 1,
+                                        textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontSize: 15,
                                           fontFamily: "Helvetica",
@@ -1430,7 +1432,8 @@ class HomePageState extends State<HomePage> {
                                 Directionality(
                                   textDirection: TextDirection.rtl,
                                   child: Padding(
-                                    padding: const EdgeInsets.only(top: 8,right: 18),
+                                    padding: const EdgeInsets.only(
+                                        top: 8, right: 18),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
