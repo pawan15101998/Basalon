@@ -111,9 +111,8 @@ class _SignInScreenState extends State<SignInScreen> {
                     fontSize: 32,
                   ),
                 ),
-                const SizedBox(height: 25),
                 if (Platform.isIOS) Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                  padding: const EdgeInsets.only(top: 18.0, right: 18.0, left: 18.0),
                   child: SignInWithAppleButton(
                     height: 44,
                     text: "Apple " + "היכנס עם",
@@ -169,7 +168,6 @@ class _SignInScreenState extends State<SignInScreen> {
                     },
                   ),
                 ),
-                const SizedBox(height: 16),
                 Padding(
                   padding: const EdgeInsets.all(18.0),
                   child: SizedBox(
