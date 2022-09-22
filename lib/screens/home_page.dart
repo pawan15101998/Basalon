@@ -1338,23 +1338,18 @@ class HomePageState extends State<HomePage> {
                                       child: Text(
                                         filterData[index].toString(),
                                         textAlign: TextAlign.center,
-                                        maxLines: 1,
-                                        style: filterData[index]
-                                                    .toString()
-                                                    .length >
-                                                4
-                                            ? TextStyle(
-                                                fontSize: 10.sp,
-                                                fontFamily: "Helvetica",
-                                                fontWeight: FontWeight.w600,
-                                                color: Colors.white,
-                                              )
-                                            : TextStyle(
-                                                fontSize: 12.sp,
-                                                fontFamily: "Helvetica",
-                                                fontWeight: FontWeight.w600,
-                                                color: Colors.white,
-                                              ),
+                                        style: filterData[index].toString().length > 4 ?
+                                        TextStyle(
+                                          fontSize: 12.sp,
+                                          fontFamily: "Helvetica",
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.white,
+                                        ): TextStyle(
+                                          fontSize: 12.sp,
+                                          fontFamily: "Helvetica",
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
                                   ),
