@@ -17,6 +17,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:sizer/sizer.dart';
 import 'package:translator/translator.dart';
 
 import '../blocs/application_bloc.dart';
@@ -1312,8 +1313,9 @@ class HomePageState extends State<HomePage> {
                                               'ב-7 ימים הקרובים', 'this_week')
                                           .replaceAll('היום', 'today')
                                           .replaceAll('מחר', 'tomorrow')
+                                      .replaceAll('סוף השבוע','this_week_end')
                                           .replaceAll(
-                                              'בכל זמן', 'this_week_end')
+                                              'בכל זמן', '')
                                           .replaceAll('בשבוע הבא', 'next_week')
                                           .replaceFirst(
                                               'תאריך מסויים', 'specific_date');
@@ -1334,14 +1336,25 @@ class HomePageState extends State<HomePage> {
                                         borderRadius: BorderRadius.circular(13),
                                       ),
                                       child: Text(
-                                        filterData[index].toString(),                                        
+                                        filterData[index].toString(),
                                         textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          fontFamily: "Helvetica",
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.white,
-                                        ),
+                                        maxLines: 1,
+                                        style: filterData[index]
+                                                    .toString()
+                                                    .length >
+                                                4
+                                            ? TextStyle(
+                                                fontSize: 10.sp,
+                                                fontFamily: "Helvetica",
+                                                fontWeight: FontWeight.w600,
+                                                color: Colors.white,
+                                              )
+                                            : TextStyle(
+                                                fontSize: 12.sp,
+                                                fontFamily: "Helvetica",
+                                                fontWeight: FontWeight.w600,
+                                                color: Colors.white,
+                                              ),
                                       ),
                                     ),
                                   ),
