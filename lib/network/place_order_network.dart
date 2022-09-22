@@ -57,6 +57,7 @@ class PlaceOrderNetwork {
     bool newsletter,
   ) async {
     try {
+      EasyLoading.show();
       final response = await ApiProvider.post(
         url: 'place_order',
         body: {
@@ -188,10 +189,10 @@ class PlaceOrderNetwork {
           contentPadding: EdgeInsets.zero,
           title: const Center(
               child: Text(
-            'תודה על הזמנתכם!',
-            textDirection: TextDirection.rtl,
-            style: TextStyle(fontSize: 24),
-          )),
+                'תודה על הזמנתכם!',
+                textDirection: TextDirection.rtl,
+                style: TextStyle(fontSize: 24),
+              )),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -205,8 +206,16 @@ class PlaceOrderNetwork {
                 style: ktextStyle,
                 textDirection: TextDirection.rtl,
               ),
+              SizedBox(
+                height: 30,
+              ),
               Text(
-                'במידה ונרשמתם אלינו תוכלו למצוא את הכרטיסים ב"הזמנות שלי"',
+                'במידה ונרשמתם אלינו תוכלו למצוא את הכרטיסים ב',
+                style: ktextStyle,
+                textAlign: TextAlign.center,
+              ),
+              Text(
+                '"הזמנות שלי"',
                 style: ktextStyle,
                 textAlign: TextAlign.center,
               ),
@@ -214,7 +223,12 @@ class PlaceOrderNetwork {
                 height: 50,
               ),
               Text(
-                'מאחלים לכם בילוי נעים! ולא לשכוח לדרג את הפעילות בסיומה (רק אם בא לכם כמובן 🙂 )',
+                'מאחלים לכם בילוי נעים! ולא לשכוח לדרג את הפעילות בסיומה',
+                style: ktextStyleSmall,
+                textAlign: TextAlign.center,
+              ),
+              Text(
+                ' ( רק אם בא לכם כמובן 🙂 )',
                 style: ktextStyleSmall,
                 textAlign: TextAlign.center,
               ),
@@ -291,10 +305,10 @@ class PlaceOrderNetwork {
         contentPadding: EdgeInsets.zero,
         title: const Center(
             child: Text(
-          'תודה על הזמנתכם!',
-          textDirection: TextDirection.rtl,
-          style: TextStyle(fontSize: 24),
-        )),
+              'תודה על הזמנתכם!',
+              textDirection: TextDirection.rtl,
+              style: TextStyle(fontSize: 24),
+            )),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -308,16 +322,29 @@ class PlaceOrderNetwork {
               style: ktextStyle,
               textDirection: TextDirection.rtl,
             ),
+            SizedBox(
+              height: 30,
+            ),
             Text(
-              'במידה ונרשמתם אלינו תוכלו למצוא את הכרטיסים ב"הזמנות שלי"',
+              'במידה ונרשמתם אלינו תוכלו למצוא את הכרטיסים ב',
               style: ktextStyle,
+              textAlign: TextAlign.center,
+            ),
+            Text(
+              '"הזמנות שלי"',
+              style: ktextStyleSmall,
               textAlign: TextAlign.center,
             ),
             SizedBox(
               height: 50,
             ),
             Text(
-              'מאחלים לכם בילוי נעים! ולא לשכוח לדרג את הפעילות בסיומה (רק אם בא לכם כמובן 🙂 )',
+              'מאחלים לכם בילוי נעים! ולא לשכוח לדרג את הפעילות בסיומה',
+              style: ktextStyleSmall,
+              textAlign: TextAlign.center,
+            ),
+            Text(
+              ' ( רק אם בא לכם כמובן 🙂 )',
               style: ktextStyleSmall,
               textAlign: TextAlign.center,
             ),
@@ -327,7 +354,7 @@ class PlaceOrderNetwork {
           TextButton(
             onPressed: () => Navigator.of(context, rootNavigator: true)
                 .push(MaterialPageRoute(builder: (context) => HomeScreen())),
-            child: const Text('OK'),
+            child: const Text('אולרייט'),
           ),
         ],
       ),

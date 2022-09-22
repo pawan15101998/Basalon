@@ -724,8 +724,8 @@ class EventCardState extends State<EventCard> {
                                 child: Row(
                                   children: [
                                     SizedBox(width: 10),
-                                    if (widget.datum.ticketRest != '')
-                                     /* Container(
+                                    /*if (widget.datum.ticketRest != '')
+                                      Container(
                                         height: 35,
                                         width: 120,
                                         decoration: BoxDecoration(

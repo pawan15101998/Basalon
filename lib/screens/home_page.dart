@@ -454,7 +454,7 @@ class HomePageState extends State<HomePage> {
                                           horizontal: 10.0),
                                       child: Column(
                                         children: [
-                                          const Text(
+                                          Text(
                                             '?אז מה עושים היום',
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
@@ -466,7 +466,7 @@ class HomePageState extends State<HomePage> {
                                               ],
                                               color: Colors.white,
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 36.0,
+                                              fontSize: 32.sp,
                                             ),
                                           ),
                                           const SizedBox(height: 10),
@@ -475,21 +475,21 @@ class HomePageState extends State<HomePage> {
                                             textAlign: TextAlign.center,
                                             textDirection: TextDirection.rtl,
                                             style: ktextStyleWhiteLarge
-                                                .copyWith(fontSize: 19),
+                                                .copyWith(fontSize: 17.sp),
                                             // maxLines: 1,
                                           ),
                                           Text(
                                             ' אירוחים קולינריים ומפגשים חברתיים',
                                             textAlign: TextAlign.center,
                                             style: ktextStyleWhiteLarge
-                                                .copyWith(fontSize: 19),
+                                                .copyWith(fontSize: 17.sp),
                                           ),
                                           Text(
                                             'בסלונים ומרחבים מסביבכם',
                                             textAlign: TextAlign.center,
                                             style:
                                                 ktextStyleWhiteLarge.copyWith(
-                                                    fontSize: 19,
+                                                    fontSize: 17.sp,
                                                     fontWeight:
                                                         FontWeight.w900),
                                             // maxLines: 1,
@@ -1269,7 +1269,7 @@ class HomePageState extends State<HomePage> {
                                           : Directionality(
                                               textDirection: TextDirection.rtl,
                                               child: FilterCardWidget(
-                                                fontsize: 15,
+                                                fontsize: 12.sp,
                                                 text: filterData1[index],
                                                 color: selectFilter1 == index
                                                     ? MyColors.lightRed
@@ -1313,9 +1313,9 @@ class HomePageState extends State<HomePage> {
                                               'ב-7 ימים הקרובים', 'this_week')
                                           .replaceAll('היום', 'today')
                                           .replaceAll('מחר', 'tomorrow')
-                                      .replaceAll('סוף השבוע','this_week_end')
                                           .replaceAll(
-                                              'בכל זמן', '')
+                                              'סוף השבוע', 'this_week_end')
+                                          .replaceAll('בכל זמן', '')
                                           .replaceAll('בשבוע הבא', 'next_week')
                                           .replaceFirst(
                                               'תאריך מסויים', 'specific_date');
@@ -1339,18 +1339,22 @@ class HomePageState extends State<HomePage> {
                                         filterData[index].toString(),
                                         maxLines: 1,
                                         textAlign: TextAlign.center,
-                                        style: filterData[index].toString().length > 4 ?
-                                        TextStyle(
-                                          fontSize: 10.sp,
-                                          fontFamily: "Helvetica",
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.white,
-                                        ): TextStyle(
-                                          fontSize: 12.sp,
-                                          fontFamily: "Helvetica",
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.white,
-                                        ),
+                                        style: filterData[index]
+                                                    .toString()
+                                                    .length >
+                                                8
+                                            ? TextStyle(
+                                                fontSize: 12.sp,
+                                                fontFamily: "Helvetica",
+                                                fontWeight: FontWeight.w600,
+                                                color: Colors.white,
+                                              )
+                                            : TextStyle(
+                                                fontSize: 12.sp,
+                                                fontFamily: "Helvetica",
+                                                fontWeight: FontWeight.w600,
+                                                color: Colors.white,
+                                              ),
                                       ),
                                     ),
                                   ),
@@ -1738,7 +1742,7 @@ class HomePageState extends State<HomePage> {
                                           : Directionality(
                                               textDirection: TextDirection.rtl,
                                               child: FilterCardWidget(
-                                                fontsize: 15,
+                                                fontsize: 12.sp,
                                                 text: dropItems[index],
                                                 color:
                                                     selectedDropItems.contains(

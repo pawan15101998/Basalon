@@ -680,7 +680,114 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                           //   ),
                                           // ),
 
-                                          Row(
+                                          new Container(
+                                            height: 80.0,
+                                            child: new ListView(
+                                              scrollDirection: Axis.horizontal,
+                                              children: new List.generate(_fetchEventData
+                                                  .eventData!
+                                                  .data!
+                                                  .bookingDates!
+                                                  .length, (int index) {
+                                                return GestureDetector(
+                                                  onTap: () {
+                                                    print('opopopop');
+                                                    print(index);
+                                                    setState(() {
+                                                      if (_selectedIndex ==
+                                                          index) {
+                                                        _selectedIndex = 0;
+                                                      } else {
+                                                        _selectedIndex = index;
+                                                      }
+                                                      isSelected = true;
+
+                                                      dynamicBookingDate =
+                                                      _fetchEventData
+                                                          .eventData!
+                                                          .data!
+                                                          .bookingDates![index];
+                                                    });
+                                                    print(
+                                                        'booking card $isSelected');
+
+                                                    print(
+                                                        'booking card $_selectedIndex');
+                                                    print('booking card $index');
+                                                  },
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                        border: Border.all(
+                                                            color: (index ==
+                                                                _selectedIndex)
+                                                                ? Colors.red
+                                                                : Colors.grey
+                                                                .shade300)),
+                                                    margin:
+                                                    EdgeInsets.symmetric(
+                                                        horizontal: 10),
+                                                    padding:
+                                                    EdgeInsets.all(6),
+                                                    child: Column(
+                                                      children: [
+                                                        Text(
+                                                          '${_fetchEventData.eventData!.data!.bookingDates![index].date1}',
+                                                          textDirection:
+                                                          TextDirection
+                                                              .rtl,
+                                                          textAlign: TextAlign
+                                                              .center,
+                                                          // style: TextStyle(fontSize: 20),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 4,
+                                                        ),
+                                                        Text(
+                                                          '${_fetchEventData.eventData!.data!.bookingDates![index].date2}',
+                                                          textDirection:
+                                                          TextDirection
+                                                              .rtl,
+                                                          textAlign: TextAlign
+                                                              .center,
+                                                          style: _fetchEventData
+                                                              .eventData!
+                                                              .data!
+                                                              .bookingDates![index]
+                                                              .date2!
+                                                              .length <
+                                                              10
+                                                              ? ktextStyleBold
+                                                              .copyWith(
+                                                            fontSize:
+                                                            width *
+                                                                0.04,
+                                                          )
+                                                              : ktextStyleBold
+                                                              .copyWith(
+                                                            fontSize:
+                                                            width *
+                                                                0.03,
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 4,
+                                                        ),
+                                                        Text(
+                                                          '${_fetchEventData.eventData!.data!.bookingDates![index].endTime} - ${_fetchEventData.eventData!.data!.bookingDates![index].startTime}',
+                                                          textDirection:
+                                                          TextDirection
+                                                              .rtl,
+                                                          textAlign: TextAlign
+                                                              .center,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                );
+                                              }),
+                                            ),
+                                          ),
+                                         /* Row(
                                             textDirection: TextDirection.rtl,
                                             children: [
                                               for (int i = 0;
@@ -745,7 +852,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                                           height: 4,
                                                         ),
                                                         Text(
-                                                          '${_fetchEventData.eventData!.data!.bookingDates![i].date2}',
+                                                          'hellofdfdfdffdfd 2545545',
                                                           textDirection:
                                                               TextDirection
                                                                   .rtl,
@@ -787,7 +894,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                                   ),
                                                 ),
                                             ],
-                                          ),
+                                          ),*/
                                           SizedBox(
                                             height: 10.0,
                                           ),
