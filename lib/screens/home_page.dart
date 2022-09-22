@@ -1337,10 +1337,11 @@ class HomePageState extends State<HomePage> {
                                       ),
                                       child: Text(
                                         filterData[index].toString(),
+                                        maxLines: 1,
                                         textAlign: TextAlign.center,
                                         style: filterData[index].toString().length > 4 ?
                                         TextStyle(
-                                          fontSize: 12.sp,
+                                          fontSize: 10.sp,
                                           fontFamily: "Helvetica",
                                           fontWeight: FontWeight.w600,
                                           color: Colors.white,
