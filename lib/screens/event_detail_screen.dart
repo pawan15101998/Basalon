@@ -24,6 +24,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 import 'package:url_launcher/link.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -760,14 +761,12 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                                               ? ktextStyleBold
                                                               .copyWith(
                                                             fontSize:
-                                                            width *
-                                                                0.04,
+                                                            12.sp,
                                                           )
                                                               : ktextStyleBold
                                                               .copyWith(
                                                             fontSize:
-                                                            width *
-                                                                0.04,
+                                                            12.sp,
                                                           ),
                                                         ),
                                                         SizedBox(
