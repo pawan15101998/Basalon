@@ -683,6 +683,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                           new Container(
                                             height: 80.0,
                                             child: new ListView(
+                                              reverse: true,
                                               scrollDirection: Axis.horizontal,
                                               children: new List.generate(_fetchEventData
                                                   .eventData!
@@ -766,7 +767,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                                               .copyWith(
                                                             fontSize:
                                                             width *
-                                                                0.03,
+                                                                0.04,
                                                           ),
                                                         ),
                                                         SizedBox(

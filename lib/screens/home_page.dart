@@ -1296,65 +1296,70 @@ class HomePageState extends State<HomePage> {
                                   ),
                                 ),
                               ),
-                              Wrap(
-                                spacing: 8,
-                                runSpacing: 8,
-                                children: List.generate(
-                                  filterData.length,
-                                  (index) => InkWell(
-                                    onTap: () {
-                                      selectFilter = index;
-                                      application.filterTimeProvider =
-                                          filterData[index];
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: Wrap(
+                                  spacing: 8,
+                                  runSpacing: 8,
+                                  children: List.generate(
+                                    filterData.length,
+                                    (index) => InkWell(
+                                      onTap: () {
+                                        selectFilter = index;
+                                        application.filterTimeProvider =
+                                            filterData[index];
+                                        realvalue = application
+                                            .filterTimeProvider!
+                                            .replaceAll(
+                                                'ב-7 ימים הקרובים', 'this_week')
+                                            .replaceAll('היום', 'today')
+                                            .replaceAll('מחר', 'tomorrow')
+                                            .replaceAll(
+                                                'סוף השבוע', 'this_week_end')
+                                            .replaceAll('בכל זמן', '')
+                                            .replaceAll(
+                                                'בשבוע הבא', 'next_week')
+                                            .replaceFirst('תאריך מסויים',
+                                                'specific_date');
 
-                                      realvalue = application
-                                          .filterTimeProvider!
-                                          .replaceAll(
-                                              'ב-7 ימים הקרובים', 'this_week')
-                                          .replaceAll('היום', 'today')
-                                          .replaceAll('מחר', 'tomorrow')
-                                          .replaceAll(
-                                              'סוף השבוע', 'this_week_end')
-                                          .replaceAll('בכל זמן', '')
-                                          .replaceAll('בשבוע הבא', 'next_week')
-                                          .replaceFirst(
-                                              'תאריך מסויים', 'specific_date');
-
-                                      page = 1;
-                                      application.filterTimeProvider =
-                                          realvalue;
-                                      setState(() {});
-                                    },
-                                    child: Container(
-                                      width: width * 0.3,
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 2, vertical: 12),
-                                      decoration: BoxDecoration(
-                                        color: selectFilter == index
-                                            ? MyColors.lightRed
-                                            : MyColors.lightBlue,
-                                        borderRadius: BorderRadius.circular(13),
-                                      ),
-                                      child: Text(
-                                        filterData[index].toString(),
-                                        maxLines: 1,
-                                        textAlign: TextAlign.center,
-                                        style: filterData[index]
-                                                    .toString()
-                                                    .length >
-                                                8
-                                            ? TextStyle(
-                                                fontSize: 12.sp,
-                                                fontFamily: "Helvetica",
-                                                fontWeight: FontWeight.w600,
-                                                color: Colors.white,
-                                              )
-                                            : TextStyle(
-                                                fontSize: 12.sp,
-                                                fontFamily: "Helvetica",
-                                                fontWeight: FontWeight.w600,
-                                                color: Colors.white,
-                                              ),
+                                        page = 1;
+                                        application.filterTimeProvider =
+                                            realvalue;
+                                        setState(() {});
+                                      },
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: width * 0.058,
+                                            vertical: 12),
+                                        decoration: BoxDecoration(
+                                          color: selectFilter == index
+                                              ? MyColors.lightRed
+                                              : MyColors.lightBlue,
+                                          borderRadius:
+                                              BorderRadius.circular(13),
+                                        ),
+                                        child: Text(
+                                          filterData[index].toString(),
+                                          maxLines: 1,
+                                          textAlign: TextAlign.center,
+                                          style: filterData[index]
+                                                      .toString()
+                                                      .length >
+                                                  8
+                                              ? TextStyle(
+                                                  fontSize: 12.sp,
+                                                  fontFamily: "Helvetica",
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Colors.white,
+                                                )
+                                              : TextStyle(
+                                                  fontSize: 12.sp,
+                                                  fontFamily: "Helvetica",
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Colors.white,
+                                                ),
+                                        ),
                                       ),
                                     ),
                                   ),
