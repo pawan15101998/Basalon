@@ -13,6 +13,7 @@ import '../../blocs/application_bloc.dart';
 import '../home_screen.dart';
 import 'change_password.dart';
 
+
 class UserProfile extends StatefulWidget {
   UserProfile({Key? key, this.getUserData}) : super(key: key);
   GetUserData? getUserData;

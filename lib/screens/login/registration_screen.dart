@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:basalon/services/constant.dart';
 import 'package:basalon/widgets/RegistrationTextField.dart';
 import 'package:dio/dio.dart';
@@ -222,27 +224,104 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 //             clientId:
                 //                 'de.lunaone.flutter.signinwithappleexample.service',
 
-Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                  child: SignInWithAppleButton(
-                    text: "להירשם עם Apple",
-                    onPressed: () async {
-                      final credential =
-                          await SignInWithApple.getAppleIDCredential(
-                        scopes: [
-                          AppleIDAuthorizationScopes.email,
-                          AppleIDAuthorizationScopes.fullName,
-                        ],
-                        webAuthenticationOptions: WebAuthenticationOptions(
-                          clientId:
-                              'de.lunaone.flutter.signinwithappleexample.service',
+                if (Platform.isIOS)
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        top: 18.0, right: 18.0, left: 18.0),
+                    child: SignInWithAppleButton(
+                      height: 44,
+                      text: "להירשם עם Apple",
+                      onPressed: () async {
+                        EasyLoading.show();
+                        try {
+                          final credential =
+                              await SignInWithApple.getAppleIDCredential(
+                            scopes: [
+                              AppleIDAuthorizationScopes.email,
+                              AppleIDAuthorizationScopes.fullName,
+                            ],
+                            webAuthenticationOptions: WebAuthenticationOptions(
+                              clientId:
+                                  'de.lunaone.flutter.signinwithappleexample.service',
+                              redirectUri: Uri.parse(
+                                'https://flutter-sign-in-with-apple-example.glitch.me/callbacks/sign_in_with_apple',
+                              ),
+                            ),
+                          );
+                          var response =
+                              await _loginRegisterNetwork.registerAppleData(
+                                  credential.identityToken,
+                                  credential.userIdentifier);
+                          print(response);
+                          print(response['status'] == 200);
+                          print(response['body']['data'][0]['user_nicename'] ==
+                              '');
+                          print(response['body']['data'][0]['user_nicename']);
+                          print(response['body']['data'][0]['user_nicename'] ==
+                              null);
+                          print(response['status'] == 200 &&
+                              (response['body']['data'][0]['user_nicename'] ==
+                                      '' ||
+                                  response['body']['data'][0]
+                                          ['user_nicename'] ==
+                                      null));
+                          if (response['status'] == 200) {
+                            setState(() {
+                              EasyLoading.dismiss();
+                            });
+                            var id = int.parse(
+                                response['body']['data'][0]['ID'].toString());
+                            //  user_email
+                            //display_name
+                            LoginUser(
+                              userName: response['body']['data'][0]
+                                  ['display_name'],
+                              email: response['body']['data'][0]['user_email'],
+                              userId: id,
+                            );
+                            SharedPreferences sharedPreferences =
+                                await SharedPreferences.getInstance();
+                            sharedPreferences.setInt('loginId', id);
+                            LoginUser.shared?.userId =
+                                sharedPreferences.getInt('loginId');
+                            application.isUserLogin = true;
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (context) => HomeScreen()),
+                                (Route<dynamic> route) => false);
+                          } else {
+                            setState(() {
+                              EasyLoading.dismiss();
+                            });
+                          }
+                        } catch (e) {
+                          print(e);
+                          EasyLoading.dismiss();
+                        }
+                      },
+                    ),
+                  ),
+// Padding(
+//                   padding: const EdgeInsets.symmetric(horizontal: 18.0),
+//                   child: SignInWithAppleButton(
+//                     text: "להירשם עם Apple",
+//                     onPressed: () async {
+//                       final credential =
+//                           await SignInWithApple.getAppleIDCredential(
+//                         scopes: [
+//                           AppleIDAuthorizationScopes.email,
+//                           AppleIDAuthorizationScopes.fullName,
+//                         ],
+//                         webAuthenticationOptions: WebAuthenticationOptions(
+//                           clientId:
+//                               'de.lunaone.flutter.signinwithappleexample.service',
 
-                          redirectUri:
-                              Uri.parse(
-                            'https://flutter-sign-in-with-apple-example.glitch.me/callbacks/sign_in_with_apple',
-                          ),
-                        ),
-                      );})),
+//                           redirectUri:
+//                               Uri.parse(
+//                             'https://flutter-sign-in-with-apple-example.glitch.me/callbacks/sign_in_with_apple',
+//                           ),
+//                         ),
+//                       );})),
 
                 //           var id = int.parse(
                 //               response['body']['data'][0]['ID'].toString());
@@ -268,96 +347,106 @@ Padding(
                 //       },
                 //     ),
                 //   ),
-
-                const SizedBox(height: 25),
                 if (!widget.isAppleLogin)
-                  SizedBox(
-                    height: 50,
-                    width: width - 30,
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        print('facebook login,,,,,,,,,,,');
-                        final result = await FacebookAuth.i.login(permissions: [
-                          "public_profile",
-                          "email",
-                        ]);
-                        if (result.status == LoginStatus.success) {
-                          final requestData = await FacebookAuth.i.getUserData(
-                              fields:
-                                  "email, name, picture.height(200).width(200)");
+                  Padding(
+                    padding: const EdgeInsets.all(18.0),
+                    child: SizedBox(
+                      height: 44.0,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          print('facebook login,,,,,,,,,,,');
+                          EasyLoading.show();
+                          try {
+                            final result =
+                                await FacebookAuth.i.login(permissions: [
+                              "public_profile",
+                              "email",
+                            ]);
+                            EasyLoading.dismiss();
+                            if (result.status == LoginStatus.success) {
+                              final requestData = await FacebookAuth.i.getUserData(
+                                  fields:
+                                      "email, name, picture.height(200).width(200)");
 
-                          setState(() {
-                            userData = requestData;
-                            LoginUser(
-                              userName: userData!['name'],
-                              email: userData!['email'] != null
-                                  ? userData!['email']
-                                  : userData!['name'],
-                              userId: int.parse(userData!['id']),
-                            );
-                            LoginUser.shared?.userId =
-                                int.parse(userData!['id']);
-                          });
+                              setState(() {
+                                userData = requestData;
+                                LoginUser(
+                                  userName: userData!['name'],
+                                  email: userData!['email'] != null
+                                      ? userData!['email']
+                                      : userData!['name'],
+                                  userId: int.parse(userData!['id']),
+                                );
+                                // LoginUser.shared?.userId = int.parse(userData!['id']);
+                              });
 
-                          setState(() {
-                            application.imageFromFacebook =
-                                userData!['picture']['data']['url'];
-                            application.emailFromFacebook = userData!['email'];
-                            application.nameFromFacebook = userData!['name'];
-                            application.isUserLogin = true;
-                          });
-                          print(int.parse(userData!['id']));
-                          print(result.accessToken?.token);
-                          print(result.status);
-                          print(result.message);
-                          print('-------------------FACEBOOK----------------');
-                          SharedPreferences sharedPreferences =
-                              await SharedPreferences.getInstance();
-                          sharedPreferences.setString(
-                              'email',
-                              userData!['email'] != null
-                                  ? userData!['email']
-                                  : userData!['name']);
-                          sharedPreferences.setString(
-                              'facebookName',
-                              userData!['name'] != null
-                                  ? userData!['name']
-                                  : '');
-                          sharedPreferences.setString(
-                              'facebookImage',
-                              userData!['picture']['data']['url'] != null
-                                  ? userData!['picture']['data']['url']
-                                  : 'no image found ---------');
-                          sharedPreferences.setInt(
-                              'loginId', int.parse(userData!['id']));
-                          await _loginRegisterNetwork.registerFbData(
-                              result.accessToken?.token,
-                              int.parse(userData!['id']));
+                              setState(() {
+                                application.imageFromFacebook =
+                                    userData!['picture']['data']['url'];
+                                application.emailFromFacebook =
+                                    userData!['email'];
+                                application.nameFromFacebook =
+                                    userData!['name'];
+                                application.isUserLogin = true;
+                              });
+                              print(int.parse(userData!['id']));
+                              print(result.accessToken?.token);
+                              print(result.status);
+                              print(result.message);
+                              print(
+                                  '-------------------FACEBOOK----------------');
+                              SharedPreferences sharedPreferences =
+                                  await SharedPreferences.getInstance();
+                              sharedPreferences.setString(
+                                  'email',
+                                  userData!['email'] != null
+                                      ? userData!['email']
+                                      : userData!['name']);
+                              sharedPreferences.setString(
+                                  'facebookName',
+                                  userData!['name'] != null
+                                      ? userData!['name']
+                                      : '');
+                              sharedPreferences.setString(
+                                  'facebookImage',
+                                  userData!['picture']['data']['url'] != null
+                                      ? userData!['picture']['data']['url']
+                                      : 'no image found ---------');
+                              // sharedPreferences.setInt(
+                              //     'loginId', int.parse(userData!['id']));
+                              await _loginRegisterNetwork.registerFbData(
+                                  result.accessToken?.token,
+                                  int.parse(userData!['id']));
 
-                          //Navigator.pushNamed(context, HomeScreen.route);
-                          Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                  builder: (context) => HomeScreen()),
-                              (Route<dynamic> route) => false);
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        primary: const Color.fromRGBO(25, 119, 243, 1),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5)),
-                        shadowColor: Colors.transparent,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 5),
-                            child: Image.asset("assets/images/facebook.png"),
-                          ),
-                          const Text('המשיכו עם פייסבוק',
-                              style: TextStyle(fontSize: 20))
-                        ],
+                              //Navigator.pushNamed(context, HomeScreen.route);
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (context) => HomeScreen()),
+                                  (Route<dynamic> route) => false);
+                            }
+                          } catch (e) {
+                            print(e);
+                            EasyLoading.dismiss();
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: const Color.fromRGBO(25, 119, 243, 1),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)),
+                          shadowColor: Colors.transparent,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 5),
+                              child: Image.asset("assets/images/facebook.png"),
+                            ),
+                            const Text('המשיכו עם פייסבוק',
+                                style: TextStyle(fontSize: 20))
+                          ],
+                        ),
                       ),
                     ),
                   ),

@@ -68,6 +68,7 @@ class ApplicationBloc with ChangeNotifier {
   dynamic cardCvvProvider;
   dynamic cardMonthProvider;
   dynamic cardYearProvider;
+  dynamic checkoutLoader = false;
 
   GetUserData? getUserDataProfileProvider;
 

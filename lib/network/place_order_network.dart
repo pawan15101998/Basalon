@@ -1,3 +1,4 @@
+import 'package:basalon/main.dart';
 import 'package:basalon/modal/discount_model.dart';
 import 'package:basalon/services/api_provider/api_provider.dart';
 import 'package:basalon/services/constant.dart';
@@ -56,8 +57,8 @@ class PlaceOrderNetwork {
     BuildContext context,
     bool newsletter,
   ) async {
+    print("Mukesh Loader :: ${application.checkoutLoader}");
     try {
-      EasyLoading.show();
       final response = await ApiProvider.post(
         url: 'place_order',
         body: {
@@ -106,10 +107,8 @@ class PlaceOrderNetwork {
       print(numOfTicket);
       print(response);
       errorAlertMessage(context);
-      EasyLoading.dismiss();
     } catch (e) {
       print('${e} failed order');
-      EasyLoading.dismiss();
     }
   }
 

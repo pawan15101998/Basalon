@@ -80,15 +80,34 @@ class _CheckoutPageState extends State<CheckoutPage> {
   final cardMonth = kmonthList;
   bool checkBoxValue = true;
   bool saveCard = true;
+  var loader;
+
+  showLoaderDialog(BuildContext context){
+    AlertDialog alert=AlertDialog(
+      content: new Row(
+        children: [
+          CircularProgressIndicator(),
+          Container(margin: EdgeInsets.only(left: 7),child:Text("Loading..." )),
+        ],),
+    );
+    showDialog(barrierDismissible: false,
+      context:context,
+      builder:(BuildContext context){
+        return alert;
+      },
+    );
+  }
 
   Future cardComApi() async {
+    showLoaderDialog(context);
     print("popopopop");
     print(cardValueChange);
     print(temp);
     print(cardNumberController.text);
+    application.checkoutLoader = true;
+    print(application.checkoutLoader);
     var dio = Dio();
     try {
-      EasyLoading.show();
       Response response;
       var totalAmount = widget.totalAmount.fold(
           0,
@@ -120,11 +139,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
       if (status.split(' ').first.contains('ResponseCode=0')) {
         await _placeOrderNetwork.placeOrder(context, checkBoxValue);
       } else {
-        EasyLoading.dismiss();
+        Navigator.pop(context);
         errorAlertMessage(context, 'Invalid Credentials!');
       }
     } catch (e) {
-      EasyLoading.dismiss();
+      Navigator.pop(context);
       print(e);
     }
   }
@@ -186,6 +205,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
     cvvController.text = application.cardCvvProvider ?? '';
     startingTime = application.cardMonthProvider ?? '';
     endTime = application.cardYearProvider ?? '';
+    loader = application.checkoutLoader ?? false;
+    print("Mukesh Loader::: $loader");
 
     temp = cardNumberController.text;
 

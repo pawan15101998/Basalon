@@ -7,6 +7,7 @@ import 'package:basalon/screens/home_screen.dart';
 import 'package:basalon/screens/login/registration_screen.dart';
 import 'package:basalon/widgets/custom_buttons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -111,131 +112,159 @@ class _SignInScreenState extends State<SignInScreen> {
                     fontSize: 32,
                   ),
                 ),
-                if (Platform.isIOS) Padding(
-                  padding: const EdgeInsets.only(top: 18.0, right: 18.0, left: 18.0),
-                  child: SignInWithAppleButton(
-                    height: 44,
-                    text: "Apple " + "היכנס עם",
-                    onPressed: () async {
-                      final credential =
-                          await SignInWithApple.getAppleIDCredential(
-                        scopes: [
-                          AppleIDAuthorizationScopes.email,
-                          AppleIDAuthorizationScopes.fullName,
-                        ],
-                        webAuthenticationOptions: WebAuthenticationOptions(
-                          clientId:
-                              'de.lunaone.flutter.signinwithappleexample.service',
-                          redirectUri: Uri.parse(
-                            'https://flutter-sign-in-with-apple-example.glitch.me/callbacks/sign_in_with_apple',
-                          ),
-                        ),
-                      );
-                      var response =
-                          await _loginRegisterNetwork.registerAppleData(
-                              credential.identityToken,
-                              credential.userIdentifier);
-                      print(response);
-                      print(response['status'] == 200);
-                      print(response['body']['data'][0]['user_nicename'] == '');
-                      print(response['body']['data'][0]['user_nicename']);
-                      print(
-                          response['body']['data'][0]['user_nicename'] == null);
-                      print(response['status'] == 200 &&
-                          (response['body']['data'][0]['user_nicename'] == '' ||
-                              response['body']['data'][0]['user_nicename'] ==
-                                  null));
-                      if (response['status'] == 200) {
-                        var id = int.parse(
-                            response['body']['data'][0]['ID'].toString());
-                        //  user_email
-                        //display_name
-                        LoginUser(
-                          userName: response['body']['data'][0]['display_name'],
-                          email: response['body']['data'][0]['user_email'],
-                          userId: id,
-                        );
-                        SharedPreferences sharedPreferences =
-                            await SharedPreferences.getInstance();
-                        sharedPreferences.setInt('loginId', id);
-                        LoginUser.shared?.userId = sharedPreferences.getInt('loginId');
-                        application.isUserLogin = true;
-                        Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                                builder: (context) => HomeScreen()),
-                            (Route<dynamic> route) => false);
-                      }
-                    },
+                if (Platform.isIOS)
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        top: 18.0, right: 18.0, left: 18.0),
+                    child: SignInWithAppleButton(
+                      height: 44,
+                      text: "Apple " + "היכנס עם",
+                      onPressed: () async {
+                        EasyLoading.show();
+                        try {
+                          final credential =
+                              await SignInWithApple.getAppleIDCredential(
+                            scopes: [
+                              AppleIDAuthorizationScopes.email,
+                              AppleIDAuthorizationScopes.fullName,
+                            ],
+                            webAuthenticationOptions: WebAuthenticationOptions(
+                              clientId:
+                                  'de.lunaone.flutter.signinwithappleexample.service',
+                              redirectUri: Uri.parse(
+                                'https://flutter-sign-in-with-apple-example.glitch.me/callbacks/sign_in_with_apple',
+                              ),
+                            ),
+                          );
+                          var response =
+                              await _loginRegisterNetwork.registerAppleData(
+                                  credential.identityToken,
+                                  credential.userIdentifier);
+                          print(response);
+                          print(response['status'] == 200);
+                          print(response['body']['data'][0]['user_nicename'] ==
+                              '');
+                          print(response['body']['data'][0]['user_nicename']);
+                          print(response['body']['data'][0]['user_nicename'] ==
+                              null);
+                          print(response['status'] == 200 &&
+                              (response['body']['data'][0]['user_nicename'] ==
+                                      '' ||
+                                  response['body']['data'][0]
+                                          ['user_nicename'] ==
+                                      null));
+                          if (response['status'] == 200) {
+                            EasyLoading.dismiss();
+
+                            var id = int.parse(
+                                response['body']['data'][0]['ID'].toString());
+                            //  user_email
+                            //display_name
+                            LoginUser(
+                              userName: response['body']['data'][0]
+                                  ['display_name'],
+                              email: response['body']['data'][0]['user_email'],
+                              userId: id,
+                            );
+                            SharedPreferences sharedPreferences =
+                                await SharedPreferences.getInstance();
+                            sharedPreferences.setInt('loginId', id);
+                            LoginUser.shared?.userId =
+                                sharedPreferences.getInt('loginId');
+                            application.isUserLogin = true;
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (context) => HomeScreen()),
+                                (Route<dynamic> route) => false);
+                          } else {
+                            EasyLoading.dismiss();
+                          }
+                        } catch (e) {
+                          print(e);
+                          EasyLoading.dismiss();
+                        }
+                        ;
+                      },
+                    ),
                   ),
-                ),
                 Padding(
                   padding: const EdgeInsets.all(18.0),
                   child: SizedBox(
                     height: 44.0,
                     child: ElevatedButton(
                       onPressed: () async {
+                        EasyLoading.show();
                         print('facebook login,,,,,,,,,,,');
-                        final result = await FacebookAuth.i.login(permissions: [
-                          "public_profile",
-                          "email",
-                        ]);
-                        if (result.status == LoginStatus.success) {
-                          final requestData = await FacebookAuth.i.getUserData(
-                              fields:
-                                  "email, name, picture.height(200).width(200)");
+                        try {
+                          final result =
+                              await FacebookAuth.i.login(permissions: [
+                            "public_profile",
+                            "email",
+                          ]);
+                          EasyLoading.dismiss();
+                          if (result.status == LoginStatus.success) {
+                            final requestData = await FacebookAuth.i.getUserData(
+                                fields:
+                                    "email, name, picture.height(200).width(200)");
 
-                          setState(() {
-                            userData = requestData;
-                            LoginUser(
-                              userName: userData!['name'],
-                              email: userData!['email'] != null
-                                  ? userData!['email']
-                                  : userData!['name'],
-                              userId: int.parse(userData!['id']),
-                            );
-                            // LoginUser.shared?.userId = int.parse(userData!['id']);
-                          });
+                            setState(() {
+                              EasyLoading.dismiss();
+                              userData = requestData;
+                              LoginUser(
+                                userName: userData!['name'],
+                                email: userData!['email'] != null
+                                    ? userData!['email']
+                                    : userData!['name'],
+                                userId: int.parse(userData!['id']),
+                              );
+                              // LoginUser.shared?.userId = int.parse(userData!['id']);
+                            });
 
-                          setState(() {
-                            application.imageFromFacebook =
-                                userData!['picture']['data']['url'];
-                            application.emailFromFacebook = userData!['email'];
-                            application.nameFromFacebook = userData!['name'];
-                            application.isUserLogin = true;
-                          });
-                          print(int.parse(userData!['id']));
-                          print(result.accessToken?.token);
-                          print(result.status);
-                          print(result.message);
-                          print('-------------------FACEBOOK----------------');
-                          SharedPreferences sharedPreferences =
-                              await SharedPreferences.getInstance();
-                          sharedPreferences.setString(
-                              'email',
-                              userData!['email'] != null
-                                  ? userData!['email']
-                                  : userData!['name']);
-                          sharedPreferences.setString(
-                              'facebookName',
-                              userData!['name'] != null
-                                  ? userData!['name']
-                                  : '');
-                          sharedPreferences.setString(
-                              'facebookImage',
-                              userData!['picture']['data']['url'] != null
-                                  ? userData!['picture']['data']['url']
-                                  : 'no image found ---------');
-                          // sharedPreferences.setInt(
-                          //     'loginId', int.parse(userData!['id']));
-                          await _loginRegisterNetwork.registerFbData(
-                              result.accessToken?.token,
-                              int.parse(userData!['id']));
+                            setState(() {
+                              application.imageFromFacebook =
+                                  userData!['picture']['data']['url'];
+                              application.emailFromFacebook =
+                                  userData!['email'];
+                              application.nameFromFacebook = userData!['name'];
+                              application.isUserLogin = true;
+                            });
+                            print(int.parse(userData!['id']));
+                            print(result.accessToken?.token);
+                            print(result.status);
+                            print(result.message);
+                            print(
+                                '-------------------FACEBOOK----------------');
+                            SharedPreferences sharedPreferences =
+                                await SharedPreferences.getInstance();
+                            sharedPreferences.setString(
+                                'email',
+                                userData!['email'] != null
+                                    ? userData!['email']
+                                    : userData!['name']);
+                            sharedPreferences.setString(
+                                'facebookName',
+                                userData!['name'] != null
+                                    ? userData!['name']
+                                    : '');
+                            sharedPreferences.setString(
+                                'facebookImage',
+                                userData!['picture']['data']['url'] != null
+                                    ? userData!['picture']['data']['url']
+                                    : 'no image found ---------');
+                            // sharedPreferences.setInt(
+                            //     'loginId', int.parse(userData!['id']));
+                            await _loginRegisterNetwork.registerFbData(
+                                result.accessToken?.token,
+                                int.parse(userData!['id']));
 
-                          //Navigator.pushNamed(context, HomeScreen.route);
-                          Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                  builder: (context) => HomeScreen()),
-                              (Route<dynamic> route) => false);
+                            //Navigator.pushNamed(context, HomeScreen.route);
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (context) => HomeScreen()),
+                                (Route<dynamic> route) => false);
+                          }
+                        } catch (e) {
+                          EasyLoading.dismiss();
                         }
                       },
                       style: ElevatedButton.styleFrom(
