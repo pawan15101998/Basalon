@@ -75,21 +75,9 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
       setState(() {
         imageList?.add(_fetchEventData.eventData!.data!.gallery![i].url!);
       });
-      print('aaaaaaaaaaaaaaaaaaaaa');
-      print(imageList);
     }
     return imageList;
   }
-
-  // List<String> imageCheck() {
-  //   if (imageList?.length == 0) {
-  //
-  //     setState(() {
-  //       imageList = ['assets/images/image_onboard1.png'];
-  //     });
-  //   }
-  //   return [];
-  // }
 
   late final PlaceOrderNetwork _placeOrderNetwork = PlaceOrderNetwork(
     bookingDate: dateFilter,
@@ -106,7 +94,6 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
     _fetchEventData.getEventDetailData();
     super.initState();
     streamController.close();
-    print('print 1');
     Future.delayed(Duration(seconds: 3), () {
       bookingDates();
       if (_fetchEventData.eventData?.data?.gallery != null) {
@@ -130,8 +117,6 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
-    print('print 2');
   }
 
   List items = [];
@@ -178,7 +163,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
       required String number}) async {
     var whatsapp = number;
     var whatsappURl_android =
-        "whatsapp://send?phone=" + whatsapp + "&text=${text}";
+        "whatsapp://send?phone=" + whatsapp + "&text=היי! בקשר לפעילות:${text}";
     var whatappURL_ios = "https://wa.me/$whatsapp?text=${Uri.parse("${text}")}";
     if (Platform.isIOS) {
       // for iOS phone only
@@ -205,8 +190,6 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(LoginUser.shared?.userId!);
-    print('gggggggggggggggggggggggggggg');
     return SafeArea(
       child: Scaffold(
         extendBody: true,
@@ -337,7 +320,6 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                         fit: BoxFit.fill,
                                       ),
                                     ),
-
                                     actions: [
                                       Builder(
                                         builder: (context) => Container(
@@ -451,9 +433,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                                       color:
                                                           Colors.amber.shade700,
                                                     ),
-                                                    onRatingUpdate: (rating) {
-                                                      print(rating);
-                                                    },
+                                                    onRatingUpdate: (rating) {},
                                                   )
                                                 ],
                                               ),
@@ -504,7 +484,11 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 10),
                                             child: Row(
-                                              mainAxisAlignment: _fetchEventData.eventData?.data?.ticketRest == ''
+                                              mainAxisAlignment: _fetchEventData
+                                                          .eventData
+                                                          ?.data
+                                                          ?.ticketRest ==
+                                                      ''
                                                   ? MainAxisAlignment.end
                                                   : MainAxisAlignment
                                                       .spaceBetween,
@@ -552,9 +536,12 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                                             TextDirection.rtl,
                                                       ),
                                                     ),
-                                                    SizedBox(width: 8,),
+                                                    SizedBox(
+                                                      width: 8,
+                                                    ),
                                                     Icon(
-                                                      Icons.location_on_outlined,
+                                                      Icons
+                                                          .location_on_outlined,
                                                       color: MyColors.topOrange,
                                                     )
                                                   ],
@@ -582,13 +569,14 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                                   width: 8.0,
                                                 ),
                                                 Transform.rotate(
-                                                    angle: 180,
-                                                    child: FaIcon(
-                                                      FontAwesomeIcons.ticket,
-                                                      color: MyColors.topOrange,
-                                                      size: 18,
-                                                    ),),
-                                                    SizedBox(
+                                                  angle: 180,
+                                                  child: FaIcon(
+                                                    FontAwesomeIcons.ticket,
+                                                    color: MyColors.topOrange,
+                                                    size: 18,
+                                                  ),
+                                                ),
+                                                SizedBox(
                                                   width: 4.0,
                                                 ),
                                               ],
@@ -686,15 +674,14 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                             child: new ListView(
                                               reverse: true,
                                               scrollDirection: Axis.horizontal,
-                                              children: new List.generate(_fetchEventData
-                                                  .eventData!
-                                                  .data!
-                                                  .bookingDates!
-                                                  .length, (int index) {
+                                              children: new List.generate(
+                                                  _fetchEventData
+                                                      .eventData!
+                                                      .data!
+                                                      .bookingDates!
+                                                      .length, (int index) {
                                                 return GestureDetector(
                                                   onTap: () {
-                                                    print('opopopop');
-                                                    print(index);
                                                     setState(() {
                                                       if (_selectedIndex ==
                                                           index) {
@@ -705,40 +692,33 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                                       isSelected = true;
 
                                                       dynamicBookingDate =
-                                                      _fetchEventData
-                                                          .eventData!
-                                                          .data!
-                                                          .bookingDates![index];
+                                                          _fetchEventData
+                                                                  .eventData!
+                                                                  .data!
+                                                                  .bookingDates![
+                                                              index];
                                                     });
-                                                    print(
-                                                        'booking card $isSelected');
-
-                                                    print(
-                                                        'booking card $_selectedIndex');
-                                                    print('booking card $index');
                                                   },
                                                   child: Container(
                                                     decoration: BoxDecoration(
                                                         border: Border.all(
                                                             color: (index ==
-                                                                _selectedIndex)
+                                                                    _selectedIndex)
                                                                 ? Colors.red
                                                                 : Colors.grey
-                                                                .shade300)),
+                                                                    .shade300)),
                                                     margin:
-                                                    EdgeInsets.symmetric(
-                                                        horizontal: 10),
-                                                    padding:
-                                                    EdgeInsets.all(6),
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 10),
+                                                    padding: EdgeInsets.all(6),
                                                     child: Column(
                                                       children: [
                                                         Text(
                                                           '${_fetchEventData.eventData!.data!.bookingDates![index].date1}',
                                                           textDirection:
-                                                          TextDirection
-                                                              .rtl,
-                                                          textAlign: TextAlign
-                                                              .center,
+                                                              TextDirection.rtl,
+                                                          textAlign:
+                                                              TextAlign.center,
                                                           // style: TextStyle(fontSize: 20),
                                                         ),
                                                         SizedBox(
@@ -747,27 +727,27 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                                         Text(
                                                           '${_fetchEventData.eventData!.data!.bookingDates![index].date2}',
                                                           textDirection:
-                                                          TextDirection
-                                                              .rtl,
-                                                          textAlign: TextAlign
-                                                              .center,
+                                                              TextDirection.rtl,
+                                                          textAlign:
+                                                              TextAlign.center,
                                                           style: _fetchEventData
-                                                              .eventData!
-                                                              .data!
-                                                              .bookingDates![index]
-                                                              .date2!
-                                                              .length <
-                                                              10
+                                                                      .eventData!
+                                                                      .data!
+                                                                      .bookingDates![
+                                                                          index]
+                                                                      .date2!
+                                                                      .length <
+                                                                  10
                                                               ? ktextStyleBold
-                                                              .copyWith(
-                                                            fontSize:
-                                                            12.sp,
-                                                          )
+                                                                  .copyWith(
+                                                                  fontSize:
+                                                                      12.sp,
+                                                                )
                                                               : ktextStyleBold
-                                                              .copyWith(
-                                                            fontSize:
-                                                            12.sp,
-                                                          ),
+                                                                  .copyWith(
+                                                                  fontSize:
+                                                                      12.sp,
+                                                                ),
                                                         ),
                                                         SizedBox(
                                                           height: 4,
@@ -775,10 +755,9 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                                         Text(
                                                           '${_fetchEventData.eventData!.data!.bookingDates![index].endTime} - ${_fetchEventData.eventData!.data!.bookingDates![index].startTime}',
                                                           textDirection:
-                                                          TextDirection
-                                                              .rtl,
-                                                          textAlign: TextAlign
-                                                              .center,
+                                                              TextDirection.rtl,
+                                                          textAlign:
+                                                              TextAlign.center,
                                                         ),
                                                       ],
                                                     ),
@@ -787,7 +766,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                               }),
                                             ),
                                           ),
-                                         /* Row(
+                                          /* Row(
                                             textDirection: TextDirection.rtl,
                                             children: [
                                               for (int i = 0;
@@ -905,34 +884,12 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
 //Button
                                             child: ElevatedButton(
                                                 onPressed: () async {
-                                                  print('ליחצו booknow');
                                                   if (_fetchEventData
                                                           .eventData!
                                                           .data!
                                                           .noOfTicket!
                                                           .isNotEmpty &&
                                                       isSelected) {
-                                                    print("hjgdj");
-                                                    print(_fetchEventData
-                                                        .eventData?.data!.id);
-                                                    print(_fetchEventData
-                                                        .eventData
-                                                        ?.data!
-                                                        .noOfTicket);
-                                                    print(_fetchEventData
-                                                        .eventData
-                                                        ?.data
-                                                        ?.thumbnailEvent);
-                                                    print(_fetchEventData
-                                                        .eventData
-                                                        ?.data
-                                                        ?.title);
-                                                    print(dynamicBookingDate);
-                                                    print(_fetchEventData
-                                                        .eventData
-                                                        ?.data
-                                                        ?.mapAddress);
-
                                                     Navigator.push(
                                                       context,
                                                       MaterialPageRoute(
@@ -992,7 +949,8 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                                         context: context,
                                                         number:
                                                             "+9720506871111",
-                                                        text: "Hi...");
+                                                        text:
+                                                            "${_fetchEventData.eventData?.data?.title}");
                                                   },
                                                   child: Container(
                                                     padding: EdgeInsets.only(
@@ -1081,8 +1039,6 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                               children: [
                                                 IconButton(
                                                     onPressed: () {
-                                                      print(
-                                                          'messenger clicked.');
                                                       share();
                                                     },
                                                     icon: Image.asset(
@@ -1358,8 +1314,6 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                         SliverList(
                           delegate: SliverChildBuilderDelegate(
                             (BuildContext context, int index) {
-                              print(p?.authorData?.authorImg);
-                              print('hhhhhhhhhhhhhh');
                               return p?.authorData != null
                                   ? ProfileCard(
                                       showCircleAvatar: true,
@@ -1425,13 +1379,6 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                             return SliverList(
                               delegate: SliverChildBuilderDelegate(
                                 (context, index) {
-                                  print("Mukesh Event:::");
-                                  print(
-                                      "Mukesh Event::: ${_fetchEventData.eventData!.toString()}");
-                                  print(
-                                      "Mukesh Event::: ${_fetchEventData.eventData!.data!.toString()}");
-                                  print(
-                                      "Mukesh Event::: ${_fetchEventData.eventData!.data!.comments!.toString()}");
                                   return widget.name == null
                                       ? SizedBox()
                                       : _fetchEventData
@@ -1709,7 +1656,6 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                 setState(() {
                                   dateFilter = val as String?;
                                 });
-                                print('----------------$val');
                               },
                             ),
                             if (dateFilter == 'תאריך ספציפי')

@@ -6,15 +6,15 @@ import 'package:basalon/services/constant.dart';
 import 'package:basalon/services/my_color.dart';
 import 'package:basalon/widgets/side_drawer.dart';
 import 'package:dio/dio.dart';
-// import 'package:facebook_app_events/facebook_app_events.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../blocs/application_bloc.dart';
+
 final navigatorKey = GlobalKey<NavigatorState>();
+
 class CheckoutPage extends StatefulWidget {
   CheckoutPage({
     required this.totalAmount,
@@ -82,17 +82,20 @@ class _CheckoutPageState extends State<CheckoutPage> {
   bool saveCard = true;
   var loader;
 
-  showLoaderDialog(BuildContext context){
-    AlertDialog alert=AlertDialog(
+  showLoaderDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
       content: new Row(
         children: [
           CircularProgressIndicator(),
-          Container(margin: EdgeInsets.only(left: 7),child:Text("Loading..." )),
-        ],),
+          Container(
+              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+        ],
+      ),
     );
-    showDialog(barrierDismissible: false,
-      context:context,
-      builder:(BuildContext context){
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
         return alert;
       },
     );
@@ -100,12 +103,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   Future cardComApi() async {
     showLoaderDialog(context);
-    print("popopopop");
-    print(cardValueChange);
-    print(temp);
-    print(cardNumberController.text);
     application.checkoutLoader = true;
-    print(application.checkoutLoader);
     var dio = Dio();
     try {
       Response response;
@@ -113,9 +111,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
           0,
           (previousValue, element) =>
               int.parse(previousValue.toString()) + element);
-      print('mukesh Total Amount :: $totalAmount');
-      print('mukesh Total Amount :: ${widget.totalAmount}');
-      print('mukesh Total Amount :: ${widget.initialPrice}');
       if (totalAmount == 0) {
         totalAmount = int.parse(widget.initialPrice);
       }
@@ -123,19 +118,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         'https://secure.cardcom.solutions/Interface/Direct2.aspx?TerminalNumber=130735&Sum=$totalAmount&cardnumber=${cardValueChange == false ? temp : cardNumberController.text}&cardvalidityyear=$endTime&cardvaliditymonth=$startingTime&username=rq6xvee8hxRaDewuTQT7&Languages=en&coinid=1&codpage=65001&Cvv=${cvvController.text}&CardOwnerName=${holderController.text}',
         options: Options(contentType: Headers.formUrlEncodedContentType),
       );
-      print(response);
       String status = response.data;
-      print('Mukesh $status');
-      print(widget.totalAmount.fold(
-          0,
-          (previousValue, element) =>
-              int.parse(previousValue.toString()) + element));
-
-      print(cardNumberController.text);
-      print(endTime);
-      print(startingTime);
-      print(cvvController.text);
-      print(status.split(' ').first.contains('ResponseCode=0'));
       if (status.split(' ').first.contains('ResponseCode=0')) {
         await _placeOrderNetwork.placeOrder(context, checkBoxValue);
       } else {
@@ -144,7 +127,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
       }
     } catch (e) {
       Navigator.pop(context);
-      print(e);
     }
   }
 
@@ -175,7 +157,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
     // TODO: implement dispose
     super.dispose();
     isClickable = true;
-    print('dispose dispose');
   }
 
   // var translator = MaskedTextController.getDefaultTranslator();
@@ -186,8 +167,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
       MaskedTextController(mask: '0000000000000000', text: 'XXXX-XXXX-XXXX');
   late final application = Provider.of<ApplicationBloc>(context, listen: false);
   cardToStar(val) {
-    print("kitne no  ka hso");
-    print(val);
     val = '************' + val.substring(12, val.length);
     return val;
   }
@@ -199,26 +178,17 @@ class _CheckoutPageState extends State<CheckoutPage> {
     super.initState();
     isClickable = true;
 
-    print('init init');
     holderController.text = application.cardHolderProvider ?? '';
     cardNumberController.text = application.cardNumberProvider ?? '';
     cvvController.text = application.cardCvvProvider ?? '';
     startingTime = application.cardMonthProvider ?? '';
     endTime = application.cardYearProvider ?? '';
     loader = application.checkoutLoader ?? false;
-    print("Mukesh Loader::: $loader");
 
     temp = cardNumberController.text;
 
-    print("memax2");
-    print(cardValueChange);
-    print(cardNumberController.text);
-
-    if (cardNumberController.text != null && cardNumberController.text != "") {
+    if (cardNumberController.text != "") {
       cardNumberController.text = cardToStar(temp);
-      print("is card change");
-      print(cardNumberController.text);
-      print(temp);
     }
   }
 
@@ -229,11 +199,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   @override
   Widget build(BuildContext context) {
-    print('endTime');
-    print(application.getUserDataProfileProvider?.data?.authorImage);
-    print(widget.nOofTicketInstance);
-    print(startingTime);
-    print(widget.formattedDate);
     var counts = widget.numOfTicket.fold(
         1,
         (previousValue, element) =>
@@ -554,9 +519,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           cardNumberController.text = '';
                         }
                         cardValueChange = true;
-
-                        print(val.length);
-                        print(showThisValue);
                       },
                     ),
                   ),
@@ -630,32 +592,32 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         child: DropdownButton(
                           isExpanded: true,
                           menuMaxHeight: 300,
-                          hint: endTime == null
-                              ? const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text(
-                                    'שנה',
-                                    style: TextStyle(
-                                        color: Colors.black, fontSize: 12),
-                                    maxLines: 1,
-                                  ),
-                                )
-                              : Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    endTime!,
-                                    style: const TextStyle(color: Colors.black),
-                                  ),
-                                ),
+                          hint: const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              'שנה',
+                              style:
+                                  TextStyle(color: Colors.black, fontSize: 12),
+                              maxLines: 1,
+                            ),
+                          ),
                           style: const TextStyle(color: Colors.black),
-                          items: cardDate.map(
-                            (val) {
-                              return DropdownMenuItem<String>(
-                                value: val,
-                                child: Text(val),
-                              );
-                            },
-                          ).toList(),
+                          items: [
+                            DropdownMenuItem<String>(
+                              value: 'שנה',
+                              child: Text('שנה'),
+                            ),
+                            ...cardMonth.map(
+                              (val) {
+                                print('endTime');
+                                print(endTime);
+                                return DropdownMenuItem<String>(
+                                  value: val,
+                                  child: Text(val),
+                                );
+                              },
+                            ).toList()
+                          ],
                           onChanged: (val) {
                             setState(
                               () {
@@ -690,32 +652,29 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             child: DropdownButton(
                               isExpanded: true,
                               menuMaxHeight: 300,
-                              hint: startingTime == null
-                                  ? const Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Text(
-                                        'חודש',
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 12),
-                                      ),
-                                    )
-                                  : Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        startingTime!,
-                                        style: const TextStyle(
-                                            color: Colors.black),
-                                      ),
-                                    ),
+                              hint: const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  'חודש',
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 12),
+                                ),
+                              ),
                               style: const TextStyle(color: Colors.black),
-                              items: cardMonth.map(
-                                (val) {
-                                  return DropdownMenuItem<String>(
-                                    value: val,
-                                    child: Text(val),
-                                  );
-                                },
-                              ).toList(),
+                              items: [
+                                DropdownMenuItem<String>(
+                                  value: "חודש",
+                                  child: Text('חודש'),
+                                ),
+                                ...cardMonth.map(
+                                  (val) {
+                                    return DropdownMenuItem<String>(
+                                      value: val,
+                                      child: Text(val),
+                                    );
+                                  },
+                                ).toList()
+                              ],
                               onChanged: (val) {
                                 setState(
                                   () {
@@ -739,8 +698,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
               onTap: () async {
                 final SharedPreferences sharedPreferences =
                     await SharedPreferences.getInstance();
-                print(
-                    '????????????????????????/*/*/*/*/*/*/*/**/*/*/*/*/*/*/*/');
                 cardComApi();
                 setState(() {
                   isClickable = false;

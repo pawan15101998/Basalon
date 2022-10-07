@@ -80,15 +80,9 @@ class _BookEventPageState extends State<BookEventPage> {
           "Auth-Key": "XkCRn9Y4PPmspuqYKolqbyhcDFhID7kl"
         }),
       );
-      // print('LoginUser.shared?.userId ${LoginUser.shared?.userId}');
       if (response.data['success'] == 401) {
-        // errorAlertMessage('No Data Found', 'Error!');
-        print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
       } else {
         getUserData = GetUserData.fromJson(response.data);
-        print(getUserData?.data?.displayName);
-        print(getUserData?.data?.authorImage);
-        print('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb');
         setState(() {
           authorImage = getUserData?.data?.authorImage;
           username = getUserData?.data?.firstName;
@@ -98,10 +92,7 @@ class _BookEventPageState extends State<BookEventPage> {
         });
       }
     } catch (error) {
-      print('ccccccccccccccccccccccccccccc');
-
       EasyLoading.dismiss();
-      // errorAlertMessage('Something went wrong!', 'Error!');
     }
   }
 
@@ -109,13 +100,6 @@ class _BookEventPageState extends State<BookEventPage> {
   void initState() {
     super.initState();
     addCounts();
-    print('uuuuuuuu');
-    print(LoginUser.shared?.userId);
-    print(username);
-    // firstnameController.text = '';
-    // lastnameController.text = '';
-    // emailController.text = '';
-    // phoneNoController.text = '';
     getProfileData();
 
     Future.delayed(Duration(seconds: 2), () {
@@ -124,9 +108,6 @@ class _BookEventPageState extends State<BookEventPage> {
       emailController.text = email ?? emailController.text;
       phoneNoController.text = mobileNumber ?? phoneNoController.text;
     });
-
-    print(
-        'didChangeDependencies didChangeDependencies didChangeDependencies didChangeDependencies ');
   }
 
   var registeredID;
@@ -157,9 +138,6 @@ class _BookEventPageState extends State<BookEventPage> {
       EasyLoading.dismiss();
       if (response.data['success'] == 200) {
         goToNextScreen = true;
-        // ignore: avoid_print
-        print('response.data  user_id user_id');
-        print(response.data['data']['user_id']);
         registeredID = response.data['data']['user_id'];
         SharedPreferences sharedPreferences =
             await SharedPreferences.getInstance();
@@ -167,9 +145,7 @@ class _BookEventPageState extends State<BookEventPage> {
 
         isUserLogin(true);
         LoginUser.shared?.userId = sharedPreferences.getInt('loginId');
-        print('pppppppppppppppppppppppppppppppppppppppppppp');
         application.isUserLogin = true;
-        print(sharedPreferences.getInt('loginId'));
 
         // showDialog<String>(
         //   context: context,
@@ -190,17 +166,13 @@ class _BookEventPageState extends State<BookEventPage> {
       } else if (response.data['success'] == 401) {
         goToNextScreen = false;
         debugPrint("Mukesh found Error");
-         print(response.data);
-       // print(response.body['error']['error']);
-         errorAlertMessage('Email or Username is allreay in System!');
+        // print(response.body['error']['error']);
+        errorAlertMessage('Email or Username is allreay in System!');
       } else {
         goToNextScreen = false;
-        print('Invalid Invalid Invalid');
         errorAlertMessage('Invalid Credential!');
       }
     } catch (error) {
-      print('error error error error');
-      print(error);
       EasyLoading.dismiss();
       errorAlertMessage('Something went wrong!');
     }
@@ -210,7 +182,6 @@ class _BookEventPageState extends State<BookEventPage> {
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
   }
 
@@ -224,7 +195,7 @@ class _BookEventPageState extends State<BookEventPage> {
       if (widget.noOfTicket![i].priceTicket != "")
         price.add(int.parse(widget.noOfTicket![i].priceTicket!));
     }
-    debugPrint('Mukesh check ticket Count:::'+ticketCount.toString());
+    debugPrint('Mukesh check ticket Count:::' + ticketCount.toString());
   }
 
   late var totalPrice = finalPrice.fold(
@@ -232,8 +203,6 @@ class _BookEventPageState extends State<BookEventPage> {
 
   addPrice() {
     for (int i = 0; i < widget.noOfTicket!.length; i++) {
-      print('wwwwwwwwwwwwwwwwwwwww');
-      print(i);
       totalPrice =
           (int.parse(widget.noOfTicket![i].priceTicket!) * ticketCount[i]) +
               (int.parse(widget.noOfTicket![i].priceTicket!) * ticketCount[i]) -
@@ -246,18 +215,8 @@ class _BookEventPageState extends State<BookEventPage> {
   @override
   Widget build(BuildContext context) {
     LoginUser.shared?.userId!;
-    print('noOfTicket');
-    print(widget.noOfTicket![0].priceTicket);
-    print('noOfTicket');
     String bookingText =
         "${widget.date?.date1} , ${widget.date?.date2} (${widget.date?.startTime}- ${widget.date?.endTime})";
-    print('widget.date');
-    // print(finalPrice);
-    // print(finalPrice.fold(
-    //     0,
-    //     (previousValue, element) => widget.noOfTicket![0].priceTicket == null
-    //         ? previousValue.toString() + element.toString()
-    //         : int.tryParse(previousValue.toString())! + element));
     var finalTotal = widget.noOfTicket![0].priceTicket == ""
         ? 0
         : finalPrice.fold(
@@ -467,10 +426,10 @@ class _BookEventPageState extends State<BookEventPage> {
                         children: [
                           InkWell(
                             onTap: () {
-                              print("add");
                               setState(() {
                                 if (ticketCount[i] < 10) ticketCount[i]++;
-                                debugPrint('Mukesh check ticket Count:::'+ticketCount.toString());
+                                debugPrint('Mukesh check ticket Count:::' +
+                                    ticketCount.toString());
                               });
                               // addPrice();
                               setState(() {
@@ -494,7 +453,8 @@ class _BookEventPageState extends State<BookEventPage> {
                               width: 30,
                               // decoration: BoxDecoration(color: Colors.blue),
                               child: Center(
-                                child: Text("${ticketCount[i] + 1}"),
+                                child: Text(
+                                    "${i == 0 ? ticketCount[i] + 1 : ticketCount[i]}"),
                               )),
                           const VerticalDivider(color: Colors.black, width: 2),
                           InkWell(
@@ -679,8 +639,8 @@ class _BookEventPageState extends State<BookEventPage> {
                             textAlign: TextAlign.end,
                           ),
                           TextFormField(
-                           // keyboardType: TextInputType.phone,
-                           // textInputAction: TextInputAction.done,
+                            // keyboardType: TextInputType.phone,
+                            // textInputAction: TextInputAction.done,
                             controller: phoneNoController,
                             textDirection: TextDirection.rtl,
                             cursorColor: Colors.black,
@@ -895,7 +855,8 @@ class _BookEventPageState extends State<BookEventPage> {
                   if (firstnameController.text.isEmpty) {
                     errorAlertMessage("Please enter firstname!");
                     validate();
-                  } if (lastnameController.text.isEmpty) {
+                  }
+                  if (lastnameController.text.isEmpty) {
                     errorAlertMessage("Please enter lastname!");
                     validate();
                   } else if (emailController.text.isEmpty) {
@@ -960,40 +921,40 @@ class _BookEventPageState extends State<BookEventPage> {
                     } else {
                       if (goToNextScreen) {
                         Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CheckoutPage(
-                            initialPrice: widget.noOfTicket![0].priceTicket,
-                            totalAmount: finalPrice, // for price static 0
-                            // email: getUserData != n
-                            //     ? getUserData!.data.authorEmail.toString()
-                            //     : 'email',
-                            email: emailController.text,
-                            eventDate: bookingText,
-                            eventTitle: widget.title.toString(),
-                            // fullName: getUserData != null
-                            //     ? getUserData!.data.displayName.toString()
-                            //     : 'fullname',
-                            fullName: firstnameController.text +
-                                ' ' +
-                                lastnameController.text,
-                            // mobileNumber: getUserData != null
-                            //     ? getUserData!.data.userPhone.toString()
-                            //     : '9876543210',
-                            mobileNumber: phoneNoController.text,
-                            nOofTicketInstance: widget.noOfTicket,
-                            numOfTicket: ticketCount,
-                            userId: LoginUser.shared?.userId! ??
-                                application.idFromLocalProvider ??
-                                registeredID,
-                            eventID: int.parse(widget.id),
-                            couponCode: couponController.text,
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CheckoutPage(
+                              initialPrice: widget.noOfTicket![0].priceTicket,
+                              totalAmount: finalPrice, // for price static 0
+                              // email: getUserData != n
+                              //     ? getUserData!.data.authorEmail.toString()
+                              //     : 'email',
+                              email: emailController.text,
+                              eventDate: bookingText,
+                              eventTitle: widget.title.toString(),
+                              // fullName: getUserData != null
+                              //     ? getUserData!.data.displayName.toString()
+                              //     : 'fullname',
+                              fullName: firstnameController.text +
+                                  ' ' +
+                                  lastnameController.text,
+                              // mobileNumber: getUserData != null
+                              //     ? getUserData!.data.userPhone.toString()
+                              //     : '9876543210',
+                              mobileNumber: phoneNoController.text,
+                              nOofTicketInstance: widget.noOfTicket,
+                              numOfTicket: ticketCount,
+                              userId: LoginUser.shared?.userId! ??
+                                  application.idFromLocalProvider ??
+                                  registeredID,
+                              eventID: int.parse(widget.id),
+                              couponCode: couponController.text,
 
-                            // ticketCount: ticketCount,
-                            formattedDate: widget.date?.eventDate ?? '',
+                              // ticketCount: ticketCount,
+                              formattedDate: widget.date?.eventDate ?? '',
+                            ),
                           ),
-                        ),
-                      );
+                        );
                       } else {
                         debugPrint("Null......");
                         setState(() {

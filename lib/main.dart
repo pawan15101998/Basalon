@@ -31,7 +31,6 @@ void main() async {
   var prefs = await SharedPreferences.getInstance();
   var boolKey = 'isFirstTime';
   var isFirstTime = prefs.getBool(boolKey) ?? true;
-  // userIdFromLocal = prefs.getInt('loginId');
   runApp(MyApp(
     isFirstTime: isFirstTime,
   ));
@@ -67,7 +66,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   // debugPaintSizeEnabled = true;
     return ChangeNotifierProvider(
       create: (context) => ApplicationBloc(),
       child: Sizer(
@@ -80,13 +78,7 @@ class MyApp extends StatelessWidget {
             supportedLocales: const [Locale('en'), Locale('iw')],
             title: 'basalon',
             debugShowCheckedModeBanner: false,
-            // home: HomeScreen(),
-            // home: SignInScreen(),
             home: isFirstTime == true ? SplashScreen() : HomeScreen(),
-            // home: UserProfile(),
-            // home: GeneralScreen(),
-            // home: MapSample(),
-            // home: PackageScreen(),
             builder: EasyLoading.init(),
             routes: {
               HomeScreen.route: (context) => HomeScreen(),

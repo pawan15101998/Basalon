@@ -129,68 +129,31 @@ class FetchEventData {
         "el_data_taxonomy_custom[]": "",
         "show_featured": "",
       });
-      //print("dklsxjkl");
-      //print(application.filterAnywhereProvider);
-      ////print(filterByAnyWhere);
-      //print(filterByTime);
-
-      //print(mapLat);
-
+      print('response body');
+      print(response);
       final result = HomeData.fromJson(response['body']);
-
-      //print('uiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
-      //print(result);
-      //print(filterByCategory);
-      //print(filterByAnyWhere);
-      //print(mapLat);
-      //print(response['status']);
-
-      //print("ajb");
       if (response['status'] == 401) {
-        //print("snbdj1");
         return errorAlertMessage('no event found', '', context);
       } else {
-        //print("snbdj2");
-        print("chetan check page");
-        print(page);
         if (page > 1) {
-          //print("snbdj3");
           data = [...data, ...?result.data];
-          //print("snbdj4");
-          //print("result.,data");
-          //print("snbdj5");
-          //print(result.data);
-          //print("snbdj6");
         } else {
-          //print("snbdj7");
           data = result.data!;
-          //print(data);
-          //print("snbdj8");
         }
         EasyLoading.dismiss();
       }
     } catch (e) {
       EasyLoading.dismiss();
-
-      //print('homepage events nhi aaye ERROR!${e}');
-      //print("snbdj9");
-      //print(keyword);
       if (keyword != null && keyword != '') {
         data = [];
-        //print("snbdj10");
       }
-      //print("snbdj11");
       data = [];
-      //print("snbdj12");
     }
-    //print("snbdj13");
-    //print(data);
-
     return data;
   }
 
   Future getEventDetailData() async {
-    print("Mukesh Event Id : "+id.toString());
+    print("Mukesh Event Id : " + id.toString());
     try {
       final response =
           await ApiProvider.post(url: 'get_event_detail', body: {"id": "$id"});

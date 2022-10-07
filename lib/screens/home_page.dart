@@ -52,6 +52,7 @@ class HomePageState extends State<HomePage> {
   int selectFilter = 2;
   int selectFilter1 = 1;
   int selectFilter2 = 0;
+  List<String> selectedFilter1 = [];
 
   bool loading = false;
   int? radiusVal = 0;
@@ -87,10 +88,14 @@ class HomePageState extends State<HomePage> {
     ' מחר  ',
   ];
   List<dynamic> filterData1 = [
-    'בכל מקום',
+    'שרון והסביבה',
+    'מרכז',
     'קרוב אליי',
-    'אונליין / זום',
-    'עיר מסויימת',
+    'ירושלים והסביבה',
+    'מחוז חיפה והצפון',
+    'עיר מסוימת',
+    'בכל הארץ',
+    'השפלה והדרום',
   ];
   String? realvalue;
   String? realvalue1;
@@ -223,7 +228,6 @@ class HomePageState extends State<HomePage> {
   }
 
   void _onRefresh() async {
-    // monitor network fetch
     await Future.delayed(Duration(milliseconds: 1000));
     page = 1;
     setState(() {});
@@ -1160,7 +1164,16 @@ class HomePageState extends State<HomePage> {
                                     return InkWell(
                                       onTap: () {
                                         debugPrint("filter 1.0");
-
+                                        if (selectedFilter1
+                                            .contains(filterData1[index])) {
+                                          selectedFilter1
+                                              .remove(filterData1[index]);
+                                        } else {
+                                          selectedFilter1
+                                              .add(filterData1[index]);
+                                        }
+                                        setState(() {});
+                                        
                                         selectFilter1 = index;
                                         application.filterAnywhereProvider =
                                             filterData1[index].replaceAll(
@@ -1271,7 +1284,8 @@ class HomePageState extends State<HomePage> {
                                               child: FilterCardWidget(
                                                 fontsize: 12.sp,
                                                 text: filterData1[index],
-                                                color: selectFilter1 == index
+                                                color: selectedFilter1.contains(
+                                                        filterData1[index])
                                                     ? MyColors.lightRed
                                                     : MyColors.lightBlue,
                                               ),
