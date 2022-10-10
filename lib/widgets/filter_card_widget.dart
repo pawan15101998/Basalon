@@ -18,6 +18,24 @@ class _FilterCardWidgetState extends State<FilterCardWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.symmetric(
+          horizontal: MediaQuery.of(context).size.width * 0.05, vertical: 12),
+      decoration: BoxDecoration(
+          color: widget.color ?? MyColors.lightBlue,
+          borderRadius: BorderRadius.circular(13)),
+      child: Text(
+        widget.text,
+        style: TextStyle(
+          fontFamily: "Helvetica",
+          fontSize: widget.fontsize ?? 14,
+          fontWeight: FontWeight.w600,
+          color: Colors.white,
+        ),
+      ),
+    );
+
+    Container(
+      // constraints: BoxConstraints(maxWidth: 200, minWidth: 0),
       alignment: Alignment.center,
       margin: EdgeInsets.symmetric(horizontal: 0, vertical: 4),
       child: Text(
@@ -30,7 +48,6 @@ class _FilterCardWidgetState extends State<FilterCardWidget> {
         ),
         maxLines: 1,
         textAlign: TextAlign.center,
-
         // overflow: TextOverflow.ellipsis,
       ),
       decoration: BoxDecoration(

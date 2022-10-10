@@ -89,12 +89,12 @@ class HomePageState extends State<HomePage> {
   ];
   List<dynamic> filterData1 = [
     'שרון והסביבה',
-    'מרכז',
+    'בכל הארץ',
     'קרוב אליי',
     'ירושלים והסביבה',
-    'מחוז חיפה והצפון',
+    'מרכז',
     'עיר מסוימת',
-    'בכל הארץ',
+    'מחוז חיפה והצפון',
     'השפלה והדרום',
   ];
   String? realvalue;
@@ -1066,7 +1066,6 @@ class HomePageState extends State<HomePage> {
                                 ),
                                 height: 150,
                                 // width: double.infinity,
-
                                 child: ListView.separated(
                                     padding: const EdgeInsets.all(0),
                                     separatorBuilder: (context, index) =>
@@ -1083,7 +1082,6 @@ class HomePageState extends State<HomePage> {
                                           .then((value) {
                                         translatedData = value;
                                       });
-
                                       return ListTile(
                                         dense: true,
                                         contentPadding:
@@ -1148,150 +1146,178 @@ class HomePageState extends State<HomePage> {
                                   ),
                                 ),
                               ),
-                              GridView.builder(
-                                  physics: ScrollPhysics(),
-                                  itemCount: filterData1.length,
-                                  gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 2,
-                                          crossAxisSpacing: 5,
-                                          // mainAxisSpacing: 5,
-                                          mainAxisExtent: 50,
-                                          childAspectRatio: 1),
-                                  padding: EdgeInsets.symmetric(horizontal: 8),
-                                  shrinkWrap: true,
-                                  itemBuilder: (context, index) {
-                                    return InkWell(
-                                      onTap: () {
-                                        debugPrint("filter 1.0");
-                                        if (selectedFilter1
-                                            .contains(filterData1[index])) {
-                                          selectedFilter1
-                                              .remove(filterData1[index]);
-                                        } else {
-                                          selectedFilter1
-                                              .add(filterData1[index]);
-                                        }
-                                        setState(() {});
-                                        
-                                        selectFilter1 = index;
-                                        application.filterAnywhereProvider =
-                                            filterData1[index].replaceAll(
-                                                'אונליין / זום', 'online');
-                                        application.showOnline = !showOnline;
-                                        page = 1;
+                              // GridView.builder(
+                              //     physics: ScrollPhysics(),
+                              //     itemCount: filterData1.length,
+                              //     gridDelegate:
+                              //         SliverGridDelegateWithFixedCrossAxisCount(
+                              //             crossAxisCount: 2,
+                              //             crossAxisSpacing: 5,
+                              //             // mainAxisSpacing: 5,
+                              //             mainAxisExtent: 50,
+                              //             childAspectRatio: 1),
+                              //     padding: EdgeInsets.symmetric(horizontal: 8),
+                              //     shrinkWrap: true,
+                              //     itemBuilder: (context, index) {
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal:4.0),
+                                child: Wrap(
+                                    runSpacing: 8,
+                                    spacing: 8,
+                                    runAlignment: WrapAlignment.start,
+                                    alignment: WrapAlignment.start,
+                                    children: List.generate(
+                                        filterData1.length,
+                                        (index) => InkWell(
+                                              onTap: () {
+                                                debugPrint("filter 1.0");
+                                                if (selectedFilter1.contains(
+                                                    filterData1[index])) {
+                                                  selectedFilter1
+                                                      .remove(filterData1[index]);
+                                                } else {
+                                                  selectedFilter1
+                                                      .add(filterData1[index]);
+                                                }
+                                                setState(() {});
 
-                                        if (filterData1[index] == 'בכל מקום') {
-                                          debugPrint("filter 1.1");
-                                          application.filterCategoryProvider =
-                                              '';
-                                          // application.filterTimeProvider =
-                                          //     '';
-                                          application.filterAnywhereProvider =
-                                              'בכל מקום';
+                                                selectFilter1 = index;
+                                                application
+                                                        .filterAnywhereProvider =
+                                                    filterData1[index].replaceAll(
+                                                        'אונליין / זום',
+                                                        'online');
+                                                application.showOnline =
+                                                    !showOnline;
+                                                page = 1;
 
-                                          categorySearchController.text = '';
-                                          endDateController.text = '';
-                                          startDateController.text = '';
-                                          klatitude = null;
-                                          klongitude = null;
-                                          page = 1;
-                                        }
-                                        if (filterData1[index] == 'קרוב אליי') {
-                                          application.filterAnywhereProvider =
-                                              'קרוב אליי';
-                                          debugPrint("filter 1.2");
-                                          debugPrint("print location near");
-                                          debugPrint("${geoLoc}");
-                                          debugPrint("${geoLoc!.latitude}");
-                                          debugPrint("${geoLoc!.longitude}");
-                                          debugPrint("location near");
-                                          klatitude = geoLoc!.latitude;
-                                          klongitude = geoLoc!.longitude;
-                                        }
-                                        setState(() {});
-                                      },
-                                      child: filterData1[index] == 'עיר מסויימת'
-                                          ? Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 4,
-                                                      horizontal: 00),
-                                              child: Directionality(
-                                                textDirection:
-                                                    TextDirection.rtl,
-                                                child: ReceivingPaymentFields(
-                                                  borderRadius: 12,
-                                                  textAlign: TextAlign.center,
-                                                  fillcolor: MyColors.lightBlue,
-                                                  isFocus: true,
-                                                  textColorPrimary:
-                                                      Colors.white,
-                                                  maxLine: 1,
-                                                  showRequired: false,
-                                                  isBorder: true,
-                                                  showLabel: false,
-                                                  controller:
-                                                      locationController,
-                                                  onChange: (v) {
-                                                    setState(() {
-                                                      application.searchPlaces(
-                                                          locationController
-                                                              .text);
-                                                    });
-                                                  },
-                                                  onTap: () {
-                                                    application
-                                                            .filterAnywhereProvider =
-                                                        'עיר מסויימת';
-                                                    setState(() {});
-                                                  },
-                                                  // onChange: (v) {
-                                                  //   locationController.text = v;
-                                                  //   application.searchPlaces(v);
-                                                  //   print('eeeeeeeeeeeeeeee$v');
-                                                  //   setState(() {});
-                                                  // },
-                                                  // onFieldSubmit: (v) {
-                                                  //   locationController.text = v;
+                                                if (filterData1[index] ==
+                                                    'בכל מקום') {
+                                                  debugPrint("filter 1.1");
+                                                  application
+                                                      .filterCategoryProvider = '';
+                                                  // application.filterTimeProvider =
+                                                  //     '';
+                                                  application
+                                                          .filterAnywhereProvider =
+                                                      'בכל מקום';
 
-                                                  //   application.searchPlaces(v);
-                                                  //   print('eeeeeeeeeeeeeeee$v');
-                                                  // },
-                                                  textColor: Colors.white,
-                                                  obscureText: false,
-                                                  hintText: 'הקלד/י עיר',
-                                                  // suffixIcon: IconButton(
-                                                  //   icon: const Icon(
-                                                  //     Icons.close,
-                                                  //     color: Colors.white,
-                                                  //   ),
-                                                  //   onPressed: () {
-                                                  //     setState(() {
-                                                  //       application
-                                                  //               .filterAnywhereProvider =
-                                                  //           null;
-                                                  //       locationController
-                                                  //           .clear();
-                                                  //     });
-                                                  //   },
-                                                  // ),
-                                                ),
-                                              ),
-                                            )
-                                          : Directionality(
-                                              textDirection: TextDirection.rtl,
-                                              child: FilterCardWidget(
-                                                fontsize: 12.sp,
-                                                text: filterData1[index],
-                                                color: selectedFilter1.contains(
-                                                        filterData1[index])
-                                                    ? MyColors.lightRed
-                                                    : MyColors.lightBlue,
-                                              ),
-                                            ),
-                                    );
-                                  }),
+                                                  categorySearchController.text =
+                                                      '';
+                                                  endDateController.text = '';
+                                                  startDateController.text = '';
+                                                  klatitude = null;
+                                                  klongitude = null;
+                                                  page = 1;
+                                                }
+                                                if (filterData1[index] ==
+                                                    'קרוב אליי') {
+                                                  application
+                                                          .filterAnywhereProvider =
+                                                      'קרוב אליי';
+                                                  debugPrint("filter 1.2");
+                                                  debugPrint(
+                                                      "print location near");
+                                                  debugPrint("${geoLoc}");
+                                                  debugPrint(
+                                                      "${geoLoc!.latitude}");
+                                                  debugPrint(
+                                                      "${geoLoc!.longitude}");
+                                                  debugPrint("location near");
+                                                  klatitude = geoLoc!.latitude;
+                                                  klongitude = geoLoc!.longitude;
+                                                }
+                                                setState(() {});
+                                              },
+                                              child: filterData1[index] ==
+                                                      'עיר מסויימת'
+                                                  ? Padding(
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          vertical: 4,
+                                                          horizontal: 00),
+                                                      child: Directionality(
+                                                        textDirection:
+                                                            TextDirection.rtl,
+                                                        child:
+                                                            ReceivingPaymentFields(
+                                                          borderRadius: 12,
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          fillcolor:
+                                                              MyColors.lightBlue,
+                                                          isFocus: true,
+                                                          textColorPrimary:
+                                                              Colors.white,
+                                                          maxLine: 1,
+                                                          showRequired: false,
+                                                          isBorder: true,
+                                                          showLabel: false,
+                                                          controller:
+                                                              locationController,
+                                                          onChange: (v) {
+                                                            setState(() {
+                                                              application
+                                                                  .searchPlaces(
+                                                                      locationController
+                                                                          .text);
+                                                            });
+                                                          },
+                                                          onTap: () {
+                                                            application
+                                                                    .filterAnywhereProvider =
+                                                                'עיר מסויימת';
+                                                            setState(() {});
+                                                          },
+                                                          // onChange: (v) {
+                                                          //   locationController.text = v;
+                                                          //   application.searchPlaces(v);
+                                                          //   print('eeeeeeeeeeeeeeee$v');
+                                                          //   setState(() {});
+                                                          // },
+                                                          // onFieldSubmit: (v) {
+                                                          //   locationController.text = v;
+
+                                                          //   application.searchPlaces(v);
+                                                          //   print('eeeeeeeeeeeeeeee$v');
+                                                          // },
+                                                          textColor: Colors.white,
+                                                          obscureText: false,
+                                                          hintText: 'הקלד/י עיר',
+                                                          // suffixIcon: IconButton(
+                                                          //   icon: const Icon(
+                                                          //     Icons.close,
+                                                          //     color: Colors.white,
+                                                          //   ),
+                                                          //   onPressed: () {
+                                                          //     setState(() {
+                                                          //       application
+                                                          //               .filterAnywhereProvider =
+                                                          //           null;
+                                                          //       locationController
+                                                          //           .clear();
+                                                          //     });
+                                                          //   },
+                                                          // ),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  : Directionality(
+                                                      textDirection:
+                                                          TextDirection.rtl,
+                                                      child: FilterCardWidget(
+                                                        fontsize: 12.sp,
+                                                        text: filterData1[index],
+                                                        color: selectedFilter1
+                                                                .contains(
+                                                                    filterData1[
+                                                                        index])
+                                                            ? MyColors.lightRed
+                                                            : MyColors.lightBlue,
+                                                      ),
+                                                    ),
+                                            ))),
+                              ),
                               SizedBox(
                                 height: 40,
                               ),
@@ -1561,8 +1587,8 @@ class HomePageState extends State<HomePage> {
                                 gridDelegate:
                                     SliverGridDelegateWithFixedCrossAxisCount(
                                         crossAxisCount: 3,
-                                        crossAxisSpacing: 5,
-                                        // mainAxisSpacing: 5,
+                                        crossAxisSpacing: 8,
+                                        mainAxisSpacing: 8,
                                         mainAxisExtent: 50,
                                         childAspectRatio: 1),
                                 padding: EdgeInsets.symmetric(horizontal: 8),
@@ -1760,14 +1786,44 @@ class HomePageState extends State<HomePage> {
                                             )
                                           : Directionality(
                                               textDirection: TextDirection.rtl,
-                                              child: FilterCardWidget(
-                                                fontsize: 12.sp,
-                                                text: dropItems[index],
-                                                color:
-                                                    selectedDropItems.contains(
-                                                            dropItems[index])
-                                                        ? MyColors.lightRed
-                                                        : MyColors.lightBlue,
+                                              child: Container(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: width * 0.058,
+                                                    vertical: 12),
+                                                decoration: BoxDecoration(
+                                                  color: selectedDropItems
+                                                          .contains(
+                                                              dropItems[index])
+                                                      ? MyColors.lightRed
+                                                      : MyColors.lightBlue,
+                                                  borderRadius:
+                                                      BorderRadius.circular(13),
+                                                ),
+                                                child: Text(
+                                                  dropItems[index].toString(),
+                                                  maxLines: 1,
+                                                  textAlign: TextAlign.center,
+                                                  style: dropItems[index]
+                                                              .toString()
+                                                              .length >
+                                                          8
+                                                      ? TextStyle(
+                                                          fontSize: 12.sp,
+                                                          fontFamily:
+                                                              "Helvetica",
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color: Colors.white,
+                                                        )
+                                                      : TextStyle(
+                                                          fontSize: 12.sp,
+                                                          fontFamily:
+                                                              "Helvetica",
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color: Colors.white,
+                                                        ),
+                                                ),
                                               ),
                                             ),
                                     ),

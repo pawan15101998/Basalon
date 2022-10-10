@@ -99,7 +99,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
       if (_fetchEventData.eventData?.data?.gallery != null) {
         addGallery();
       }
-      if (p!.linkVideo != null) {
+      if (p?.linkVideo != null) {
         String url = p!.linkVideo!;
         controller = YoutubePlayerController(
           flags: YoutubePlayerFlags(
@@ -107,7 +107,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
               disableDragSeek: false,
               useHybridComposition: false,
               hideThumbnail: true),
-          initialVideoId: YoutubePlayer.convertUrlToId(url)!,
+          initialVideoId: YoutubePlayer.convertUrlToId(url)??'',
         );
       }
       setState(() {});
