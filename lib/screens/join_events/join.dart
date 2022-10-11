@@ -101,7 +101,6 @@ class _BookEventPageState extends State<BookEventPage> {
     super.initState();
     addCounts();
     getProfileData();
-
     Future.delayed(Duration(seconds: 2), () {
       firstnameController.text = username ?? firstnameController.text;
       lastnameController.text = username2 ?? lastnameController.text;
@@ -187,14 +186,20 @@ class _BookEventPageState extends State<BookEventPage> {
 
   bool isDiscount = false;
   List<int> price = [];
-
+  var finalTotal;
   addCounts() {
     for (int i = 0; i < widget.noOfTicket!.length; i++) {
-      ticketCount.add(0);
-      finalPrice.add(0);
+      ticketCount.add(i == 0 ? 1 : 0);
+      finalPrice.add(
+          i == 0 ? int.parse(widget.noOfTicket![i].priceTicket ?? '0') : 0);
       if (widget.noOfTicket![i].priceTicket != "")
         price.add(int.parse(widget.noOfTicket![i].priceTicket!));
     }
+    finalTotal = finalPrice.fold(
+        0,
+        (previousValue, element) => widget.noOfTicket![0].priceTicket == ""
+            ? previousValue.toString() + element.toString()
+            : int.tryParse(previousValue.toString())! + element);
     debugPrint('Mukesh check ticket Count:::' + ticketCount.toString());
   }
 
@@ -210,20 +215,12 @@ class _BookEventPageState extends State<BookEventPage> {
     }
   }
 
-  add() {}
-
   @override
   Widget build(BuildContext context) {
     LoginUser.shared?.userId!;
     String bookingText =
         "${widget.date?.date1} , ${widget.date?.date2} (${widget.date?.startTime}- ${widget.date?.endTime})";
-    var finalTotal = widget.noOfTicket![0].priceTicket == ""
-        ? 0
-        : finalPrice.fold(
-            widget.noOfTicket![0].priceTicket ?? 0,
-            (previousValue, element) => widget.noOfTicket![0].priceTicket == ""
-                ? previousValue.toString() + element.toString()
-                : int.tryParse(previousValue.toString())! + element);
+
     return Scaffold(
       backgroundColor: Colors.white,
       endDrawer: NavDrawer(),
@@ -432,9 +429,20 @@ class _BookEventPageState extends State<BookEventPage> {
                                     ticketCount.toString());
                               });
                               // addPrice();
-                              setState(() {
-                                finalPrice[i] = price[i] * ticketCount[i];
-                              });
+
+                              finalPrice[i] = price[i] * ticketCount[i];
+                              print(finalPrice);
+
+                              finalTotal = finalPrice.fold(
+                                  0,
+                                  (previousValue, element) =>
+                                      widget.noOfTicket![0].priceTicket == ""
+                                          ? previousValue.toString() +
+                                              element.toString()
+                                          : int.tryParse(
+                                                  previousValue.toString())! +
+                                              element);
+                              setState(() {});
                             },
                             child: Container(
                               margin: EdgeInsets.only(left: 3),
@@ -453,8 +461,7 @@ class _BookEventPageState extends State<BookEventPage> {
                               width: 30,
                               // decoration: BoxDecoration(color: Colors.blue),
                               child: Center(
-                                child: Text(
-                                    "${i == 0 ? ticketCount[i] + 1 : ticketCount[i]}"),
+                                child: Text("${ticketCount[i]}"),
                               )),
                           const VerticalDivider(color: Colors.black, width: 2),
                           InkWell(
@@ -465,13 +472,20 @@ class _BookEventPageState extends State<BookEventPage> {
                                   ticketCount[i]--;
                                 }
                               });
-                              // addPrice();
-                              setState(() {
-                                finalPrice[i] = price[i] * ticketCount[i];
-                              });
 
-                              print(finalTotal);
-                              print('finalTotal');
+                              finalPrice[i] = price[i] * ticketCount[i];
+                              print(finalPrice);
+                              finalTotal = finalPrice.fold(
+                                  0,
+                                  (previousValue, element) =>
+                                      widget.noOfTicket![0].priceTicket == ""
+                                          ? previousValue.toString() +
+                                              element.toString()
+                                          : int.tryParse(
+                                                  previousValue.toString())! +
+                                              element);
+
+                              setState(() {});
                             },
                             child: Container(
                               margin: EdgeInsets.only(right: 3),
@@ -790,7 +804,7 @@ class _BookEventPageState extends State<BookEventPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text("${ticketCount[i] + 1}"),
+                            Text("${ticketCount[i]}"),
                             Text(
                                 "₪${widget.noOfTicket?[i].priceTicket} ${widget.noOfTicket?[i].nameTicket ?? 'כרטיס רגיל'}")
                           ],
@@ -868,21 +882,7 @@ class _BookEventPageState extends State<BookEventPage> {
                         !isUserLogin(application.isUserLogin)) {
                       await registerData();
                     }
-                    print(finalTotal);
-
                     if (finalTotal == 0) {
-                      print('objecttttttttttttttttt');
-
-                      print(phoneNoController.text);
-                      // print(LoginUser.shared?.userId!);
-                      print(emailController.text);
-                      print(firstnameController.text);
-                      print(lastnameController.text);
-                      print(widget.noOfTicket);
-                      print(ticketCount);
-                      print(int.parse(widget.id));
-                      print(widget.date?.eventDate);
-                      print('emailController');
                       await PlaceOrderNetwork.placeOrders(
                         context,
                         true,
@@ -919,7 +919,7 @@ class _BookEventPageState extends State<BookEventPage> {
 
                       // PlaceOrderNetwork().placeOrder(context, showtitle);
                     } else {
-                      if (goToNextScreen) {
+                                           if (goToNextScreen) {
                         Navigator.push(
                           context,
                           MaterialPageRoute(

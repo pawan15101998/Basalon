@@ -18,8 +18,7 @@ class _FilterCardWidgetState extends State<FilterCardWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(
-          horizontal: MediaQuery.of(context).size.width * 0.05, vertical: 12),
+      padding: EdgeInsets.symmetric(horizontal: 17, vertical: 12),
       decoration: BoxDecoration(
           color: widget.color ?? MyColors.lightBlue,
           borderRadius: BorderRadius.circular(13)),

@@ -200,11 +200,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
   @override
   Widget build(BuildContext context) {
     var counts = widget.numOfTicket.fold(
-        1,
+        0,
         (previousValue, element) =>
             int.parse(previousValue.toString()) + element);
     var finalPrice = widget.totalAmount.fold(
-        int.parse(widget.initialPrice.toString()),
+        0,
         (previousValue, element) =>
             int.parse(previousValue.toString()) + element);
     return Scaffold(

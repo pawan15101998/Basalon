@@ -107,7 +107,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
               disableDragSeek: false,
               useHybridComposition: false,
               hideThumbnail: true),
-          initialVideoId: YoutubePlayer.convertUrlToId(url)??'',
+          initialVideoId: YoutubePlayer.convertUrlToId(url) ?? '',
         );
       }
       setState(() {});
@@ -246,10 +246,6 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                             image: Image.network(
                                               '${_fetchEventData.eventData?.data?.thumbnailEvent}',
                                             ).image)),
-                                    // child: Image.network(
-                                    //   '${_fetchEventData.eventData?.data?.thumbnailEvent}',
-                                    //   fit: BoxFit.cover,
-                                    // ),
                                   ),
                                   AppBar(
                                     toolbarHeight: 70,

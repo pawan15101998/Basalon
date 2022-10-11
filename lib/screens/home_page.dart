@@ -88,13 +88,13 @@ class HomePageState extends State<HomePage> {
     ' מחר  ',
   ];
   List<dynamic> filterData1 = [
-    'שרון והסביבה',
-    'בכל הארץ',
-    'קרוב אליי',
+    ' שרון והסביבה ',
+    ' מרכז ',
+    ' קרוב אליי ',
     'ירושלים והסביבה',
-    'מרכז',
-    'עיר מסוימת',
     'מחוז חיפה והצפון',
+    'עיר מסוימת',
+    'בכל הארץ',
     'השפלה והדרום',
   ];
   String? realvalue;
@@ -1160,12 +1160,12 @@ class HomePageState extends State<HomePage> {
                               //     shrinkWrap: true,
                               //     itemBuilder: (context, index) {
                               Padding(
-                                padding: const EdgeInsets.symmetric(horizontal:4.0),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 4.0),
                                 child: Wrap(
                                     runSpacing: 8,
                                     spacing: 8,
-                                    runAlignment: WrapAlignment.start,
-                                    alignment: WrapAlignment.start,
+                                    alignment: WrapAlignment.center,
                                     children: List.generate(
                                         filterData1.length,
                                         (index) => InkWell(
@@ -1173,8 +1173,8 @@ class HomePageState extends State<HomePage> {
                                                 debugPrint("filter 1.0");
                                                 if (selectedFilter1.contains(
                                                     filterData1[index])) {
-                                                  selectedFilter1
-                                                      .remove(filterData1[index]);
+                                                  selectedFilter1.remove(
+                                                      filterData1[index]);
                                                 } else {
                                                   selectedFilter1
                                                       .add(filterData1[index]);
@@ -1184,9 +1184,10 @@ class HomePageState extends State<HomePage> {
                                                 selectFilter1 = index;
                                                 application
                                                         .filterAnywhereProvider =
-                                                    filterData1[index].replaceAll(
-                                                        'אונליין / זום',
-                                                        'online');
+                                                    filterData1[index]
+                                                        .replaceAll(
+                                                            'אונליין / זום',
+                                                            'online');
                                                 application.showOnline =
                                                     !showOnline;
                                                 page = 1;
@@ -1202,8 +1203,8 @@ class HomePageState extends State<HomePage> {
                                                           .filterAnywhereProvider =
                                                       'בכל מקום';
 
-                                                  categorySearchController.text =
-                                                      '';
+                                                  categorySearchController
+                                                      .text = '';
                                                   endDateController.text = '';
                                                   startDateController.text = '';
                                                   klatitude = null;
@@ -1225,7 +1226,8 @@ class HomePageState extends State<HomePage> {
                                                       "${geoLoc!.longitude}");
                                                   debugPrint("location near");
                                                   klatitude = geoLoc!.latitude;
-                                                  klongitude = geoLoc!.longitude;
+                                                  klongitude =
+                                                      geoLoc!.longitude;
                                                 }
                                                 setState(() {});
                                               },
@@ -1244,8 +1246,8 @@ class HomePageState extends State<HomePage> {
                                                           borderRadius: 12,
                                                           textAlign:
                                                               TextAlign.center,
-                                                          fillcolor:
-                                                              MyColors.lightBlue,
+                                                          fillcolor: MyColors
+                                                              .lightBlue,
                                                           isFocus: true,
                                                           textColorPrimary:
                                                               Colors.white,
@@ -1281,9 +1283,11 @@ class HomePageState extends State<HomePage> {
                                                           //   application.searchPlaces(v);
                                                           //   print('eeeeeeeeeeeeeeee$v');
                                                           // },
-                                                          textColor: Colors.white,
+                                                          textColor:
+                                                              Colors.white,
                                                           obscureText: false,
-                                                          hintText: 'הקלד/י עיר',
+                                                          hintText:
+                                                              'הקלד/י עיר',
                                                           // suffixIcon: IconButton(
                                                           //   icon: const Icon(
                                                           //     Icons.close,
@@ -1307,13 +1311,15 @@ class HomePageState extends State<HomePage> {
                                                           TextDirection.rtl,
                                                       child: FilterCardWidget(
                                                         fontsize: 12.sp,
-                                                        text: filterData1[index],
+                                                        text:
+                                                            filterData1[index],
                                                         color: selectedFilter1
                                                                 .contains(
                                                                     filterData1[
                                                                         index])
                                                             ? MyColors.lightRed
-                                                            : MyColors.lightBlue,
+                                                            : MyColors
+                                                                .lightBlue,
                                                       ),
                                                     ),
                                             ))),
