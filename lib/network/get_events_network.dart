@@ -143,6 +143,8 @@ class FetchEventData {
         EasyLoading.dismiss();
       }
     } catch (e) {
+      print("get event error");
+      print(e);
       EasyLoading.dismiss();
       if (keyword != null && keyword != '') {
         data = [];

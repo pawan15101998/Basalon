@@ -88,7 +88,6 @@ class _ReceivingActivityScreenState extends State<ReceivingActivityScreen> {
                         ),
                       ],
                     )
-
                   // RichText(
                   //   textDirection: TextDirection.rtl,
                   //   text: TextSpan(
@@ -119,7 +118,6 @@ class _ReceivingActivityScreenState extends State<ReceivingActivityScreen> {
                       obscureText: false,
                       label: 'שם בעל/ת חשבון',
                       showRequired: true,
-
                       // hintText: 'Account Holder Name',
                     ),
                     const SizedBox(height: 20),

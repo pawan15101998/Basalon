@@ -11,11 +11,13 @@ class CommentCard extends StatefulWidget {
   CommentCard(
       {required this.commentContent,
       required this.commentDate,
+      required this.commentName,
       required this.commentRating,
       this.image,
       this.userEmail,
       this.desc});
 
+  String commentName;
   String commentDate;
   String commentContent;
   dynamic commentRating;
@@ -37,6 +39,8 @@ class _CommentCardState extends State<CommentCard> {
 
   @override
   Widget build(BuildContext context) {
+    print("comment content");
+    print(widget.commentContent);
     return Container(
       // padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: Padding(
@@ -112,9 +116,8 @@ class _CommentCardState extends State<CommentCard> {
                   // Text(
                   //   '.Your comment is awaiting moderation',
                   // ),
-
                   Text(
-                    widget.userEmail,
+                    widget.commentName,
                     style: ktextStyleBold,
                   ),
                   SizedBox(

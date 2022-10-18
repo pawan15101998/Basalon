@@ -112,6 +112,8 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
       }
       setState(() {});
     });
+  print("this is comment data");
+  print(_fetchEventData);
   }
 
   @override
@@ -1372,6 +1374,9 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                           stream: streamController.stream,
                           builder: (BuildContext context,
                               AsyncSnapshot<dynamic> snapshot) {
+                                print("sakljklsn");
+                                // print(widget.name);
+                                // print(_fetchEventData.eventData!.data!.comments![0].commentContent);
                             return SliverList(
                               delegate: SliverChildBuilderDelegate(
                                 (context, index) {
@@ -1391,6 +1396,11 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                                   .data!
                                                   .comments![index]
                                                   .commentContent!,
+                                                  commentName: _fetchEventData
+                                                  .eventData!
+                                                  .data!
+                                                  .comments![index]
+                                                  .commentName!,
                                               commentDate: intl.DateFormat(
                                                       _fetchEventData
                                                           .eventData!

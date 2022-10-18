@@ -429,6 +429,7 @@ class Comment {
   Comment({
     this.commentId,
     this.commentContent,
+    this.commentName,
     this.commentDate,
     this.commentAuthorEmail,
     this.averageRating,
@@ -438,6 +439,7 @@ class Comment {
 
   String? commentId;
   String? commentContent;
+  String? commentName;
   dynamic commentDate;
   String? commentAuthorEmail;
   dynamic averageRating;
@@ -448,6 +450,7 @@ class Comment {
   factory Comment.fromJson(Map<String, dynamic> json) => Comment(
         commentId: json["comment_ID"],
         commentContent: json["comment_content"],
+        commentName: json["comment_name"],
         commentDate: json["comment_date"],
         commentAuthorEmail: json["comment_author_email"],
         averageRating: json["average_rating"],
@@ -458,6 +461,7 @@ class Comment {
   Map<String, dynamic> toJson() => {
         "comment_ID": commentId,
         "comment_content": commentContent,
+        "comment_name": commentName,
         "comment_date": commentDate,
         "comment_author_email": commentAuthorEmail,
         "average_rating": averageRating,

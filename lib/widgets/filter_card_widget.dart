@@ -18,7 +18,7 @@ class _FilterCardWidgetState extends State<FilterCardWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 17, vertical: 12),
+      padding: (widget.text == ' שרון והסביבה ' || widget.text == ' מרכז ' || widget.text == ' קרוב אליי ') ? EdgeInsets.symmetric(horizontal: 23, vertical: 12): EdgeInsets.symmetric(horizontal: 17, vertical: 12),
       decoration: BoxDecoration(
           color: widget.color ?? MyColors.lightBlue,
           borderRadius: BorderRadius.circular(13)),

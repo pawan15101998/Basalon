@@ -17,4 +17,5 @@ class MyColors {
   static Color purpleAppbar = Color(0XFF343353);
   static Color lightBlue = Color(0XFF6F71A1);
   static Color lightRed = Color(0XFFE86C60);
+  static Color filterColor = Color(0xff672480);
 }

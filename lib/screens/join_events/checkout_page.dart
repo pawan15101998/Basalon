@@ -207,6 +207,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
         0,
         (previousValue, element) =>
             int.parse(previousValue.toString()) + element);
+            print("this is count");
+            print(widget.numOfTicket);
+    print(counts);
     return Scaffold(
       backgroundColor: Colors.white,
       endDrawer: NavDrawer(),
@@ -338,7 +341,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 i < widget.nOofTicketInstance!.length;
                                 i++)
                               checkoutDetails(":סוג כרטיס",
-                                  "${widget.nOofTicketInstance?[i].nameTicket}: ${counts}"),
+                                  "${widget.nOofTicketInstance?[i].nameTicket}: ${widget.numOfTicket[i]}"),
                             // checkoutDetails(":סוג כרטיס", "ילד מגיל 7-18 כמות: 2"),
                           ]),
                     ),

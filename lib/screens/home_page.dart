@@ -97,6 +97,7 @@ class HomePageState extends State<HomePage> {
     'בכל הארץ',
     'השפלה והדרום',
   ];
+
   String? realvalue;
   String? realvalue1;
 
@@ -1133,7 +1134,7 @@ class HomePageState extends State<HomePage> {
                               ),
                               Padding(
                                 padding:
-                                    const EdgeInsets.symmetric(vertical: 12.0),
+                                    const EdgeInsets.symmetric(vertical: 6.0),
                                 child: Directionality(
                                   textDirection: TextDirection.rtl,
                                   child: Text(
@@ -1142,6 +1143,21 @@ class HomePageState extends State<HomePage> {
                                       fontFamily: "Helvetica",
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(bottom: 15),
+                                child: Directionality(
+                                  textDirection: TextDirection.rtl,
+                                  child: Text(
+                                    '(ניתן לבחור יותר מאזור אחד)',
+                                    style: TextStyle(
+                                      fontFamily: "Helvetica",
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.normal,
                                     ),
                                   ),
                                 ),
@@ -1161,7 +1177,7 @@ class HomePageState extends State<HomePage> {
                               //     itemBuilder: (context, index) {
                               Padding(
                                 padding:
-                                    const EdgeInsets.symmetric(horizontal: 4.0),
+                                const EdgeInsets.symmetric(horizontal: 4),
                                 child: Wrap(
                                     runSpacing: 8,
                                     spacing: 8,
@@ -1202,7 +1218,6 @@ class HomePageState extends State<HomePage> {
                                                   application
                                                           .filterAnywhereProvider =
                                                       'בכל מקום';
-
                                                   categorySearchController
                                                       .text = '';
                                                   endDateController.text = '';
@@ -1237,7 +1252,7 @@ class HomePageState extends State<HomePage> {
                                                       padding: const EdgeInsets
                                                               .symmetric(
                                                           vertical: 4,
-                                                          horizontal: 00),
+                                                        ),
                                                       child: Directionality(
                                                         textDirection:
                                                             TextDirection.rtl,
@@ -1262,7 +1277,7 @@ class HomePageState extends State<HomePage> {
                                                               application
                                                                   .searchPlaces(
                                                                       locationController
-                                                                          .text);
+                                                                      .text);
                                                             });
                                                           },
                                                           onTap: () {
@@ -1762,80 +1777,116 @@ class HomePageState extends State<HomePage> {
                                     child: Directionality(
                                       textDirection: TextDirection.rtl,
                                       child: dropItems[index] == 'חיפוש חופשי'
-                                          ? Directionality(
-                                              textDirection: TextDirection.rtl,
-                                              child: Align(
-                                                alignment:
-                                                    Alignment.centerRight,
-                                                child: Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(vertical: 4),
-                                                  child: ReceivingPaymentFields(
-                                                    borderRadius: 12.0,
+                                          ? SizedBox()
+                                          // Directionality(
+                                          //     textDirection: TextDirection.rtl,
+                                          //     child: Align(
+                                          //       alignment:
+                                          //           Alignment.center,
+                                          //       child: Padding(
+                                          //         padding: const EdgeInsets
+                                          //             .symmetric(vertical: 4),
+                                          //         child: ReceivingPaymentFields(
+                                          //           borderRadius: 12.0,
+                                          //           textAlign: TextAlign.center,
+                                          //           onTap: () {},
+                                          //           textInputAction:
+                                          //               TextInputAction.done,
+                                          //           keyboardType:
+                                          //               TextInputType.name,
+                                          //           fillcolor:
+                                          //               Colors.white,
+                                          //           controller:
+                                          //               categorySearchController,
+                                          //           obscureText: false,
+                                          //           width: width / 2,
+                                          //           hintText: 'חיפוש חופשי',
+                                          //           textColor: Colors.black,
+                                          //         ),
+                                          //       ),
+                                          //     ),
+                                          //   )
+                                          : Padding(
+                                            padding: const EdgeInsets.symmetric(vertical: 3),
+                                            child: Directionality(
+                                                textDirection: TextDirection.rtl,
+                                                child: Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: width * 0.058,
+                                                      vertical: 12),
+                                                  decoration: BoxDecoration(
+                                                    color: selectedDropItems
+                                                            .contains(
+                                                                dropItems[index])
+                                                        ? MyColors.lightRed
+                                                        : MyColors.lightBlue,
+                                                    borderRadius:
+                                                        BorderRadius.circular(13),
+                                                  ),
+                                                  child: Text(
+                                                    dropItems[index].toString(),
+                                                    maxLines: 1,
                                                     textAlign: TextAlign.center,
-                                                    onTap: () {},
-                                                    textInputAction:
-                                                        TextInputAction.done,
-                                                    keyboardType:
-                                                        TextInputType.name,
-                                                    fillcolor:
-                                                        MyColors.lightBlue,
-                                                    controller:
-                                                        categorySearchController,
-                                                    obscureText: false,
-                                                    width: width / 2,
-                                                    hintText: 'חיפוש חופשי',
-                                                    textColor: Colors.white,
+                                                    style: dropItems[index]
+                                                                .toString()
+                                                                .length >
+                                                            8
+                                                        ? TextStyle(
+                                                            fontSize: 12.sp,
+                                                            fontFamily:
+                                                                "Helvetica",
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            color: Colors.white,
+                                                          )
+                                                        : TextStyle(
+                                                            fontSize: 12.sp,
+                                                            fontFamily:
+                                                                "Helvetica",
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            color: Colors.white,
+                                                          ),
                                                   ),
                                                 ),
                                               ),
-                                            )
-                                          : Directionality(
-                                              textDirection: TextDirection.rtl,
-                                              child: Container(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: width * 0.058,
-                                                    vertical: 12),
-                                                decoration: BoxDecoration(
-                                                  color: selectedDropItems
-                                                          .contains(
-                                                              dropItems[index])
-                                                      ? MyColors.lightRed
-                                                      : MyColors.lightBlue,
-                                                  borderRadius:
-                                                      BorderRadius.circular(13),
-                                                ),
-                                                child: Text(
-                                                  dropItems[index].toString(),
-                                                  maxLines: 1,
-                                                  textAlign: TextAlign.center,
-                                                  style: dropItems[index]
-                                                              .toString()
-                                                              .length >
-                                                          8
-                                                      ? TextStyle(
-                                                          fontSize: 12.sp,
-                                                          fontFamily:
-                                                              "Helvetica",
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          color: Colors.white,
-                                                        )
-                                                      : TextStyle(
-                                                          fontSize: 12.sp,
-                                                          fontFamily:
-                                                              "Helvetica",
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          color: Colors.white,
-                                                        ),
-                                                ),
-                                              ),
-                                            ),
+                                          ),
+                                        
                                     ),
                                   );
                                 },
                               ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 12),
+                                child: Directionality(
+                                                textDirection: TextDirection.rtl,
+                                                child: Align(
+                                                  alignment:
+                                                      Alignment.center,
+                                                  child: Padding(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(),
+                                                    child: ReceivingPaymentFields(
+                                                      borderRadius: 15.0,
+                                                      textAlign: TextAlign.center,
+                                                      onTap: () {},
+                                                      textInputAction:
+                                                          TextInputAction.done,
+                                                      keyboardType:
+                                                          TextInputType.name,
+                                                      fillcolor:
+                                                          Colors.white,
+                                                      controller:
+                                                          categorySearchController,
+                                                      obscureText: false,
+                                                      width: width / 2,
+                                                      hintText: 'חיפוש חופשי',
+                                                      textColor: Colors.black,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                              )
                             ],
                           ),
                         ),
@@ -1906,7 +1957,6 @@ class HomePageState extends State<HomePage> {
                   //     childCount: filterData.length, // 1000 list items
                   //   ),
                   // ),
-
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
