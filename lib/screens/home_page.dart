@@ -53,6 +53,8 @@ class HomePageState extends State<HomePage> {
   int selectFilter1 = 1;
   int selectFilter2 = 0;
   List<String> selectedFilter1 = [];
+  List tempArr = [];
+  List tempArr2 = [];
 
   bool loading = false;
   int? radiusVal = 0;
@@ -70,9 +72,6 @@ class HomePageState extends State<HomePage> {
   dynamic filterByTime;
   dynamic filterByAnywhere;
   late final application = Provider.of<ApplicationBloc>(context, listen: false);
-  late final FetchEventData _fetchEventDataFilter = FetchEventData(
-    filterByTime: application.realValueTime,
-  );
   StreamSubscription? locationSubscription;
   final UpdateAndGetUserProfile _updateAndGetUserProfile =
       UpdateAndGetUserProfile();
@@ -93,7 +92,7 @@ class HomePageState extends State<HomePage> {
     ' קרוב אליי ',
     'ירושלים והסביבה',
     'מחוז חיפה והצפון',
-    'עיר מסוימת',
+    'עיר מסויימת',
     'בכל הארץ',
     'השפלה והדרום',
   ];
@@ -102,17 +101,17 @@ class HomePageState extends State<HomePage> {
   String? realvalue1;
 
   AppsflyerSdk? _appsflyerSdk;
-  Map? _deepLinkData;
-  Map? _gcd;
 
   @override
   void initState() {
     super.initState();
     getId();
+      selectedFilter1.add(filterData1[0]);
+      selectedFilter1.add(filterData1[1]);
     Future.delayed(Duration(milliseconds: 100), () {
       setLocation();
-    });
 
+    });
     LoginUser.shared?.userId != null
         ? packageNetwork.getPackage(
             LoginUser.shared?.userId! ?? application.idFromLocalProvider,
@@ -128,7 +127,6 @@ class HomePageState extends State<HomePage> {
       }
     });
 
-    print('Login User Id :: ${application.idFromLocalProvider}');
     _updateAndGetUserProfile.getProfileData(
         LoginUser.shared?.userId! ?? application.idFromLocalProvider,
         context: context);
@@ -139,36 +137,25 @@ class HomePageState extends State<HomePage> {
         timeToWaitForATTUserAuthorization: 15);
     _appsflyerSdk = AppsflyerSdk(options);
     _appsflyerSdk!.onAppOpenAttribution((res) {
-      print("onAppOpenAttribution res: " + res.toString());
       setState(() {
-        _deepLinkData = res;
       });
     });
     _appsflyerSdk!.onInstallConversionData((res) {
-      print("onInstallConversionData res: " + res.toString());
       setState(() {
-        _gcd = res;
       });
     });
     _appsflyerSdk!.onDeepLinking((DeepLinkResult dp) {
       switch (dp.status) {
         case Status.FOUND:
-          print(dp.deepLink?.toString());
-          print("deep link value: ${dp.deepLink?.deepLinkValue}");
           break;
         case Status.NOT_FOUND:
-          print("deep link not found");
           break;
         case Status.ERROR:
-          print("deep link error: ${dp.error}");
           break;
         case Status.PARSE_ERROR:
-          print("deep link status parsing error");
           break;
       }
-      print("onDeepLinking res: " + dp.toString());
       setState(() {
-        _deepLinkData = dp.toJson();
       });
     });
     _appsflyerSdk!
@@ -177,15 +164,11 @@ class HomePageState extends State<HomePage> {
             registerOnAppOpenAttributionCallback: false,
             registerOnDeepLinkingCallback: true)
         .then((value) {
-      print("value of appflyer");
-      print(value);
     });
   }
 
   getId() async {
     var id = await DeviceId.getID;
-    print("DeviceId.getID");
-    print(id);
   }
 
   @override
@@ -235,11 +218,12 @@ class HomePageState extends State<HomePage> {
     _refreshController.refreshCompleted();
   }
 
-  Stream streamController() => Stream.fromFuture(_fetchEventData.getEventData(
+  Stream streamController() => Stream.fromFuture(_fetchEventData.getEventData2(
       page,
+      selectedFilter1,
       application.filterCategoryProvider,
       application.filterTimeProvider,
-      application.filterAnywhereProvider,
+      application.filterAnywhereProvider.toString().trim(),
       klatitude,
       klongitude,
       categorySearchController.text,
@@ -273,13 +257,17 @@ class HomePageState extends State<HomePage> {
   final Location location = Location();
 
   setLocation() async {
+    print("Inside location");
     PermissionStatus permissionRequestedResult =
         await location.requestPermission();
     if (permissionRequestedResult == PermissionStatus.granted) {
+      print("give permission");
       geoLoc = await Geolocator.getCurrentPosition();
       klatitude = geoLoc!.latitude;
       klongitude = geoLoc!.longitude;
       application.filterAnywhereProvider = filterData1[1];
+      selectedFilter1.clear();
+      selectedFilter1.add(filterData1[2]);
       setState(() {});
     }
   }
@@ -310,6 +298,7 @@ class HomePageState extends State<HomePage> {
           initialData: [],
           stream: streamController(),
           builder: (context, AsyncSnapshot snapshot) {
+                        
             return SmartRefresher(
               key: _refresherKey,
               controller: _refreshController,
@@ -1148,8 +1137,7 @@ class HomePageState extends State<HomePage> {
                                 ),
                               ),
                               Padding(
-                                padding:
-                                    const EdgeInsets.only(bottom: 15),
+                                padding: const EdgeInsets.only(bottom: 15),
                                 child: Directionality(
                                   textDirection: TextDirection.rtl,
                                   child: Text(
@@ -1177,7 +1165,7 @@ class HomePageState extends State<HomePage> {
                               //     itemBuilder: (context, index) {
                               Padding(
                                 padding:
-                                const EdgeInsets.symmetric(horizontal: 4),
+                                    const EdgeInsets.symmetric(horizontal: 4),
                                 child: Wrap(
                                     runSpacing: 8,
                                     spacing: 8,
@@ -1186,7 +1174,6 @@ class HomePageState extends State<HomePage> {
                                         filterData1.length,
                                         (index) => InkWell(
                                               onTap: () {
-                                                debugPrint("filter 1.0");
                                                 if (selectedFilter1.contains(
                                                     filterData1[index])) {
                                                   selectedFilter1.remove(
@@ -1195,8 +1182,50 @@ class HomePageState extends State<HomePage> {
                                                   selectedFilter1
                                                       .add(filterData1[index]);
                                                 }
-                                                setState(() {});
+                                                if (index == 2 || index == 6) {
+                                                  selectedFilter1
+                                                      .removeWhere((element) {
+                                                    if (element ==
+                                                            filterData1[2] ||
+                                                        element ==
+                                                            filterData1[6]) {
+                                                      return false;
+                                                    }
+                                                    return true;
+                                                  });
+                                                } else {
+                                                  selectedFilter1.removeWhere(
+                                                      (element) =>
+                                                          element ==
+                                                              filterData1[2] ||
+                                                          element ==
+                                                              filterData1[6]);
+                                                }
 
+                                                // if(selectedFilter1.contains(filterData1[2]) || selectedFilter1.contains(filterData1[6])){
+                                                //   if (selectedFilter1.contains(
+                                                //     filterData1[index])){
+                                                //   selectedFilter1.remove(
+                                                //       filterData1[index]);
+                                                // }else{
+                                                //   selectedFilter1.add(filterData1[index]);
+                                                // }
+                                                // }else{
+                                                //   if (selectedFilter1.contains(
+                                                //     filterData1[index])) {
+                                                //   selectedFilter1.remove(
+                                                //       filterData1[index]);
+                                                // } else if(!selectedFilter1.contains(filterData1[2]) || !selectedFilter1.contains(filterData1[5]) || !selectedFilter1.contains(filterData1[6])) {
+                                                //   selectedFilter1.add(filterData1[index]);
+                                                // }
+                                                // }
+
+                                                print("THis is arr and arr2");
+                                                print(selectedFilter1);
+
+                                                // print("This is delected");
+                                                // print(selectedFilter1);
+                                                setState(() {});
                                                 selectFilter1 = index;
                                                 application
                                                         .filterAnywhereProvider =
@@ -1248,79 +1277,82 @@ class HomePageState extends State<HomePage> {
                                               },
                                               child: filterData1[index] ==
                                                       'עיר מסויימת'
-                                                  ? Padding(
-                                                      padding: const EdgeInsets
-                                                              .symmetric(
+                                                  ? SizedBox(
+                                                    width: 120,
+                                                    child: Padding(
+                                                        padding: const EdgeInsets
+                                                            .symmetric(
                                                           vertical: 4,
                                                         ),
-                                                      child: Directionality(
-                                                        textDirection:
-                                                            TextDirection.rtl,
-                                                        child:
-                                                            ReceivingPaymentFields(
-                                                          borderRadius: 12,
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          fillcolor: MyColors
-                                                              .lightBlue,
-                                                          isFocus: true,
-                                                          textColorPrimary:
-                                                              Colors.white,
-                                                          maxLine: 1,
-                                                          showRequired: false,
-                                                          isBorder: true,
-                                                          showLabel: false,
-                                                          controller:
-                                                              locationController,
-                                                          onChange: (v) {
-                                                            setState(() {
+                                                        child: Directionality(
+                                                          textDirection:
+                                                              TextDirection.rtl,
+                                                          child:
+                                                              ReceivingPaymentFields(
+                                                            borderRadius: 12,
+                                                            textAlign:
+                                                                TextAlign.center,
+                                                            fillcolor: MyColors
+                                                                .lightBlue,
+                                                            isFocus: true,
+                                                            textColorPrimary:
+                                                                Colors.white,
+                                                            maxLine: 1,
+                                                            showRequired: false,
+                                                            isBorder: true,
+                                                            showLabel: false,
+                                                            controller:
+                                                                locationController,
+                                                            onChange: (v) {
+                                                              setState(() {
+                                                                application
+                                                                    .searchPlaces(
+                                                                        locationController
+                                                                            .text);
+                                                              });
+                                                            },
+                                                            onTap: () {
                                                               application
-                                                                  .searchPlaces(
-                                                                      locationController
-                                                                      .text);
-                                                            });
-                                                          },
-                                                          onTap: () {
-                                                            application
-                                                                    .filterAnywhereProvider =
-                                                                'עיר מסויימת';
-                                                            setState(() {});
-                                                          },
-                                                          // onChange: (v) {
-                                                          //   locationController.text = v;
-                                                          //   application.searchPlaces(v);
-                                                          //   print('eeeeeeeeeeeeeeee$v');
-                                                          //   setState(() {});
-                                                          // },
-                                                          // onFieldSubmit: (v) {
-                                                          //   locationController.text = v;
+                                                                      .filterAnywhereProvider =
+                                                                  'עיר מסויימת';
+                                                              setState(() {});
+                                                            },
+                                                            // onChange: (v) {
+                                                            //   locationController.text = v;
+                                                            //   application.searchPlaces(v);
+                                                            //   print('eeeeeeeeeeeeeeee$v');
+                                                            //   setState(() {});
+                                                            // },
+                                                            // onFieldSubmit: (v) {
+                                                            //   locationController.text = v;
 
-                                                          //   application.searchPlaces(v);
-                                                          //   print('eeeeeeeeeeeeeeee$v');
-                                                          // },
-                                                          textColor:
-                                                              Colors.white,
-                                                          obscureText: false,
-                                                          hintText:
-                                                              'הקלד/י עיר',
-                                                          // suffixIcon: IconButton(
-                                                          //   icon: const Icon(
-                                                          //     Icons.close,
-                                                          //     color: Colors.white,
-                                                          //   ),
-                                                          //   onPressed: () {
-                                                          //     setState(() {
-                                                          //       application
-                                                          //               .filterAnywhereProvider =
-                                                          //           null;
-                                                          //       locationController
-                                                          //           .clear();
-                                                          //     });
-                                                          //   },
-                                                          // ),
+                                                            //   application.searchPlaces(v);
+                                                            //   print('eeeeeeeeeeeeeeee$v');
+                                                            // },
+                                                            textColor:
+                                                                Colors.white,
+                                                            obscureText: false,
+                                                            hintText:
+                                                                'הקלד/י עיר',
+                                                            // suffixIcon: IconButton(
+                                                            //   icon: const Icon(
+                                                            //     Icons.close,
+                                                            //     color: Colors.white,
+                                                            //   ),
+                                                            //   onPressed: () {
+                                                            //     setState(() {
+                                                            //       application
+                                                            //               .filterAnywhereProvider =
+                                                            //           null;
+                                                            //       locationController
+                                                            //           .clear();
+                                                            //     });
+                                                            //   },
+                                                            // ),
+                                                          ),
                                                         ),
                                                       ),
-                                                    )
+                                                  )
                                                   : Directionality(
                                                       textDirection:
                                                           TextDirection.rtl,
@@ -1807,21 +1839,25 @@ class HomePageState extends State<HomePage> {
                                           //     ),
                                           //   )
                                           : Padding(
-                                            padding: const EdgeInsets.symmetric(vertical: 3),
-                                            child: Directionality(
-                                                textDirection: TextDirection.rtl,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 3),
+                                              child: Directionality(
+                                                textDirection:
+                                                    TextDirection.rtl,
                                                 child: Container(
                                                   padding: EdgeInsets.symmetric(
                                                       horizontal: width * 0.058,
                                                       vertical: 12),
                                                   decoration: BoxDecoration(
                                                     color: selectedDropItems
-                                                            .contains(
-                                                                dropItems[index])
+                                                            .contains(dropItems[
+                                                                index])
                                                         ? MyColors.lightRed
                                                         : MyColors.lightBlue,
                                                     borderRadius:
-                                                        BorderRadius.circular(13),
+                                                        BorderRadius.circular(
+                                                            13),
                                                   ),
                                                   child: Text(
                                                     dropItems[index].toString(),
@@ -1850,8 +1886,7 @@ class HomePageState extends State<HomePage> {
                                                   ),
                                                 ),
                                               ),
-                                          ),
-                                        
+                                            ),
                                     ),
                                   );
                                 },
@@ -1859,33 +1894,27 @@ class HomePageState extends State<HomePage> {
                               Padding(
                                 padding: const EdgeInsets.only(top: 12),
                                 child: Directionality(
-                                                textDirection: TextDirection.rtl,
-                                                child: Align(
-                                                  alignment:
-                                                      Alignment.center,
-                                                  child: Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(),
-                                                    child: ReceivingPaymentFields(
-                                                      borderRadius: 15.0,
-                                                      textAlign: TextAlign.center,
-                                                      onTap: () {},
-                                                      textInputAction:
-                                                          TextInputAction.done,
-                                                      keyboardType:
-                                                          TextInputType.name,
-                                                      fillcolor:
-                                                          Colors.white,
-                                                      controller:
-                                                          categorySearchController,
-                                                      obscureText: false,
-                                                      width: width / 2,
-                                                      hintText: 'חיפוש חופשי',
-                                                      textColor: Colors.black,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
+                                  textDirection: TextDirection.rtl,
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(),
+                                      child: ReceivingPaymentFields(
+                                        borderRadius: 15.0,
+                                        textAlign: TextAlign.center,
+                                        onTap: () {},
+                                        textInputAction: TextInputAction.done,
+                                        keyboardType: TextInputType.name,
+                                        fillcolor: Colors.white,
+                                        controller: categorySearchController,
+                                        obscureText: false,
+                                        width: width / 2,
+                                        hintText: 'חיפוש חופשי',
+                                        textColor: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               )
                             ],
                           ),
@@ -2031,7 +2060,7 @@ class HomePageState extends State<HomePage> {
                           delegate: SliverChildBuilderDelegate(
                             (BuildContext context, int index) {
                               // final items = _fetchEventData.data;
-                              if (snapshot.data.length == 0 &&
+                              if ((snapshot.data??[]).length == 0 &&
                                   snapshot.connectionState ==
                                       ConnectionState.done) {
                                 return Text('data');
@@ -2045,7 +2074,7 @@ class HomePageState extends State<HomePage> {
                                 );
                               }
                             },
-                            childCount: snapshot.data.length,
+                            childCount: (snapshot.data??[]).length,
                           ),
                         ),
                   SliverList(

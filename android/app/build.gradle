@@ -65,6 +65,7 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "il.co.basalon"
+        multiDexEnabled true
         minSdkVersion 21
         targetSdkVersion 32
         versionCode flutterVersionCode.toInteger()
@@ -88,10 +89,11 @@ android {
 }
 
 flutter {
-    source '../..'
+    source '../...'
 }
 
 dependencies {
+    implementation 'com.android.support:multidex:2.0.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.google.android.gms:play-services-maps:18.0.2'
     implementation platform('com.google.firebase:firebase-bom:30.0.1')

@@ -48,8 +48,6 @@ class FetchEventData {
 
   Future getEventData(page, filterByCategory, filterByTime, filterByAnyWhere,
       mapLat, mapLng, keyword, startDate, endDate, BuildContext context) async {
-    print(filterByAnyWhere);
-    print("filterByAnyWhere");
     try {
       configLoading();
       //EasyLoading.show();
@@ -91,46 +89,6 @@ class FetchEventData {
         "el_data_taxonomy_custom[]": "",
         "show_featured": "",
       });
-      print({
-        "paged": "$page",
-        "keyword": keyword != "" || keyword != null ? "$keyword" : "",
-        "category": "${filterByCategory ?? ''}",
-        "map_lat": (filterByAnyWhere == 'עיר מסויימת' ||
-                filterByAnyWhere == 'בכל מקום' ||
-                filterByAnyWhere == 'קרוב אליי')
-            ? '$mapLat'
-            : null,
-        "map_lng": (filterByAnyWhere == 'עיר מסויימת' ||
-                filterByAnyWhere == 'בכל מקום' ||
-                filterByAnyWhere == 'קרוב אליי')
-            ? '$mapLng'
-            : null,
-        "start_date": "$startDate",
-        "end_date": "$endDate",
-        "time":
-            "${filterByTime == 'specific_date' ? "this_week" : filterByTime ?? " "}",
-        // "sort": filterByAnyWhere == 'online'
-        //     ? 'start-date'
-        //     : (filterByAnyWhere == 'בכל מקום' || filterByCategory == 'אירוח קולינרי')
-        //       ? 'start-date'
-        //         : ((filterByAnyWhere == 'קרוב אליי' ||
-        //                     filterByAnyWhere == 'עיר מסויימת') ||
-        //                 mapLng != null)
-        //             ? 'near'
-        //             : '',
-        "sort": (filterByAnyWhere == 'עיר מסויימת' ||
-                filterByAnyWhere == 'קרוב אליי' ||
-                application.filterAnywhereProvider == 'קרוב אליי')
-            ? "near"
-            : (filterByAnyWhere == 'בכל מקום')
-                ? 'start-date'
-                : '',
-        "event_type": filterByAnyWhere == 'online' ? 'online' : 'classic',
-        "el_data_taxonomy_custom[]": "",
-        "show_featured": "",
-      });
-      print('response body');
-      print(response);
       final result = HomeData.fromJson(response['body']);
       if (response['status'] == 401) {
         return errorAlertMessage('no event found', '', context);
@@ -143,8 +101,99 @@ class FetchEventData {
         EasyLoading.dismiss();
       }
     } catch (e) {
-      print("get event error");
-      print(e);
+     
+      EasyLoading.dismiss();
+      if (keyword != null && keyword != '') {
+        data = [];
+      }
+      data = [];
+    }
+    return data;
+  }
+
+  List greekToEng = [
+    {"greekName": "שרון והסביבה", "englishName": "sharon"},
+    {"greekName": "מרכז", "englishName": "center"},
+    {"greekName": "ירושלים והסביבה", "englishName": "east"},
+    {"greekName": "מחוז חיפה והצפון", "englishName": "north"},
+    {"greekName": "השפלה והדרום", "englishName": "south"},
+    {
+      "greekName": "קרוב אליי",
+      "englishName": "",
+    },
+    {"greekName": "בכל הארץ", "englishName": ""}
+  ];
+
+  getFilterEnglishName(val) {
+    var res =
+        greekToEng.firstWhere((element) => element['greekName'] == val.trim());
+   
+    return res['englishName'];
+  }
+
+  Future getEventData2(
+      page,
+      List locdata,
+      filterByCategory,
+      filterByTime,
+      filterByAnyWhere,
+      mapLat,
+      mapLng,
+      keyword,
+      startDate,
+      endDate,
+      BuildContext context) async {
+    var filteer = [];
+    locdata.map((val) => {filteer.add(getFilterEnglishName(val))}).toList();
+    var body = {
+      "event_state": filteer.join(","),
+      "column": "three-column",
+      "event_type": filterByAnyWhere == 'online' ? 'online' : 'classic',
+      "el_data_taxonomy_custom[]": "",
+      "show_featured": "",
+      "keyword": keyword != "" || keyword != null ? "$keyword" : "",
+      "cat": "${filterByCategory ?? ''}",
+      "map_lat": (filterByAnyWhere == 'עיר מסויימת' ||
+              filterByAnyWhere == 'בכל מקום' ||
+              filterByAnyWhere == 'מרכז' ||
+              filterByAnyWhere == 'קרוב אליי')
+          ? '$mapLat'
+          : null,
+      "map_lng": (filterByAnyWhere == 'עיר מסויימת' ||
+              filterByAnyWhere == 'בכל מקום' ||
+              filterByAnyWhere == 'קרוב אליי')
+          ? '$mapLng'
+          : null,
+      "start_date": "$startDate",
+      "end_date": "$endDate",
+      "time":
+          "${filterByTime == 'specific_date' ? "this_week" : filterByTime ?? " "}",
+      "sort": (filterByAnyWhere == 'עיר מסויימת' ||
+              filterByAnyWhere == 'קרוב אליי' ||
+              application.filterAnywhereProvider == 'קרוב אליי')
+          ? "near"
+          : (filterByAnyWhere == 'בכל מקום')
+              ? 'start-date'
+              : '',
+      "type": "",
+      "paged": "$page"
+    };
+print(body);
+    try {
+      configLoading();
+      final response = await ApiProvider.post(url: 'get_event_search', body: body);
+      final result = HomeData.fromJson(response['body']);
+      if (response['body']['success'] == 401) {
+        // return errorAlertMessage('no event found', '', context);
+      } else {
+        if (page > 1) {
+          data = [...data, ...?result.data];
+        } else {
+          data = result.data!;
+        }
+        EasyLoading.dismiss();
+      }
+    } catch (e) {
       EasyLoading.dismiss();
       if (keyword != null && keyword != '') {
         data = [];
@@ -155,19 +204,12 @@ class FetchEventData {
   }
 
   Future getEventDetailData() async {
-    print("Mukesh Event Id : " + id.toString());
     try {
       final response =
           await ApiProvider.post(url: 'get_event_detail', body: {"id": "$id"});
       final result = Welcome.fromJson(response['body']);
-      //print('resultlkjlkjlkjlkjlkjlk');
-
-      //print('${result.data?.gallery}');
       eventData = result;
-      //print(eventData?.data?.noOfTicket?[0].priceTicket);
-      // cardData = eventData?.data?.relatedEvent;
     } catch (e) {
-      //print(e);
     }
     return eventData;
   }
@@ -178,11 +220,7 @@ class FetchEventData {
       final result = FilterCategoryModel.fromJson(response['body']);
 
       filterCategoryModel = result;
-      //print('ye chaliu category');
-      //print(filterCategoryModel?.data);
     } catch (e) {
-      //print('nhi chli categories');
-      //print(e);
     }
     return filterCategoryModel;
   }
@@ -196,11 +234,8 @@ class FetchEventData {
         'rating': '$rating',
         'comment_content': '$commentContent',
       });
-      //print(response);
       errorAlertMessage('Waiting for approval', '', context);
     } catch (e) {
-      //print('postFeedbackEventDetails nhi chala sasura');
-      //print(e);
     }
   }
 
@@ -222,11 +257,8 @@ class FetchEventData {
         'subject_customer': '$subject',
         'content': '$content',
       });
-      //print(response);
       errorAlertMessage('Mail Sent Successfully!', '', context);
     } catch (e) {
-      //print('postFeedbackEventDetails nhi chala sasura');
-      //print(e);
     }
   }
 
@@ -304,8 +336,6 @@ class FetchEventData {
 //       });
 //
 //       final result = HomeData.fromJson(response['body']);
-//      //print('uiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
-//      //print(filterByAnyWhere);
 //
 //       if (page > 1) {
 //         data = [...data, ...?result.data];
@@ -313,7 +343,6 @@ class FetchEventData {
 //         data = result.data!;
 //       }
 //     } catch (e) {
-//      //print('homepage events nhi aaye ERROR!${e}');
 //       if (keyword != null && keyword != '') {
 //         data = [];
 //       }
@@ -326,15 +355,9 @@ class FetchEventData {
 //       final response =
 //       await ApiProvider.post(url: 'get_event_detail', body: {"id": "$id"});
 //       final result = Welcome.fromJson(response['body']);
-//       ////print('resultlkjlkjlkjlkjlkjlk');
-//
-//       ////print('${result.toJson()}');
 //       eventData = result;
 //       // cardData = eventData?.data?.relatedEvent;
 //     } catch (e) {
-//      //print(e);
-//      //print(
-//           '${eventData}hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh');
 //     }
 //     return eventData;
 //   }
@@ -345,11 +368,7 @@ class FetchEventData {
 //       final result = FilterCategoryModel.fromJson(response['body']);
 //
 //       filterCategoryModel = result;
-//      //print('ye chaliu category');
-//      //print(filterCategoryModel?.data);
 //     } catch (e) {
-//      //print('nhi chli categories');
-//      //print(e);
 //     }
 //     return filterCategoryModel;
 //   }
@@ -361,12 +380,7 @@ class FetchEventData {
 //         'rating': '$rating',
 //         'comment_content': '$commentContent',
 //       });
-//      //print(
-//           'postFeedbackEventDetails postFeedbackEventDetails postFeedbackEventDetails postFeedbackEventDetails');
-//      //print(response);
 //     } catch (e) {
-//      //print('postFeedbackEventDetails nhi chala sasura');
-//      //print(e);
 //     }
 //   }
 // }
