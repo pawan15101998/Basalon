@@ -144,6 +144,8 @@ class FetchEventData {
       endDate,
       BuildContext context) async {
     var filteer = [];
+    print("filterby ");
+    print(filterByAnyWhere);
     locdata.map((val) => {filteer.add(getFilterEnglishName(val))}).toList();
     var body = {
       "event_state": filteer.join(","),
@@ -153,21 +155,19 @@ class FetchEventData {
       "show_featured": "",
       "keyword": keyword != "" || keyword != null ? "$keyword" : "",
       "cat": "${filterByCategory ?? ''}",
-      "map_lat": (filterByAnyWhere == 'עיר מסויימת' ||
-              filterByAnyWhere == 'בכל מקום' ||
-              filterByAnyWhere == 'מרכז' ||
-              filterByAnyWhere == 'קרוב אליי')
-          ? '$mapLat'
-          : null,
-      "map_lng": (filterByAnyWhere == 'עיר מסויימת' ||
-              filterByAnyWhere == 'בכל מקום' ||
-              filterByAnyWhere == 'קרוב אליי')
-          ? '$mapLng'
-          : null,
+      "map_lat": filterByAnyWhere == 'עיר מסויימת' ? mapLat : 
+                filterByAnyWhere == 'בכל מקום' ? mapLat : 
+                filterByAnyWhere == 'מרכז' ? mapLat :
+                filterByAnyWhere == 'קרוב אליי' ? mapLat : 
+                null,
+      "map_lng":filterByAnyWhere == 'עיר מסויימת' ?mapLng : 
+                filterByAnyWhere == 'בכל מקום' ? mapLng:
+                filterByAnyWhere == 'קרוב אליי' ? mapLng:
+                null,
       "start_date": "$startDate",
       "end_date": "$endDate",
       "time":
-          "${filterByTime == 'specific_date' ? "this_week" : filterByTime ?? " "}",
+          "${filterByTime}",
       "sort": (filterByAnyWhere == 'עיר מסויימת' ||
               filterByAnyWhere == 'קרוב אליי' ||
               application.filterAnywhereProvider == 'קרוב אליי')
@@ -175,7 +175,7 @@ class FetchEventData {
           : (filterByAnyWhere == 'בכל מקום')
               ? 'start-date'
               : '',
-      "type": "",
+      "type": "type5",
       "paged": "$page"
     };
 print(body);

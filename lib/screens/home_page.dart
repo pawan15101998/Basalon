@@ -112,6 +112,8 @@ class HomePageState extends State<HomePage> {
       setLocation();
 
     });
+    print("this is location");
+    print(geoLoc);
     LoginUser.shared?.userId != null
         ? packageNetwork.getPackage(
             LoginUser.shared?.userId! ?? application.idFromLocalProvider,
@@ -1179,6 +1181,7 @@ class HomePageState extends State<HomePage> {
                                                   selectedFilter1.remove(
                                                       filterData1[index]);
                                                 } else {
+                                                  // if()
                                                   selectedFilter1
                                                       .add(filterData1[index]);
                                                 }
@@ -1220,7 +1223,8 @@ class HomePageState extends State<HomePage> {
                                                 // }
                                                 // }
 
-                                                print("THis is arr and arr2");
+                                                print("This is arr and arr2");
+                                                print(klatitude);
                                                 print(selectedFilter1);
 
                                                 // print("This is delected");
@@ -1257,9 +1261,10 @@ class HomePageState extends State<HomePage> {
                                                 }
                                                 if (filterData1[index] ==
                                                     'קרוב אליי') {
-                                                  application
+                                                      application
                                                           .filterAnywhereProvider =
                                                       'קרוב אליי';
+                                                      print("filter 1.2");
                                                   debugPrint("filter 1.2");
                                                   debugPrint(
                                                       "print location near");
@@ -1272,7 +1277,8 @@ class HomePageState extends State<HomePage> {
                                                   klatitude = geoLoc!.latitude;
                                                   klongitude =
                                                       geoLoc!.longitude;
-                                                }
+                                                  
+                                                    }
                                                 setState(() {});
                                               },
                                               child: filterData1[index] ==
@@ -1668,15 +1674,15 @@ class HomePageState extends State<HomePage> {
                                             .replaceAll('[', '')
                                             .replaceAll(']', '')
                                             .replaceAll(', ', ',')
-                                            .replaceAll('הרצאה', 'lecture')
+                                            .replaceAll('סדנת יצירה', 'workshop')
                                             .replaceAll(
-                                                'אירוח קולינרי', 'meals')
-                                            .replaceAll('הופעה/מופע', 'show')
-                                            .replaceAll('הופעה', 'show')
+                                                'הופעה', 'show')
                                             .replaceAll('מפגש חברתי', 'group')
-                                            .replaceAll(
-                                                'סדנת בישול/אפיה', 'food')
+                                            .replaceAll('חוויה לילדים', 'kids')
                                             .replaceAll('סדנת בישול', 'food')
+                                            // .replaceAll(
+                                            //     'סדנת בישול/אפיה', 'food')
+                                            .replaceAll('סדנת גוף/נפש', 'body-mind')
                                             .replaceAll(
                                                 'סדנת גוף/נפש', 'body-mind')
                                             .replaceAll(

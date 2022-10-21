@@ -725,7 +725,7 @@ class EventCardState extends State<EventCard> {
                                             text:("${widget.datum.eventDate[0].startDate}, "),
                                             style: TextStyle(
                                               color: Colors.black,
-                                              fontWeight: FontWeight.normal,
+                                              fontWeight: FontWeight.bold,
                                               fontSize: 16,
                                             ),
                                           ),
@@ -734,12 +734,12 @@ class EventCardState extends State<EventCard> {
                                             text: "${widget.datum.eventDate[0].startTime}",
                                             style: TextStyle(
                                               color: Colors.black,
-                                              fontWeight: FontWeight.normal,
+                                              fontWeight: FontWeight.bold,
                                               fontSize: 16,
                                             ),
                                           ),
                                            TextSpan(
-                                            text: "או",
+                                            text: " או ",
                                             style: TextStyle(
                                               color: Colors.black,
                                               fontWeight: FontWeight.bold,
