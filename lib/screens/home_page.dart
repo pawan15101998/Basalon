@@ -110,7 +110,6 @@ class HomePageState extends State<HomePage> {
       selectedFilter1.add(filterData1[1]);
     Future.delayed(Duration(milliseconds: 100), () {
       setLocation();
-
     });
     print("this is location");
     print(geoLoc);
@@ -263,10 +262,15 @@ class HomePageState extends State<HomePage> {
     PermissionStatus permissionRequestedResult =
         await location.requestPermission();
     if (permissionRequestedResult == PermissionStatus.granted) {
-      print("give permission");
+      
       geoLoc = await Geolocator.getCurrentPosition();
       klatitude = geoLoc!.latitude;
       klongitude = geoLoc!.longitude;
+      // print("this is");
+      print("give permission");
+      print(geoLoc!.latitude);
+      print(geoLoc!.longitude);
+      print(klatitude);
       application.filterAnywhereProvider = filterData1[1];
       selectedFilter1.clear();
       selectedFilter1.add(filterData1[2]);
@@ -299,8 +303,7 @@ class HomePageState extends State<HomePage> {
         body: StreamBuilder(
           initialData: [],
           stream: streamController(),
-          builder: (context, AsyncSnapshot snapshot) {
-                        
+          builder: (context, AsyncSnapshot snapshot) {   
             return SmartRefresher(
               key: _refresherKey,
               controller: _refreshController,
@@ -1165,217 +1168,251 @@ class HomePageState extends State<HomePage> {
                               //     padding: EdgeInsets.symmetric(horizontal: 8),
                               //     shrinkWrap: true,
                               //     itemBuilder: (context, index) {
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 4),
-                                child: Wrap(
-                                    runSpacing: 8,
-                                    spacing: 8,
-                                    alignment: WrapAlignment.center,
-                                    children: List.generate(
-                                        filterData1.length,
-                                        (index) => InkWell(
-                                              onTap: () {
-                                                if (selectedFilter1.contains(
-                                                    filterData1[index])) {
-                                                  selectedFilter1.remove(
-                                                      filterData1[index]);
-                                                } else {
-                                                  // if()
-                                                  selectedFilter1
-                                                      .add(filterData1[index]);
-                                                }
-                                                if (index == 2 || index == 6) {
-                                                  selectedFilter1
-                                                      .removeWhere((element) {
-                                                    if (element ==
-                                                            filterData1[2] ||
-                                                        element ==
-                                                            filterData1[6]) {
-                                                      return false;
-                                                    }
-                                                    return true;
-                                                  });
-                                                } else {
-                                                  selectedFilter1.removeWhere(
-                                                      (element) =>
-                                                          element ==
+                              ChangeNotifierProvider(
+                                create: (_)=> ApplicationBloc(),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 4),
+                                  child: Wrap(
+                                      runSpacing: 8,
+                                      spacing: 8,
+                                      alignment: WrapAlignment.center,
+                                      children: List.generate(
+                                          filterData1.length,
+                                          (index) => InkWell(
+                                                onTap: () {
+                                                  if (selectedFilter1.contains(
+                                                      filterData1[index])) {
+                                                    selectedFilter1.remove(
+                                                        filterData1[index]);
+                                                  } else {
+                                                    // if()
+                                                    selectedFilter1
+                                                        .add(filterData1[index]);
+                                                  }
+                                                  if (index == 2 || index == 6) {
+                                                    selectedFilter1
+                                                        .removeWhere((element) {
+                                                      if (element ==
                                                               filterData1[2] ||
                                                           element ==
-                                                              filterData1[6]);
-                                                }
+                                                              filterData1[6]) {
+                                                        return false;
+                                                      }
+                                                      return true;
+                                                    });
+                                                  } else {
+                                                    selectedFilter1.removeWhere(
+                                                        (element) =>
+                                                            element ==
+                                                                filterData1[2] ||
+                                                            element ==
+                                                                filterData1[6]);
+                                                  }
+                                                  if(index == 2 && klatitude == null){
+                                                    selectedFilter1.remove(filterData1[2]);
+                                                    setLocation();
+                                                  }
+                                                  if(index == 2){
+                                                    print("`isnerer`");
+                                                    application.isNearme(true);
+                                                    print(application.isNearMe);
+                                                  }
+                                                  if(index == 6){
+                                                    application.isNearme(false);
+                                                    print("value false");
+                                                    print(application.isNearMe);
+                                                  }
+                                                  if(index == 5){
+                                                    print("searchData");
+                                                    selectedFilter1.remove(filterData1[2]);
+                                                  }
+                                                          print("index no. 5");
+                                                          print(index);
 
-                                                // if(selectedFilter1.contains(filterData1[2]) || selectedFilter1.contains(filterData1[6])){
-                                                //   if (selectedFilter1.contains(
-                                                //     filterData1[index])){
-                                                //   selectedFilter1.remove(
-                                                //       filterData1[index]);
-                                                // }else{
-                                                //   selectedFilter1.add(filterData1[index]);
-                                                // }
-                                                // }else{
-                                                //   if (selectedFilter1.contains(
-                                                //     filterData1[index])) {
-                                                //   selectedFilter1.remove(
-                                                //       filterData1[index]);
-                                                // } else if(!selectedFilter1.contains(filterData1[2]) || !selectedFilter1.contains(filterData1[5]) || !selectedFilter1.contains(filterData1[6])) {
-                                                //   selectedFilter1.add(filterData1[index]);
-                                                // }
-                                                // }
-
-                                                print("This is arr and arr2");
-                                                print(klatitude);
-                                                print(selectedFilter1);
-
-                                                // print("This is delected");
-                                                // print(selectedFilter1);
-                                                setState(() {});
-                                                selectFilter1 = index;
-                                                application
-                                                        .filterAnywhereProvider =
-                                                    filterData1[index]
-                                                        .replaceAll(
-                                                            'אונליין / זום',
-                                                            'online');
-                                                application.showOnline =
-                                                    !showOnline;
-                                                page = 1;
-
-                                                if (filterData1[index] ==
-                                                    'בכל מקום') {
-                                                  debugPrint("filter 1.1");
-                                                  application
-                                                      .filterCategoryProvider = '';
-                                                  // application.filterTimeProvider =
-                                                  //     '';
-                                                  application
-                                                          .filterAnywhereProvider =
-                                                      'בכל מקום';
-                                                  categorySearchController
-                                                      .text = '';
-                                                  endDateController.text = '';
-                                                  startDateController.text = '';
-                                                  klatitude = null;
-                                                  klongitude = null;
-                                                  page = 1;
-                                                }
-                                                if (filterData1[index] ==
-                                                    'קרוב אליי') {
-                                                      application
-                                                          .filterAnywhereProvider =
-                                                      'קרוב אליי';
-                                                      print("filter 1.2");
-                                                  debugPrint("filter 1.2");
-                                                  debugPrint(
-                                                      "print location near");
-                                                  debugPrint("${geoLoc}");
-                                                  debugPrint(
-                                                      "${geoLoc!.latitude}");
-                                                  debugPrint(
-                                                      "${geoLoc!.longitude}");
-                                                  debugPrint("location near");
-                                                  klatitude = geoLoc!.latitude;
-                                                  klongitude =
-                                                      geoLoc!.longitude;
+                                                  if(filterData1[index] ==
+                                                        'עיר מסויימת'){
+                                                          // selectedFilter1.remove(value);
+                                                        }
                                                   
-                                                    }
-                                                setState(() {});
-                                              },
-                                              child: filterData1[index] ==
-                                                      'עיר מסויימת'
-                                                  ? SizedBox(
-                                                    width: 120,
-                                                    child: Padding(
-                                                        padding: const EdgeInsets
-                                                            .symmetric(
-                                                          vertical: 4,
-                                                        ),
-                                                        child: Directionality(
-                                                          textDirection:
-                                                              TextDirection.rtl,
-                                                          child:
-                                                              ReceivingPaymentFields(
-                                                            borderRadius: 12,
-                                                            textAlign:
-                                                                TextAlign.center,
-                                                            fillcolor: MyColors
-                                                                .lightBlue,
-                                                            isFocus: true,
-                                                            textColorPrimary:
-                                                                Colors.white,
-                                                            maxLine: 1,
-                                                            showRequired: false,
-                                                            isBorder: true,
-                                                            showLabel: false,
-                                                            controller:
-                                                                locationController,
-                                                            onChange: (v) {
-                                                              setState(() {
+                                                  // if(selectedFilter1.contains(filterData1[2]) || selectedFilter1.contains(filterData1[6])){
+                                                  //   if (selectedFilter1.contains(
+                                                  //     filterData1[index])){
+                                                  //   selectedFilter1.remove(
+                                                  //       filterData1[index]);
+                                                  // }else{
+                                                  //   selectedFilter1.add(filterData1[index]);
+                                                  // }
+                                                  // }else{
+                                                  //   if (selectedFilter1.contains(
+                                                  //     filterData1[index])) {
+                                                  //   selectedFilter1.remove(
+                                                  //       filterData1[index]);
+                                                  // } else if(!selectedFilter1.contains(filterData1[2]) || !selectedFilter1.contains(filterData1[5]) || !selectedFilter1.contains(filterData1[6])) {
+                                                  //   selectedFilter1.add(filterData1[index]);
+                                                  // }
+                                                  // }
+                                                  
+                              
+                                                  
+                              
+                                                  // print("This is delected");
+                                                  // print(selectedFilter1);
+                                                  setState(() {});
+                                                  selectFilter1 = index;
+                                                  application
+                                                          .filterAnywhereProvider =
+                                                      filterData1[index]
+                                                          .replaceAll(
+                                                              'אונליין / זום',
+                                                              'online');
+                                                  application.showOnline =
+                                                      !showOnline;
+                                                  page = 1;
+                              
+                                                  if (filterData1[index] ==
+                                                      'בכל מקום') {
+                                                    debugPrint("filter 1.1");
+                                                    application
+                                                        .filterCategoryProvider = '';
+                                                    // application.filterTimeProvider =
+                                                    //     '';
+                                                    application
+                                                            .filterAnywhereProvider =
+                                                        'בכל מקום';
+                                                    categorySearchController
+                                                        .text = '';
+                                                    endDateController.text = '';
+                                                    startDateController.text = '';
+                                                    klatitude = null;
+                                                    klongitude = null;
+                                                    page = 1;
+                                                  }
+                                                  if (filterData1[index] ==
+                                                      'קרוב אליי') {
+                                                        application
+                                                            .filterAnywhereProvider =
+                                                        'קרוב אליי';
+                                                        print("filter 1.2");
+                                                    debugPrint("filter 1.2");
+                                                    debugPrint(
+                                                        "print location near");
+                                                    debugPrint("${geoLoc}");
+                                                    debugPrint(
+                                                        "${geoLoc!.latitude}");
+                                                    debugPrint(
+                                                        "${geoLoc!.longitude}");
+                                                    debugPrint("location near");
+                                                    klatitude = geoLoc!.latitude;
+                                                    klongitude =
+                                                        geoLoc!.longitude;
+                                                    
+                                                      }
+                                                      if(filterData1[index] ==
+                                                      'בכל הארץ'){
+                                                         application.isNearme(false);
+                                                      }
+                                                  setState(() {});
+                                                },
+                                                child: filterData1[index] ==
+                                                        'עיר מסויימת'
+                                                    ? SizedBox(
+                                                      width: 120,
+                                                      child: Padding(
+                                                          padding: const EdgeInsets
+                                                              .symmetric(
+                                                            vertical: 4,
+                                                          ),
+                                                          child: Directionality(
+                                                            textDirection:
+                                                                TextDirection.rtl,
+                                                            child:
+                                                                ReceivingPaymentFields(
+                                                              borderRadius: 12,
+                                                              textAlign:
+                                                                  TextAlign.center,
+                                                              fillcolor: MyColors
+                                                                  .lightBlue,
+                                                              isFocus: true,
+                                                              textColorPrimary:
+                                                                  Colors.white,
+                                                              maxLine: 1,
+                                                              showRequired: false,
+                                                              isBorder: true,
+                                                              showLabel: false,
+                                                              controller:
+                                                                  locationController,
+                                                              onChange: (v) {
+                                                                setState(() {
+                                                                  application
+                                                                      .searchPlaces(
+                                                                          locationController
+                                                                              .text);
+                                                                });
+                                                              },
+                                                              onTap: () {
                                                                 application
-                                                                    .searchPlaces(
-                                                                        locationController
-                                                                            .text);
-                                                              });
-                                                            },
-                                                            onTap: () {
-                                                              application
-                                                                      .filterAnywhereProvider =
-                                                                  'עיר מסויימת';
-                                                              setState(() {});
-                                                            },
-                                                            // onChange: (v) {
-                                                            //   locationController.text = v;
-                                                            //   application.searchPlaces(v);
-                                                            //   print('eeeeeeeeeeeeeeee$v');
-                                                            //   setState(() {});
-                                                            // },
-                                                            // onFieldSubmit: (v) {
-                                                            //   locationController.text = v;
-
-                                                            //   application.searchPlaces(v);
-                                                            //   print('eeeeeeeeeeeeeeee$v');
-                                                            // },
-                                                            textColor:
-                                                                Colors.white,
-                                                            obscureText: false,
-                                                            hintText:
-                                                                'הקלד/י עיר',
-                                                            // suffixIcon: IconButton(
-                                                            //   icon: const Icon(
-                                                            //     Icons.close,
-                                                            //     color: Colors.white,
-                                                            //   ),
-                                                            //   onPressed: () {
-                                                            //     setState(() {
-                                                            //       application
-                                                            //               .filterAnywhereProvider =
-                                                            //           null;
-                                                            //       locationController
-                                                            //           .clear();
-                                                            //     });
-                                                            //   },
-                                                            // ),
+                                                                        .filterAnywhereProvider =
+                                                                    'עיר מסויימת';
+                                                                    if(index == 5){
+                                                                      selectedFilter1.remove(filterData1[2]);
+                                                                    }
+                                                                setState(() {});
+                                                              },
+                                                              // onChange: (v) {
+                                                              //   locationController.text = v;
+                                                              //   application.searchPlaces(v);
+                                                              //   print('eeeeeeeeeeeeeeee$v');
+                                                              //   setState(() {});
+                                                              // },
+                                                              // onFieldSubmit: (v) {
+                                                              //   locationController.text = v;
+                              
+                                                              //   application.searchPlaces(v);
+                                                              //   print('eeeeeeeeeeeeeeee$v');
+                                                              // },
+                                                              textColor:
+                                                                  Colors.white,
+                                                              obscureText: false,
+                                                              hintText:
+                                                                  'הקלד/י עיר',
+                                                              // suffixIcon: IconButton(
+                                                              //   icon: const Icon(
+                                                              //     Icons.close,
+                                                              //     color: Colors.white,
+                                                              //   ),
+                                                              //   onPressed: () {
+                                                              //     setState(() {
+                                                              //       application
+                                                              //               .filterAnywhereProvider =
+                                                              //           null;
+                                                              //       locationController
+                                                              //           .clear();
+                                                              //     });
+                                                              //   },
+                                                              // ),
+                                                            ),
                                                           ),
                                                         ),
+                                                    )
+                                                    : Directionality(
+                                                        textDirection:
+                                                            TextDirection.rtl,
+                                                        child: FilterCardWidget(
+                                                          fontsize: 12.sp,
+                                                          text:
+                                                              filterData1[index],
+                                                          color: selectedFilter1
+                                                                  .contains(
+                                                                      filterData1[
+                                                                          index])
+                                                              ? MyColors.lightRed
+                                                              : MyColors
+                                                                  .lightBlue,
+                                                        ),
                                                       ),
-                                                  )
-                                                  : Directionality(
-                                                      textDirection:
-                                                          TextDirection.rtl,
-                                                      child: FilterCardWidget(
-                                                        fontsize: 12.sp,
-                                                        text:
-                                                            filterData1[index],
-                                                        color: selectedFilter1
-                                                                .contains(
-                                                                    filterData1[
-                                                                        index])
-                                                            ? MyColors.lightRed
-                                                            : MyColors
-                                                                .lightBlue,
-                                                      ),
-                                                    ),
-                                            ))),
+                                              ))),
+                                ),
                               ),
                               SizedBox(
                                 height: 40,
@@ -1897,6 +1934,7 @@ class HomePageState extends State<HomePage> {
                                   );
                                 },
                               ),
+                              // free search
                               Padding(
                                 padding: const EdgeInsets.only(top: 12),
                                 child: Directionality(

@@ -36,6 +36,7 @@ class FetchEventData {
   FilterCategoryModel? filterCategoryModel;
   dynamic categoryData;
   Position? geoLoc;
+  String isNear = '';
   setLocation() async {
     geoLoc = await Geolocator.getCurrentPosition();
 
@@ -144,8 +145,14 @@ class FetchEventData {
       endDate,
       BuildContext context) async {
     var filteer = [];
-    print("filterby ");
-    print(filterByAnyWhere);
+    if(filterByAnyWhere == 'קרוב אליי'){
+      isNear = 'קרוב אליי';
+    }else if(filterByAnyWhere == 'בכל הארץ'){
+      isNear = 'בכל הארץ';
+    }
+    print("filterbykeyword");
+    print(application.filterAnywhereProvider);
+    print(isNear);
     locdata.map((val) => {filteer.add(getFilterEnglishName(val))}).toList();
     var body = {
       "event_state": filteer.join(","),
@@ -159,22 +166,23 @@ class FetchEventData {
                 filterByAnyWhere == 'בכל מקום' ? mapLat : 
                 filterByAnyWhere == 'מרכז' ? mapLat :
                 filterByAnyWhere == 'קרוב אליי' ? mapLat : 
-                null,
-      "map_lng":filterByAnyWhere == 'עיר מסויימת' ?mapLng : 
+                mapLat,
+      "map_lng": filterByAnyWhere == 'עיר מסויימת' ?mapLng : 
                 filterByAnyWhere == 'בכל מקום' ? mapLng:
                 filterByAnyWhere == 'קרוב אליי' ? mapLng:
-                null,
+                mapLng,
       "start_date": "$startDate",
       "end_date": "$endDate",
       "time":
           "${filterByTime}",
-      "sort": (filterByAnyWhere == 'עיר מסויימת' ||
-              filterByAnyWhere == 'קרוב אליי' ||
-              application.filterAnywhereProvider == 'קרוב אליי')
-          ? "near"
-          : (filterByAnyWhere == 'בכל מקום')
-              ? 'start-date'
-              : '',
+      "sort": isNear == 'קרוב אליי' ? 'near' : isNear == 'בכל הארץ'?  'start-date': "",
+      // (filterByAnyWhere == 'עיר מסויימת' ||
+      //         filterByAnyWhere == 'קרוב אליי' ||
+      //         application.filterAnywhereProvider == 'קרוב אליי')
+      //     ? "near"
+      //     : filterByAnyWhere == 'בכל מקום' ?  'start-date':
+      //     filterByAnyWhere == 'בכל הארץ' ?  'start-date':
+      //      filterByAnyWhere == 'השפלה והדרום' ? 'start-date': '',
       "type": "type5",
       "paged": "$page"
     };
@@ -184,7 +192,7 @@ print(body);
       final response = await ApiProvider.post(url: 'get_event_search', body: body);
       final result = HomeData.fromJson(response['body']);
       if (response['body']['success'] == 401) {
-        // return errorAlertMessage('no event found', '', context);
+        return errorAlertMessage('no event found', '', context);
       } else {
         if (page > 1) {
           data = [...data, ...?result.data];

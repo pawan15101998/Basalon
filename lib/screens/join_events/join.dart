@@ -514,9 +514,16 @@ class _BookEventPageState extends State<BookEventPage> {
                               margin: EdgeInsets.only(right: 60),
                               child: Text(
                                   "₪${widget.noOfTicket?[i].priceTicket == "" ? 0 : widget.noOfTicket?[i].priceTicket}")),
-                          Text(
-                            "${widget.noOfTicket?[i].nameTicket ?? 'כרטיס רגיל'}",
-                            textAlign: TextAlign.end,
+                          SizedBox(
+                            width: 110,
+                            child: Text(
+                              "${widget.noOfTicket?[i].nameTicket ?? 'כרטיס רגיל'}",
+                              //  overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.end,
+                              style: TextStyle(
+                                // fontSize: 12
+                              ),
+                            ),
                           )
                         ],
                       ),

@@ -19,6 +19,7 @@ class ApplicationBloc with ChangeNotifier {
   dynamic filterCategoryProvider;
   dynamic filterTimeProvider;
   dynamic filterAnywhereProvider;
+  bool isNearMe = false;
 
   final geoLocatorService = GeolocatorSerice();
   final placesService = PlacesService();
@@ -160,6 +161,11 @@ class ApplicationBloc with ChangeNotifier {
   setFilterByAnywhere(value) {
     filterAnywhereProvider = value;
     showOnline = true;
+    notifyListeners();
+  }
+
+  isNearme(value) {
+    isNearMe = value;
     notifyListeners();
   }
 }
