@@ -55,6 +55,7 @@ class HomePageState extends State<HomePage> {
   List<String> selectedFilter1 = [];
   List tempArr = [];
   List tempArr2 = [];
+  bool isSearch =  false;
 
   bool loading = false;
   int? radiusVal = 0;
@@ -67,6 +68,7 @@ class HomePageState extends State<HomePage> {
 
   int countCat = 0;
   bool? value = false;
+  bool isInfiniteLoading = false;
 
   // dynamic filterCategory;
   dynamic filterByTime;
@@ -106,8 +108,8 @@ class HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     getId();
-      selectedFilter1.add(filterData1[0]);
-      selectedFilter1.add(filterData1[1]);
+    selectedFilter1.add(filterData1[0]);
+    selectedFilter1.add(filterData1[1]);
     Future.delayed(Duration(milliseconds: 100), () {
       setLocation();
     });
@@ -138,12 +140,10 @@ class HomePageState extends State<HomePage> {
         timeToWaitForATTUserAuthorization: 15);
     _appsflyerSdk = AppsflyerSdk(options);
     _appsflyerSdk!.onAppOpenAttribution((res) {
-      setState(() {
-      });
+      setState(() {});
     });
     _appsflyerSdk!.onInstallConversionData((res) {
-      setState(() {
-      });
+      setState(() {});
     });
     _appsflyerSdk!.onDeepLinking((DeepLinkResult dp) {
       switch (dp.status) {
@@ -156,16 +156,14 @@ class HomePageState extends State<HomePage> {
         case Status.PARSE_ERROR:
           break;
       }
-      setState(() {
-      });
+      setState(() {});
     });
     _appsflyerSdk!
         .initSdk(
             registerConversionDataCallback: true,
             registerOnAppOpenAttributionCallback: false,
             registerOnDeepLinkingCallback: true)
-        .then((value) {
-    });
+        .then((value) {});
   }
 
   getId() async {
@@ -207,6 +205,7 @@ class HomePageState extends State<HomePage> {
   }
 
   void _onLoading() {
+    isInfiniteLoading = true;
     page += 1;
     if (mounted) setState(() {});
     _refreshController.loadComplete();
@@ -220,7 +219,8 @@ class HomePageState extends State<HomePage> {
   }
 
   Stream streamController() => Stream.fromFuture(_fetchEventData.getEventData2(
-      page,
+      isInfiniteLoading ? page : 1,
+      isSearch,
       selectedFilter1,
       application.filterCategoryProvider,
       application.filterTimeProvider,
@@ -231,6 +231,7 @@ class HomePageState extends State<HomePage> {
       startDateController.text,
       endDateController.text,
       context));
+
   bool showMap = false;
   bool showOnline = false;
 
@@ -262,7 +263,6 @@ class HomePageState extends State<HomePage> {
     PermissionStatus permissionRequestedResult =
         await location.requestPermission();
     if (permissionRequestedResult == PermissionStatus.granted) {
-      
       geoLoc = await Geolocator.getCurrentPosition();
       klatitude = geoLoc!.latitude;
       klongitude = geoLoc!.longitude;
@@ -303,7 +303,8 @@ class HomePageState extends State<HomePage> {
         body: StreamBuilder(
           initialData: [],
           stream: streamController(),
-          builder: (context, AsyncSnapshot snapshot) {   
+          builder: (context, AsyncSnapshot snapshot) {
+            isInfiniteLoading = false;
             return SmartRefresher(
               key: _refresherKey,
               controller: _refreshController,
@@ -1168,251 +1169,262 @@ class HomePageState extends State<HomePage> {
                               //     padding: EdgeInsets.symmetric(horizontal: 8),
                               //     shrinkWrap: true,
                               //     itemBuilder: (context, index) {
-                              ChangeNotifierProvider(
-                                create: (_)=> ApplicationBloc(),
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 4),
-                                  child: Wrap(
-                                      runSpacing: 8,
-                                      spacing: 8,
-                                      alignment: WrapAlignment.center,
-                                      children: List.generate(
-                                          filterData1.length,
-                                          (index) => InkWell(
-                                                onTap: () {
-                                                  if (selectedFilter1.contains(
-                                                      filterData1[index])) {
-                                                    selectedFilter1.remove(
-                                                        filterData1[index]);
-                                                  } else {
-                                                    // if()
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 4),
+                                child: Wrap(
+                                    runSpacing: 8,
+                                    spacing: 8,
+                                    alignment: WrapAlignment.center,
+                                    children: List.generate(
+                                        filterData1.length,
+                                        (index) => InkWell(
+                                              onTap: () {
+                                                if (selectedFilter1.contains(
+                                                    filterData1[index])) {
+                                                  selectedFilter1.remove(
+                                                      filterData1[index]);
+                                                } else {
+                                                  // if()
+                                                  selectedFilter1
+                                                      .add(filterData1[index]);
+                                                }
+                                                if (index == 2 || index == 6) {
+                                                  if (index == 2) {
                                                     selectedFilter1
-                                                        .add(filterData1[index]);
+                                                        .remove(filterData1[6]);
                                                   }
-                                                  if (index == 2 || index == 6) {
-                                                    selectedFilter1
-                                                        .removeWhere((element) {
-                                                      if (element ==
+                                                  selectedFilter1
+                                                      .removeWhere((element) {
+                                                    if (element ==
+                                                            filterData1[2] ||
+                                                        element ==
+                                                            filterData1[6]) {
+                                                      return false;
+                                                    }
+                                                    return true;
+                                                  });
+                                                } else {
+                                                  selectedFilter1.removeWhere(
+                                                      (element) =>
+                                                          element ==
                                                               filterData1[2] ||
                                                           element ==
-                                                              filterData1[6]) {
-                                                        return false;
-                                                      }
-                                                      return true;
-                                                    });
-                                                  } else {
-                                                    selectedFilter1.removeWhere(
-                                                        (element) =>
-                                                            element ==
-                                                                filterData1[2] ||
-                                                            element ==
-                                                                filterData1[6]);
-                                                  }
-                                                  if(index == 2 && klatitude == null){
-                                                    selectedFilter1.remove(filterData1[2]);
-                                                    setLocation();
-                                                  }
-                                                  if(index == 2){
-                                                    print("`isnerer`");
-                                                    application.isNearme(true);
-                                                    print(application.isNearMe);
-                                                  }
-                                                  if(index == 6){
-                                                    application.isNearme(false);
-                                                    print("value false");
-                                                    print(application.isNearMe);
-                                                  }
-                                                  if(index == 5){
-                                                    print("searchData");
-                                                    selectedFilter1.remove(filterData1[2]);
-                                                  }
-                                                          print("index no. 5");
-                                                          print(index);
+                                                              filterData1[6]);
+                                                }
+                                                if (index == 2 &&
+                                                    klatitude == null) {
+                                                  selectedFilter1
+                                                      .remove(filterData1[2]);
+                                                  setLocation();
+                                                }
+                                                if (index == 2) {
+                                                  print("`isnerer`");
+                                                  application.isNearme(true);
+                                                  print(application.isNearMe);
+                                                }
+                                                if (index == 6) {
+                                                  application.isNearme(false);
+                                                  print("value false");
+                                                  print(application.isNearMe);
+                                                }
+                                                if (index == 5) {
+                                                  print("searchData");
+                                                  selectedFilter1
+                                                      .remove(filterData1[2]);
+                                                }
+                                  
+                                                print("index no. 5");
+                                                print(index);
 
-                                                  if(filterData1[index] ==
-                                                        'עיר מסויימת'){
-                                                          // selectedFilter1.remove(value);
-                                                        }
-                                                  
-                                                  // if(selectedFilter1.contains(filterData1[2]) || selectedFilter1.contains(filterData1[6])){
-                                                  //   if (selectedFilter1.contains(
-                                                  //     filterData1[index])){
-                                                  //   selectedFilter1.remove(
-                                                  //       filterData1[index]);
-                                                  // }else{
-                                                  //   selectedFilter1.add(filterData1[index]);
-                                                  // }
-                                                  // }else{
-                                                  //   if (selectedFilter1.contains(
-                                                  //     filterData1[index])) {
-                                                  //   selectedFilter1.remove(
-                                                  //       filterData1[index]);
-                                                  // } else if(!selectedFilter1.contains(filterData1[2]) || !selectedFilter1.contains(filterData1[5]) || !selectedFilter1.contains(filterData1[6])) {
-                                                  //   selectedFilter1.add(filterData1[index]);
-                                                  // }
-                                                  // }
-                                                  
-                              
-                                                  
-                              
-                                                  // print("This is delected");
-                                                  // print(selectedFilter1);
-                                                  setState(() {});
-                                                  selectFilter1 = index;
+                                                if (filterData1[index] ==
+                                                    'עיר מסויימת') {
+                                                  // selectedFilter1.remove(value);
+                                                }
+
+                                                // if(selectedFilter1.contains(filterData1[2]) || selectedFilter1.contains(filterData1[6])){
+                                                //   if (selectedFilter1.contains(
+                                                //     filterData1[index])){
+                                                //   selectedFilter1.remove(
+                                                //       filterData1[index]);
+                                                // }else{
+                                                //   selectedFilter1.add(filterData1[index]);
+                                                // }
+                                                // }else{
+                                                //   if (selectedFilter1.contains(
+                                                //     filterData1[index])) {
+                                                //   selectedFilter1.remove(
+                                                //       filterData1[index]);
+                                                // } else if(!selectedFilter1.contains(filterData1[2]) || !selectedFilter1.contains(filterData1[5]) || !selectedFilter1.contains(filterData1[6])) {
+                                                //   selectedFilter1.add(filterData1[index]);
+                                                // }
+                                                // }
+
+                                                // print("This is delected");
+                                                // print(selectedFilter1);
+                                                setState(() {});
+                                                selectFilter1 = index;
+                                                application
+                                                        .filterAnywhereProvider =
+                                                    filterData1[index]
+                                                        .replaceAll(
+                                                            'אונליין / זום',
+                                                            'online');
+                                                application.showOnline =
+                                                    !showOnline;
+                                                page = 1;
+
+                                                if (filterData1[index] ==
+                                                    'בכל מקום') {
+                                                  debugPrint("filter 1.1");
+                                                  application
+                                                      .filterCategoryProvider = '';
+                                                  // application.filterTimeProvider =
+                                                  //     '';
                                                   application
                                                           .filterAnywhereProvider =
-                                                      filterData1[index]
-                                                          .replaceAll(
-                                                              'אונליין / זום',
-                                                              'online');
-                                                  application.showOnline =
-                                                      !showOnline;
+                                                      'בכל מקום';
+                                                  categorySearchController
+                                                      .text = '';
+                                                  endDateController.text = '';
+                                                  startDateController.text = '';
+                                                  klatitude = null;
+                                                  klongitude = null;
                                                   page = 1;
-                              
-                                                  if (filterData1[index] ==
-                                                      'בכל מקום') {
-                                                    debugPrint("filter 1.1");
-                                                    application
-                                                        .filterCategoryProvider = '';
-                                                    // application.filterTimeProvider =
-                                                    //     '';
-                                                    application
-                                                            .filterAnywhereProvider =
-                                                        'בכל מקום';
-                                                    categorySearchController
-                                                        .text = '';
-                                                    endDateController.text = '';
-                                                    startDateController.text = '';
-                                                    klatitude = null;
-                                                    klongitude = null;
-                                                    page = 1;
-                                                  }
-                                                  if (filterData1[index] ==
-                                                      'קרוב אליי') {
-                                                        application
-                                                            .filterAnywhereProvider =
-                                                        'קרוב אליי';
-                                                        print("filter 1.2");
-                                                    debugPrint("filter 1.2");
-                                                    debugPrint(
-                                                        "print location near");
-                                                    debugPrint("${geoLoc}");
-                                                    debugPrint(
-                                                        "${geoLoc!.latitude}");
-                                                    debugPrint(
-                                                        "${geoLoc!.longitude}");
-                                                    debugPrint("location near");
-                                                    klatitude = geoLoc!.latitude;
-                                                    klongitude =
-                                                        geoLoc!.longitude;
-                                                    
-                                                      }
-                                                      if(filterData1[index] ==
-                                                      'בכל הארץ'){
-                                                         application.isNearme(false);
-                                                      }
-                                                  setState(() {});
-                                                },
-                                                child: filterData1[index] ==
-                                                        'עיר מסויימת'
-                                                    ? SizedBox(
+                                                }
+                                                if (filterData1[index] ==
+                                                    'קרוב אליי') {
+                                                  application
+                                                          .filterAnywhereProvider =
+                                                      'קרוב אליי';
+                                                  print("filter 1.2");
+                                                  debugPrint("filter 1.2");
+                                                  debugPrint(
+                                                      "print location near");
+                                                  debugPrint("${geoLoc}");
+                                                  debugPrint(
+                                                      "${geoLoc!.latitude}");
+                                                  debugPrint(
+                                                      "${geoLoc!.longitude}");
+                                                  debugPrint("location near");
+                                                  klatitude = geoLoc!.latitude;
+                                                  klongitude =
+                                                      geoLoc!.longitude;
+                                                }
+                                                if (filterData1[index] ==
+                                                    'בכל הארץ') {
+                                                  application.isNearme(false);
+                                                }
+                                                page = 1;
+                                                setState(() {});
+                                                isSearch = false;
+                                              },
+                                              child: filterData1[index] ==
+                                                      'עיר מסויימת'
+                                                  ? SizedBox(
                                                       width: 120,
+                                                      height: 80,
                                                       child: Padding(
-                                                          padding: const EdgeInsets
-                                                              .symmetric(
-                                                            vertical: 4,
-                                                          ),
-                                                          child: Directionality(
-                                                            textDirection:
-                                                                TextDirection.rtl,
-                                                            child:
-                                                                ReceivingPaymentFields(
-                                                              borderRadius: 12,
-                                                              textAlign:
-                                                                  TextAlign.center,
-                                                              fillcolor: MyColors
-                                                                  .lightBlue,
-                                                              isFocus: true,
-                                                              textColorPrimary:
-                                                                  Colors.white,
-                                                              maxLine: 1,
-                                                              showRequired: false,
-                                                              isBorder: true,
-                                                              showLabel: false,
-                                                              controller:
-                                                                  locationController,
-                                                              onChange: (v) {
-                                                                setState(() {
-                                                                  application
-                                                                      .searchPlaces(
-                                                                          locationController
-                                                                              .text);
-                                                                });
-                                                              },
-                                                              onTap: () {
-                                                                application
-                                                                        .filterAnywhereProvider =
-                                                                    'עיר מסויימת';
-                                                                    if(index == 5){
-                                                                      selectedFilter1.remove(filterData1[2]);
-                                                                    }
-                                                                setState(() {});
-                                                              },
-                                                              // onChange: (v) {
-                                                              //   locationController.text = v;
-                                                              //   application.searchPlaces(v);
-                                                              //   print('eeeeeeeeeeeeeeee$v');
-                                                              //   setState(() {});
-                                                              // },
-                                                              // onFieldSubmit: (v) {
-                                                              //   locationController.text = v;
-                              
-                                                              //   application.searchPlaces(v);
-                                                              //   print('eeeeeeeeeeeeeeee$v');
-                                                              // },
-                                                              textColor:
-                                                                  Colors.white,
-                                                              obscureText: false,
-                                                              hintText:
-                                                                  'הקלד/י עיר',
-                                                              // suffixIcon: IconButton(
-                                                              //   icon: const Icon(
-                                                              //     Icons.close,
-                                                              //     color: Colors.white,
-                                                              //   ),
-                                                              //   onPressed: () {
-                                                              //     setState(() {
-                                                              //       application
-                                                              //               .filterAnywhereProvider =
-                                                              //           null;
-                                                              //       locationController
-                                                              //           .clear();
-                                                              //     });
-                                                              //   },
-                                                              // ),
-                                                            ),
-                                                          ),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                          vertical: 4,
                                                         ),
-                                                    )
-                                                    : Directionality(
-                                                        textDirection:
-                                                            TextDirection.rtl,
-                                                        child: FilterCardWidget(
-                                                          fontsize: 12.sp,
-                                                          text:
-                                                              filterData1[index],
-                                                          color: selectedFilter1
-                                                                  .contains(
-                                                                      filterData1[
-                                                                          index])
-                                                              ? MyColors.lightRed
-                                                              : MyColors
-                                                                  .lightBlue,
+                                                        child: Directionality(
+                                                          textDirection:
+                                                              TextDirection.rtl,
+                                                          child:
+                                                              ReceivingPaymentFields(
+                                                            borderRadius: 12,
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            fillcolor: MyColors
+                                                                .lightBlue,
+                                                            isFocus: true,
+                                                            textColorPrimary:
+                                                                Colors.white,
+                                                            maxLine: 1,
+                                                            showRequired: false,
+                                                            isBorder: true,
+                                                            showLabel: false,
+                                                            controller:
+                                                                locationController,
+                                                            onFieldSubmit: (v) {
+                                                              setState(() {
+                                                                application.searchPlaces(
+                                                                    locationController
+                                                                        .text);
+                                                              });
+
+                                                              page = 1;
+                                                            },
+                                                            onTap: () {
+                                                              application
+                                                                      .filterAnywhereProvider =
+                                                                  'עיר מסויימת';
+                                                              if (index == 5) {
+                                                                selectedFilter1
+                                                                    .remove(
+                                                                        filterData1[
+                                                                            2]);
+                                                              }
+                                                              isSearch = true;
+                                                              setState(() {});
+
+                                                            },
+                                                            // onChange: (v) {
+                                                            //   locationController.text = v;
+                                                            //   application.searchPlaces(v);
+                                                            //   print('eeeeeeeeeeeeeeee$v');
+                                                            //   setState(() {});
+                                                            // },
+                                                            // onFieldSubmit: (v) {
+                                                            //   locationController.text = v;
+
+                                                            //   application.searchPlaces(v);
+                                                            //   print('eeeeeeeeeeeeeeee$v');
+                                                            // },
+                                                            textColor:
+                                                                Colors.white,
+                                                            obscureText: false,
+                                                            hintText:
+                                                                'הקלד/י עיר',
+                                                            // suffixIcon: IconButton(
+                                                            //   icon: const Icon(
+                                                            //     Icons.close,
+                                                            //     color: Colors.white,
+                                                            //   ),
+                                                            //   onPressed: () {
+                                                            //     setState(() {
+                                                            //       application
+                                                            //               .filterAnywhereProvider =
+                                                            //           null;
+                                                            //       locationController
+                                                            //           .clear();
+                                                            //     });
+                                                            //   },
+                                                            // ),
+                                                          ),
                                                         ),
                                                       ),
-                                              ))),
-                                ),
+                                                    )
+                                                  : Directionality(
+                                                      textDirection:
+                                                          TextDirection.rtl,
+                                                      child: FilterCardWidget(
+                                                        fontsize: 12.sp,
+                                                        text:
+                                                            filterData1[index],
+                                                        color: selectedFilter1
+                                                                .contains(
+                                                                    filterData1[
+                                                                        index])
+                                                            ? MyColors.lightRed
+                                                            : MyColors
+                                                                .lightBlue,
+                                                      ),
+                                                    ),
+                                            ))),
                               ),
                               SizedBox(
                                 height: 40,
@@ -1675,7 +1687,6 @@ class HomePageState extends State<HomePage> {
                                   ),
                                 ),
                               ),
-
                               // if (showToolBar)
                               GridView.builder(
                                 physics: ScrollPhysics(),
@@ -1697,7 +1708,6 @@ class HomePageState extends State<HomePage> {
                                       //   dropItemsHandler[index] = value!;
                                       // });
                                       page = 1;
-
                                       value = !value!;
                                       dropItemsHandler[index] = value!;
                                       if (!selectedDropItems
@@ -1711,15 +1721,16 @@ class HomePageState extends State<HomePage> {
                                             .replaceAll('[', '')
                                             .replaceAll(']', '')
                                             .replaceAll(', ', ',')
-                                            .replaceAll('סדנת יצירה', 'workshop')
                                             .replaceAll(
-                                                'הופעה', 'show')
+                                                'סדנת יצירה', 'workshop')
+                                            .replaceAll('הופעה', 'show')
                                             .replaceAll('מפגש חברתי', 'group')
                                             .replaceAll('חוויה לילדים', 'kids')
                                             .replaceAll('סדנת בישול', 'food')
                                             // .replaceAll(
                                             //     'סדנת בישול/אפיה', 'food')
-                                            .replaceAll('סדנת גוף/נפש', 'body-mind')
+                                            .replaceAll(
+                                                'סדנת גוף/נפש', 'body-mind')
                                             .replaceAll(
                                                 'סדנת גוף/נפש', 'body-mind')
                                             .replaceAll(
@@ -1946,7 +1957,9 @@ class HomePageState extends State<HomePage> {
                                       child: ReceivingPaymentFields(
                                         borderRadius: 15.0,
                                         textAlign: TextAlign.center,
-                                        onTap: () {},
+                                        onTap: () {
+                                        
+                                        },
                                         textInputAction: TextInputAction.done,
                                         keyboardType: TextInputType.name,
                                         fillcolor: Colors.white,
@@ -2104,7 +2117,7 @@ class HomePageState extends State<HomePage> {
                           delegate: SliverChildBuilderDelegate(
                             (BuildContext context, int index) {
                               // final items = _fetchEventData.data;
-                              if ((snapshot.data??[]).length == 0 &&
+                              if ((snapshot.data ?? []).length == 0 &&
                                   snapshot.connectionState ==
                                       ConnectionState.done) {
                                 return Text('data');
@@ -2118,7 +2131,7 @@ class HomePageState extends State<HomePage> {
                                 );
                               }
                             },
-                            childCount: (snapshot.data??[]).length,
+                            childCount: snapshot.data != null ? snapshot.data.length : [],
                           ),
                         ),
                   SliverList(

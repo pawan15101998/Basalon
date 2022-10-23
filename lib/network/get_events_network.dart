@@ -27,6 +27,7 @@ class FetchEventData {
   String? eventId;
   dynamic rating;
   String? commentContent;
+  bool isAlertOpened = false;
 
   var dio = Dio();
   List data = [];
@@ -37,6 +38,8 @@ class FetchEventData {
   dynamic categoryData;
   Position? geoLoc;
   String isNear = '';
+  String timeValue = '';
+  String loc = '';
   setLocation() async {
     geoLoc = await Geolocator.getCurrentPosition();
 
@@ -91,8 +94,10 @@ class FetchEventData {
         "show_featured": "",
       });
       final result = HomeData.fromJson(response['body']);
+      data = [];
+
       if (response['status'] == 401) {
-        return errorAlertMessage('no event found', '', context);
+        // errorAlertMessage('no event found', '', context);
       } else {
         if (page > 1) {
           data = [...data, ...?result.data];
@@ -102,7 +107,6 @@ class FetchEventData {
         EasyLoading.dismiss();
       }
     } catch (e) {
-     
       EasyLoading.dismiss();
       if (keyword != null && keyword != '') {
         data = [];
@@ -128,12 +132,13 @@ class FetchEventData {
   getFilterEnglishName(val) {
     var res =
         greekToEng.firstWhere((element) => element['greekName'] == val.trim());
-   
+
     return res['englishName'];
   }
 
   Future getEventData2(
       page,
+      isSearch,
       List locdata,
       filterByCategory,
       filterByTime,
@@ -145,15 +150,25 @@ class FetchEventData {
       endDate,
       BuildContext context) async {
     var filteer = [];
-    if(filterByAnyWhere == 'קרוב אליי'){
+    if (filterByAnyWhere == 'קרוב אליי') {
       isNear = 'קרוב אליי';
-    }else if(filterByAnyWhere == 'בכל הארץ'){
+    } else if (filterByAnyWhere == 'בכל הארץ') {
       isNear = 'בכל הארץ';
     }
+    if(filterByAnyWhere == 'קרוב אליי'){
+      loc = 'קרוב אליי';
+    }
+    timeValue = filterByTime;
     print("filterbykeyword");
+    print(filterByTime);
+    print(keyword);
+    print(isNear);
+    print(filterByAnyWhere);
     print(application.filterAnywhereProvider);
     print(isNear);
     locdata.map((val) => {filteer.add(getFilterEnglishName(val))}).toList();
+        print(filteer.last);
+
     var body = {
       "event_state": filteer.join(","),
       "column": "three-column",
@@ -162,20 +177,35 @@ class FetchEventData {
       "show_featured": "",
       "keyword": keyword != "" || keyword != null ? "$keyword" : "",
       "cat": "${filterByCategory ?? ''}",
-      "map_lat": filterByAnyWhere == 'עיר מסויימת' ? mapLat : 
-                filterByAnyWhere == 'בכל מקום' ? mapLat : 
-                filterByAnyWhere == 'מרכז' ? mapLat :
-                filterByAnyWhere == 'קרוב אליי' ? mapLat : 
-                mapLat,
-      "map_lng": filterByAnyWhere == 'עיר מסויימת' ?mapLng : 
-                filterByAnyWhere == 'בכל מקום' ? mapLng:
-                filterByAnyWhere == 'קרוב אליי' ? mapLng:
-                mapLng,
+      "map_lat": loc == 'קרוב אליי' ? mapLat : null,
+      // filterByAnyWhere == 'עיר מסויימת'
+      //     ? mapLat
+      //     : filterByAnyWhere == 'בכל מקום'
+      //         ? mapLat
+      //         : filterByAnyWhere == 'מרכז'
+      //             ? mapLat
+      //             : filterByAnyWhere == 'קרוב אליי'
+      //                 ? mapLat
+      //                 : null,
+      "map_lng": loc == 'קרוב אליי' ? mapLng : null,
+      // filterByAnyWhere == 'עיר מסויימת'
+      //     ? mapLng
+      //     : filterByAnyWhere == 'בכל מקום'
+      //         ? mapLng
+      //         : filterByAnyWhere == 'קרוב אליי'
+      //             ? mapLng
+      //             : null,
       "start_date": "$startDate",
       "end_date": "$endDate",
-      "time":
-          "${filterByTime}",
-      "sort": isNear == 'קרוב אליי' ? 'near' : isNear == 'בכל הארץ'?  'start-date': "",
+      "time": "${filterByTime}",
+      "sort": (isNear == 'קרוב אליי' && timeValue == filterByTime)
+          ? 'near'
+          : (isNear =='קרוב אליי' && filterByTime == null)
+              ? 'near'
+              : (isNear == 'בכל הארץ' && filterByTime == null)
+              ? 'start-date'
+              :(isNear == 'בכל הארץ' && filterByTime == timeValue)
+              ? "":keyword == ""? 'near': "",
       // (filterByAnyWhere == 'עיר מסויימת' ||
       //         filterByAnyWhere == 'קרוב אליי' ||
       //         application.filterAnywhereProvider == 'קרוב אליי')
@@ -186,13 +216,20 @@ class FetchEventData {
       "type": "type5",
       "paged": "$page"
     };
-print(body);
+    print(body);
     try {
       configLoading();
-      final response = await ApiProvider.post(url: 'get_event_search', body: body);
+      final response =
+          await ApiProvider.post(url: 'get_event_search', body: body);
+      data = [];
+
       final result = HomeData.fromJson(response['body']);
       if (response['body']['success'] == 401) {
-        return errorAlertMessage('no event found', '', context);
+        if (!isAlertOpened) {
+        isAlertOpened = true;
+          errorAlertMessage('no event found', '', context);
+        }else {
+        }
       } else {
         if (page > 1) {
           data = [...data, ...?result.data];
@@ -217,8 +254,7 @@ print(body);
           await ApiProvider.post(url: 'get_event_detail', body: {"id": "$id"});
       final result = Welcome.fromJson(response['body']);
       eventData = result;
-    } catch (e) {
-    }
+    } catch (e) {}
     return eventData;
   }
 
@@ -228,8 +264,7 @@ print(body);
       final result = FilterCategoryModel.fromJson(response['body']);
 
       filterCategoryModel = result;
-    } catch (e) {
-    }
+    } catch (e) {}
     return filterCategoryModel;
   }
 
@@ -243,8 +278,7 @@ print(body);
         'comment_content': '$commentContent',
       });
       errorAlertMessage('Waiting for approval', '', context);
-    } catch (e) {
-    }
+    } catch (e) {}
   }
 
   Future sendEmailToAuthor(
@@ -266,8 +300,7 @@ print(body);
         'content': '$content',
       });
       errorAlertMessage('Mail Sent Successfully!', '', context);
-    } catch (e) {
-    }
+    } catch (e) {}
   }
 
   void errorAlertMessage(
@@ -284,8 +317,12 @@ print(body);
         ),
         actions: <Widget>[
           TextButton(
-            onPressed: () => Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => HomePage())),
+            onPressed: () {
+              isAlertOpened = false;
+              Navigator.of(context).pop();
+            },
+            // onPressed: () => Navigator.pushReplacement(
+            //     context, MaterialPageRoute(builder: (context) => HomePage())),
             child: const Text('OK'),
           ),
         ],
