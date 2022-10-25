@@ -40,7 +40,6 @@ class EventCardState extends State<EventCard> {
   @override
   void initState() {
     super.initState();
-    print("dateee");
     // print(widget.datum.markerDate);
   }
 
@@ -468,7 +467,7 @@ class EventCardState extends State<EventCard> {
                           child: Text(
                               '${widget.datum.markerPrice}',
                               style:
-                                  TextStyle(fontSize: 14, color: Colors.white)),
+                                  TextStyle(fontSize: 20, color: Colors.white)),
                         ),]
                     //   ),
                     // )
@@ -541,6 +540,7 @@ class EventCardState extends State<EventCard> {
                   ),
               ],
             ),
+            // SizedBox(height: 0.0,),
             Align(
               alignment: Alignment.topRight,
               child: Column(
@@ -553,9 +553,10 @@ class EventCardState extends State<EventCard> {
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             SizedBox(
-                              height: 10,
+                              // height: 10,
                             ),
                                
                            (widget.datum.numberComment != 0 &&
@@ -568,15 +569,12 @@ class EventCardState extends State<EventCard> {
                                   // mainAxisAlignment: MainAxisAlignment.end,
                                   // crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
-                                    Padding(
-                                padding: const EdgeInsets.only(right: 7, top: 16),
-                                child: SizedBox(
-                                  // width: 200,
-                                  child: Text('${widget.datum.title}',
-                                      textDirection: TextDirection.rtl,
-                                      style: ktextStyleBoldMedium),
-                                ),
-                                                          ),
+                                    SizedBox(
+                                      // width: 200,
+                                      child: Text('${widget.datum.title}',
+                                          textDirection: TextDirection.rtl,
+                                          style: ktextStyleBoldMedium),
+                                    ),
                                     // Padding(
                                     //   padding: const EdgeInsets.only(left: 8.0),
                                     //   child: Row(
@@ -700,85 +698,95 @@ class EventCardState extends State<EventCard> {
                                     ),
                                   ),
                                   // if(widget.datum.eventDate.isNotEmpty)
-                                  RichText(
-                                    textAlign: TextAlign.end,
-                                    text: TextSpan(
-                                        text: "....${dateSplit.day}, ",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black,
-                                            fontSize: 18),
-                                        children: [
-                                          // TextSpan(
-                                          //   text: " | ",
-                                          //   style: TextStyle(
-                                          //     color: Colors.black,
-                                          //     fontWeight: FontWeight.bold,
-                                          //     fontSize: 16,
-                                          //   ),
-                                          // ),
-
-                                          // for(int i=0; i< (widget.datum.eventDate.length > 3 ? 3 :widget.datum.eventDate.length) ; i++)
-                                          
-                                          // if(widget.datum.eventDate.isNotEmpty)
-                                          TextSpan(
-                                            text:("${widget.datum.eventDate[0].startDate}, "),
-                                            style: TextStyle(
-                                              color: Colors.black,
+                                  Flexible(
+                                    child: RichText(
+                                      textAlign: TextAlign.end,
+                                      text: TextSpan(
+                                          text: "....${dateSplit.day}",
+                                          style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                          if(widget.datum.eventDate.isNotEmpty)
-                                           TextSpan(
-                                            text: "${widget.datum.eventDate[0].startTime}",
-                                            style: TextStyle(
                                               color: Colors.black,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16,
+                                              fontSize: 18),
+                                          children: [
+                                            TextSpan(
+                                              text: " | ",
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18,
+                                              ),
                                             ),
-                                          ),
-                                           TextSpan(
-                                            text: " או ",
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16,
+                                  
+                                            // for(int i=0; i< (widget.datum.eventDate.length > 3 ? 3 :widget.datum.eventDate.length) ; i++)
+                                            
+                                            // if(widget.datum.eventDate.isNotEmpty)
+                                            TextSpan(
+                                              text:("${widget.datum.eventDate[0].startDate}"),
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18,
+                                              ),
                                             ),
-                                          ),
-                                          for(int i=1; i< (widget.datum.eventDate.length > 3 ? 3 :widget.datum.eventDate.length) ; i++)
-
-                                         
-                                          // if(widget.datum.eventDate.isNotEmpty && widget.datum.eventDate[1] != null)
-                                          TextSpan(
-                                            text: '${widget.datum.eventDate[i].startDate} | ',
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.normal,
-                                              fontSize: 16,
+                                            TextSpan(
+                                              text: " | ",
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18,
+                                              ),
                                             ),
-                                          ),
-                                          //  TextSpan(
-                                          //   text: " | ",
-                                          //   style: TextStyle(
-                                          //     color: Colors.black,
-                                          //     fontWeight: FontWeight.bold,
-                                          //     fontSize: 16,
-                                          //   ),
-                                          // ),
-                                          // if(widget.datum.eventDate.isNotEmpty && widget.datum.eventDate[2] != null)
-                                          // TextSpan(
-                                          //   text: '${widget.datum.eventDate[2].startDate}',
-                                          //   style: TextStyle(
-                                          //     color: Colors.black,
-                                          //     fontWeight: FontWeight.normal,
-                                          //     fontSize: 16,
-                                          //   ),
-                                          // ),
-                                        ]),
+                                            if(widget.datum.eventDate.isNotEmpty)
+                                             TextSpan(
+                                              text: "${widget.datum.eventDate[0].startTime}",
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                             TextSpan(
+                                              text: " ובתאריכים נוספים",
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                            // for(int i=1; i< (widget.datum.eventDate.length > 3 ? 3 :widget.datum.eventDate.length) ; i++)
+                                  
+                                           
+                                            // // if(widget.datum.eventDate.isNotEmpty && widget.datum.eventDate[1] != null)
+                                            // TextSpan(
+                                            //   text: '${widget.datum.eventDate[i].startDate} | ',
+                                            //   style: TextStyle(
+                                            //     color: Colors.black,
+                                            //     fontWeight: FontWeight.normal,
+                                            //     fontSize: 16,
+                                            //   ),
+                                            // ),
+                                            //  TextSpan(
+                                            //   text: " | ",
+                                            //   style: TextStyle(
+                                            //     color: Colors.black,
+                                            //     fontWeight: FontWeight.bold,
+                                            //     fontSize: 16,
+                                            //   ),
+                                            // ),
+                                            // if(widget.datum.eventDate.isNotEmpty && widget.datum.eventDate[2] != null)
+                                            // TextSpan(
+                                            //   text: '${widget.datum.eventDate[2].startDate}',
+                                            //   style: TextStyle(
+                                            //     color: Colors.black,
+                                            //     fontWeight: FontWeight.normal,
+                                            //     fontSize: 16,
+                                            //   ),
+                                            // ),
+                                          ]),
+                                    ),
                                   ),
                                   SizedBox(
-                                    width: 12,
+                                    width: 5,
                                   ),
                                   Image.asset(
                                     'assets/icons/calendar.jpeg',
@@ -883,6 +891,7 @@ class EventCardState extends State<EventCard> {
                                                               ? ' | '
                                                               : '',
                                                           style: TextStyle(
+                                                        
                                                               fontSize: 16)),
                                                       TextSpan(
                                                           text: (widget.datum
@@ -897,12 +906,13 @@ class EventCardState extends State<EventCard> {
                                                               ? 'במרחק ${widget.datum.distance < 1 ? (widget.datum.distance * 1000).round() : widget.datum.distance.toStringAsFixed(2)} ${widget.datum.distance < 1 ? 'מטרים' : 'ק"מ'}'
                                                               : '',
                                                           style: TextStyle(
+                                                            fontWeight: FontWeight.bold,
                                                               color:
                                                                   Colors.red)),
                                                     ])),
                                           ),
                                           SizedBox(
-                                    width: 12,
+                                    width: 5,
                                   ),
                                           // Expanded(
                                           //   child: Text(
@@ -958,15 +968,16 @@ class EventCardState extends State<EventCard> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Expanded(
-                                      child: Container(
-                                        height: 35,
-                                        padding:
-                                            EdgeInsets.symmetric(horizontal: 2),
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: MyColors.greenButton,
-                                                width: 2)),
+                                    Container(
+                                      height: 35,
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 2),
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: MyColors.greenButton,
+                                              width: 2)),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(5.0),
                                         child: Center(
                                           child: RichText(
                                               maxLines: 1,

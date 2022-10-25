@@ -69,7 +69,7 @@ class HomePageState extends State<HomePage> {
   int countCat = 0;
   bool? value = false;
   bool isInfiniteLoading = false;
-
+  List Search = [];
   // dynamic filterCategory;
   dynamic filterByTime;
   dynamic filterByAnywhere;
@@ -107,6 +107,8 @@ class HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+       _refreshController.loadComplete();
+
     getId();
     selectedFilter1.add(filterData1[0]);
     selectedFilter1.add(filterData1[1]);
@@ -204,16 +206,18 @@ class HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  void _onLoading() {
+  void _onLoading()async {
     isInfiniteLoading = true;
     page += 1;
+    print("this is mounted");
     if (mounted) setState(() {});
-    _refreshController.loadComplete();
+    await Future.delayed(Duration(milliseconds: 4000));
+   _refreshController.loadComplete();
   }
 
   void _onRefresh() async {
-    await Future.delayed(Duration(milliseconds: 1000));
-    page = 1;
+    page == 1;
+    // await Future.delayed(Duration(milliseconds: 5000));
     setState(() {});
     _refreshController.refreshCompleted();
   }
@@ -221,6 +225,7 @@ class HomePageState extends State<HomePage> {
   Stream streamController() => Stream.fromFuture(_fetchEventData.getEventData2(
       isInfiniteLoading ? page : 1,
       isSearch,
+      Search,
       selectedFilter1,
       application.filterCategoryProvider,
       application.filterTimeProvider,
@@ -274,6 +279,7 @@ class HomePageState extends State<HomePage> {
       application.filterAnywhereProvider = filterData1[1];
       selectedFilter1.clear();
       selectedFilter1.add(filterData1[2]);
+      application.setFilterByAnywhere('קרוב אליי');
       setState(() {});
     }
   }
@@ -285,7 +291,7 @@ class HomePageState extends State<HomePage> {
   final translator = GoogleTranslator();
   Translation? translatedData;
   dynamic increaseHeight = 20.0;
-
+  List data = [];
   DateTime timeBackPressed = DateTime.now();
   String? val;
 
@@ -304,14 +310,15 @@ class HomePageState extends State<HomePage> {
           initialData: [],
           stream: streamController(),
           builder: (context, AsyncSnapshot snapshot) {
-            isInfiniteLoading = false;
+          isInfiniteLoading = false;
+          data = snapshot.data;
             return SmartRefresher(
               key: _refresherKey,
               controller: _refreshController,
               enablePullUp: true,
               enablePullDown: false,
-              onRefresh: _onRefresh,
-              onLoading: _onLoading,
+              onRefresh: _onRefresh ,
+              onLoading:  _onLoading,
               footer: CustomFooter(
                 builder: (BuildContext context, LoadStatus? mode) {
                   Widget body;
@@ -470,16 +477,16 @@ class HomePageState extends State<HomePage> {
                                             ),
                                           ),
                                           const SizedBox(height: 10),
+                                          // Text(
+                                          //   'גלו סדנאות, הרצאות, הופעות,',
+                                          //   textAlign: TextAlign.center,
+                                          //   textDirection: TextDirection.rtl,
+                                          //   style: ktextStyleWhiteLarge
+                                          //       .copyWith(fontSize: 17.sp),
+                                          //   // maxLines: 1,
+                                          // ),
                                           Text(
-                                            'גלו סדנאות, הרצאות, הופעות,',
-                                            textAlign: TextAlign.center,
-                                            textDirection: TextDirection.rtl,
-                                            style: ktextStyleWhiteLarge
-                                                .copyWith(fontSize: 17.sp),
-                                            // maxLines: 1,
-                                          ),
-                                          Text(
-                                            ' אירוחים קולינריים ומפגשים חברתיים',
+                                            'גלו חוויות ואירועים שווים',
                                             textAlign: TextAlign.center,
                                             style: ktextStyleWhiteLarge
                                                 .copyWith(fontSize: 17.sp),
@@ -1194,6 +1201,10 @@ class HomePageState extends State<HomePage> {
                                                     selectedFilter1
                                                         .remove(filterData1[6]);
                                                   }
+                                                  if (index == 6){
+                                                    selectedFilter1
+                                                        .remove(filterData1[2]);
+                                                  }
                                                   selectedFilter1
                                                       .removeWhere((element) {
                                                     if (element ==
@@ -1233,7 +1244,8 @@ class HomePageState extends State<HomePage> {
                                                   selectedFilter1
                                                       .remove(filterData1[2]);
                                                 }
-                                  
+                                                Search = selectedFilter1;
+                                                print(Search);
                                                 print("index no. 5");
                                                 print(index);
 
@@ -1323,53 +1335,56 @@ class HomePageState extends State<HomePage> {
                                                       'עיר מסויימת'
                                                   ? SizedBox(
                                                       width: 120,
-                                                      height: 80,
+                                                      // height: 80,
                                                       child: Padding(
                                                         padding:
                                                             const EdgeInsets
                                                                 .symmetric(
-                                                          vertical: 4,
+                                                          vertical: 2,
                                                         ),
                                                         child: Directionality(
                                                           textDirection:
                                                               TextDirection.rtl,
                                                           child:
-                                                              ReceivingPaymentFields(
+                                                              SizedBox(
+                                                                height: 44,
+                                                                child: ReceivingPaymentFields(
                                                             borderRadius: 12,
                                                             textAlign: TextAlign
-                                                                .center,
+                                                                  .center,
                                                             fillcolor: MyColors
-                                                                .lightBlue,
+                                                                  .lightBlue,
                                                             isFocus: true,
                                                             textColorPrimary:
-                                                                Colors.white,
+                                                                  Colors.white,
                                                             maxLine: 1,
                                                             showRequired: false,
                                                             isBorder: true,
                                                             showLabel: false,
                                                             controller:
-                                                                locationController,
+                                                                  locationController,
                                                             onFieldSubmit: (v) {
-                                                              setState(() {
-                                                                application.searchPlaces(
-                                                                    locationController
-                                                                        .text);
-                                                              });
+                                                                setState(() {
+                                                                  application.searchPlaces(
+                                                                      locationController
+                                                                          .text);
+                                                                });
 
-                                                              page = 1;
+                                                                page = 1;
+                                                                // selectedFilter1 = [];
                                                             },
                                                             onTap: () {
-                                                              application
-                                                                      .filterAnywhereProvider =
-                                                                  'עיר מסויימת';
-                                                              if (index == 5) {
-                                                                selectedFilter1
-                                                                    .remove(
-                                                                        filterData1[
-                                                                            2]);
-                                                              }
-                                                              isSearch = true;
-                                                              setState(() {});
+                                                                application
+                                                                        .filterAnywhereProvider =
+                                                                    'עיר מסויימת';
+                                                                if (index == 5) {
+                                                                  selectedFilter1
+                                                                      .remove(
+                                                                          filterData1[
+                                                                              2]);
+                                                                }
+                                                                isSearch = true;
+                                                                setState(() {});
 
                                                             },
                                                             // onChange: (v) {
@@ -1385,10 +1400,10 @@ class HomePageState extends State<HomePage> {
                                                             //   print('eeeeeeeeeeeeeeee$v');
                                                             // },
                                                             textColor:
-                                                                Colors.white,
+                                                                  Colors.white,
                                                             obscureText: false,
                                                             hintText:
-                                                                'הקלד/י עיר',
+                                                                  'הקלד/י עיר',
                                                             // suffixIcon: IconButton(
                                                             //   icon: const Icon(
                                                             //     Icons.close,
@@ -1405,6 +1420,7 @@ class HomePageState extends State<HomePage> {
                                                             //   },
                                                             // ),
                                                           ),
+                                                              ),
                                                         ),
                                                       ),
                                                     )
@@ -1470,7 +1486,11 @@ class HomePageState extends State<HomePage> {
                                                 'בשבוע הבא', 'next_week')
                                             .replaceFirst('תאריך מסויים',
                                                 'specific_date');
-
+                                                print(application.filterTimeProvider);
+                                                 if(!(application.filterTimeProvider == 'תאריך מסויים')){
+                                                  startDateController.text = '';
+                                                  endDateController.text = "";
+                                                 }
                                         page = 1;
                                         application.filterTimeProvider =
                                             realvalue;
@@ -1901,7 +1921,7 @@ class HomePageState extends State<HomePage> {
                                                     TextDirection.rtl,
                                                 child: Container(
                                                   padding: EdgeInsets.symmetric(
-                                                      horizontal: width * 0.058,
+                                                      // horizontal: width * 0.058,
                                                       vertical: 12),
                                                   decoration: BoxDecoration(
                                                     color: selectedDropItems
@@ -1914,7 +1934,19 @@ class HomePageState extends State<HomePage> {
                                                             13),
                                                   ),
                                                   child: Text(
-                                                    dropItems[index].toString(),
+                                                    dropItems[index].toString() == 'סדנת יצירה'?
+                                                    "${dropItems[index]} 🎨" :
+                                                    dropItems[index].toString() == 'הופעה'?
+                                                    "${dropItems[index]} 🎤":
+                                                    dropItems[index].toString() == 'מפגש חברתי'?
+                                                    "${dropItems[index]} 😀":
+                                                    dropItems[index].toString() == 'חוויה לילדים'?
+                                                    "${dropItems[index]} 🧒":
+                                                    dropItems[index].toString() == 'סדנת בישול'?
+                                                    "${dropItems[index]} 🍲":
+                                                    dropItems[index].toString() == 'סדנת גוף/נפש'?
+                                                    "${dropItems[index]} 🧘":"",
+                                                    // dropItems[index].toString(),
                                                     maxLines: 1,
                                                     textAlign: TextAlign.center,
                                                     style: dropItems[index]
@@ -1922,7 +1954,7 @@ class HomePageState extends State<HomePage> {
                                                                 .length >
                                                             8
                                                         ? TextStyle(
-                                                            fontSize: 12.sp,
+                                                            fontSize:dropItems[index].toString() == 'סדנת גוף/נפש'? 11.sp: 12.sp,
                                                             fontFamily:
                                                                 "Helvetica",
                                                             fontWeight:
@@ -2131,7 +2163,7 @@ class HomePageState extends State<HomePage> {
                                 );
                               }
                             },
-                            childCount: snapshot.data != null ? snapshot.data.length : [],
+                            childCount: snapshot.data != null ? snapshot.data.length : 0,
                           ),
                         ),
                   SliverList(

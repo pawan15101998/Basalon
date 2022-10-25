@@ -94,7 +94,10 @@ class FetchEventData {
         "show_featured": "",
       });
       final result = HomeData.fromJson(response['body']);
-      data = [];
+     
+    //  if(data.isEmpty && page == 1){
+    //   data = [];
+    //  }
 
       if (response['status'] == 401) {
         // errorAlertMessage('no event found', '', context);
@@ -111,7 +114,7 @@ class FetchEventData {
       if (keyword != null && keyword != '') {
         data = [];
       }
-      data = [];
+      // data = [];
     }
     return data;
   }
@@ -139,6 +142,7 @@ class FetchEventData {
   Future getEventData2(
       page,
       isSearch,
+      Search,
       List locdata,
       filterByCategory,
       filterByTime,
@@ -150,6 +154,7 @@ class FetchEventData {
       endDate,
       BuildContext context) async {
     var filteer = [];
+    var searchLoc = [];
     if (filterByAnyWhere == 'קרוב אליי') {
       isNear = 'קרוב אליי';
     } else if (filterByAnyWhere == 'בכל הארץ') {
@@ -160,17 +165,15 @@ class FetchEventData {
     }
     timeValue = filterByTime;
     print("filterbykeyword");
-    print(filterByTime);
-    print(keyword);
-    print(isNear);
     print(filterByAnyWhere);
-    print(application.filterAnywhereProvider);
-    print(isNear);
     locdata.map((val) => {filteer.add(getFilterEnglishName(val))}).toList();
         print(filteer.last);
+    Search.map((val)=>{searchLoc.add(getFilterEnglishName(val))}).toList();
+    print("SearchLoc");
+    print(searchLoc.join(','));
 
     var body = {
-      "event_state": filteer.join(","),
+      "event_state": searchLoc.isNotEmpty ? searchLoc.join(","): filteer.join(","),
       "column": "three-column",
       "event_type": filterByAnyWhere == 'online' ? 'online' : 'classic',
       "el_data_taxonomy_custom[]": "",
@@ -205,7 +208,7 @@ class FetchEventData {
               : (isNear == 'בכל הארץ' && filterByTime == null)
               ? 'start-date'
               :(isNear == 'בכל הארץ' && filterByTime == timeValue)
-              ? "":keyword == ""? 'near': "",
+              ? "": mapLng == null? "": "",
       // (filterByAnyWhere == 'עיר מסויימת' ||
       //         filterByAnyWhere == 'קרוב אליי' ||
       //         application.filterAnywhereProvider == 'קרוב אליי')
@@ -216,18 +219,17 @@ class FetchEventData {
       "type": "type5",
       "paged": "$page"
     };
-    print(body);
     try {
       configLoading();
       final response =
           await ApiProvider.post(url: 'get_event_search', body: body);
-      data = [];
-
+      // data = [];
+              
       final result = HomeData.fromJson(response['body']);
       if (response['body']['success'] == 401) {
         if (!isAlertOpened) {
         isAlertOpened = true;
-          errorAlertMessage('no event found', '', context);
+        page == 1 ? errorAlertMessage('no event found', '', context): "";
         }else {
         }
       } else {
@@ -236,10 +238,10 @@ class FetchEventData {
         } else {
           data = result.data!;
         }
-        EasyLoading.dismiss();
+    // EasyLoading.dismiss();
       }
     } catch (e) {
-      EasyLoading.dismiss();
+      // EasyLoading.dismiss();
       if (keyword != null && keyword != '') {
         data = [];
       }

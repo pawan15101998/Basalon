@@ -16,7 +16,7 @@ const ktextStyleSmall = TextStyle(fontSize: 12, color: Colors.black);
 const ktextStyleBold =
     TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.black);
 const ktextStyleBoldMedium =
-    TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: Colors.black);
+    TextStyle(fontSize: 22, height: 1, fontWeight: FontWeight.w700, color: Colors.black);
 const ktextStyleBoldSmall =
     TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black);
 const ktextStyleLarge = TextStyle(
