@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:basalon/modal/event_category_model.dart';
 import 'package:basalon/modal/get_user_data.dart';
 import 'package:basalon/network/geolocator.dart';
@@ -8,7 +7,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:multi_image_picker2/multi_image_picker2.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../modal/get_activity_edit_detials.dart';
 import '../modal/package_model.dart';
 
