@@ -40,6 +40,9 @@ class EventCardState extends State<EventCard> {
   @override
   void initState() {
     super.initState();
+    print("aplicatio0m");
+    print(widget.datum.distance);
+    print(application.filterAnywhereProvider);
     // print(widget.datum.markerDate);
   }
 
@@ -302,7 +305,7 @@ class EventCardState extends State<EventCard> {
   // }
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     widget.datum.categoryData = widget.datum.categoryData.reversed.toList();
     return FutureBuilder(builder: (context, snapshot) {
       return Container(
@@ -433,9 +436,7 @@ class EventCardState extends State<EventCard> {
                 Positioned(
                     left: 00,
                     bottom: 00,
-                    child: Row(
-                        children:[
-
+                    child: Row(children: [
                       //    List.generate(
                       // widget.datum.categoryData.length,
                       // (index) => Transform.translate(
@@ -445,34 +446,33 @@ class EventCardState extends State<EventCard> {
                       //           ? 0
                       //           : 15,
                       //       0),
-                        // child:
-                         Container(
-                          decoration: BoxDecoration(
-                            color: Color(int.parse('0xffe86c60')),
-                            borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(30),
-                              bottomRight: Radius.circular(30),
-                              // bottomLeft: Radius.circular(index == 1 ||
-                              //         widget.datum.categoryData.length == 1
-                              //     ? 0
-                              //     : 30),
-                              // topLeft: Radius.circular(index == 1 ||
-                              //         widget.datum.categoryData.length == 1
-                              //     ? 0
-                              //     : 30),
-                            ),
+                      // child:
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Color(int.parse('0xffe86c60')),
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(30),
+                            bottomRight: Radius.circular(30),
+                            // bottomLeft: Radius.circular(index == 1 ||
+                            //         widget.datum.categoryData.length == 1
+                            //     ? 0
+                            //     : 30),
+                            // topLeft: Radius.circular(index == 1 ||
+                            //         widget.datum.categoryData.length == 1
+                            //     ? 0
+                            //     : 30),
                           ),
-                          padding:
-                              EdgeInsets.symmetric(vertical: 12, horizontal: 15),
-                          child: Text(
-                              '${widget.datum.markerPrice}',
-                              style:
-                                  TextStyle(fontSize: 20, color: Colors.white)),
-                        ),]
-                    //   ),
-                    // )
-                    )
-                    ),
+                        ),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 12, horizontal: 15),
+                        child: Text('${widget.datum.markerPrice}',
+                            style:
+                                TextStyle(fontSize: 16, color: Colors.white)),
+                      ),
+                    ]
+                        //   ),
+                        // )
+                        )),
 
                 // Positioned(
                 //   left: 00,
@@ -556,106 +556,175 @@ class EventCardState extends State<EventCard> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             SizedBox(
-                              // height: 10,
-                            ),
-                               
-                           (widget.datum.numberComment != 0 &&
-                                widget.datum.averageRating != 0) ?
-                              Directionality(
-                                textDirection: TextDirection.rtl,
-                                child: Wrap(
-                                  crossAxisAlignment: WrapCrossAlignment.end,
-                                  alignment: WrapAlignment.start,
-                                  // mainAxisAlignment: MainAxisAlignment.end,
-                                  // crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    SizedBox(
+                                // height: 10,
+                                ),
+                            (widget.datum.numberComment != 0 &&
+                                    widget.datum.averageRating != 0)
+                                ? Padding(
+                                    padding:
+                                        const EdgeInsets.only(top: 8, right: 8),
+                                    child: Directionality(
+                                      textDirection: TextDirection.rtl,
+                                      child: RichText(
+  text: TextSpan(
+    children: [
+      TextSpan(
+        text:  '${widget.datum.title}', style: TextStyle(color: Colors.black, fontSize: 20,  fontWeight: FontWeight.w700,)
+      ),
+      WidgetSpan(
+        child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 0, right: 8),
+                                            child: Row(
+                                              textDirection: TextDirection.ltr,
+                                              mainAxisSize: MainAxisSize.min,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  '(${widget.datum.numberComment})',
+                                                  style: TextStyle(
+                                                    color: Colors.grey,
+                                                    // fontFamily: 'Alef',
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                                RatingBar.builder(
+                                                  initialRating: widget
+                                                      .datum.averageRating!
+                                                      .toDouble(),
+                                                  minRating: 1,
+                                                  itemSize: 20,
+                                                  direction: Axis.horizontal,
+                                                  allowHalfRating: true,
+                                                  itemCount: 5,
+                                                  // itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
+                                                  itemBuilder: (context, _) =>
+                                                      Icon(
+                                                    Icons.star,
+                                                    // color: MyColors.topOrange,
+                                                    color:
+                                                        Colors.amber.shade700,
+                                                  ),
+                                                  ignoreGestures: true,
+                                                  onRatingUpdate:
+                                                      (double value) {},
+                                                )
+                                              ],
+                                            ),
+                                          ),
+      )
+    ],
+  ),
+),
+                                      // Wrap(
+                                      //   crossAxisAlignment:
+                                      //       WrapCrossAlignment.end,
+                                      //   // alignment: WrapAlignment.start,
+
+                                      //   // crossAxisAlignment: CrossAxisAlignment.end,
+                                      //   children: [
+                                      //     Container(
+                                      //       color: Colors.red,
+                                      //       constraints: BoxConstraints(
+                                      //           minHeight: 0,
+                                      //           maxWidth: MediaQuery.of(context)
+                                      //               .size
+                                      //               .width,
+                                      //           minWidth: 0),
+                                      //       child: Text(
+                                      //         '${widget.datum.title}',
+                                      //         textDirection: TextDirection.rtl,
+                                      //         style: ktextStyleBoldMedium,
+                                      //       ),
+                                      //     ),
+                                      //     // Padding(
+                                      //     //   padding: const EdgeInsets.only(left: 8.0),
+                                      //     //   child: Row(
+                                      //     //     mainAxisAlignment: MainAxisAlignment.end,
+                                      //     //     children: [
+                                      //     //       Text('אנשים השתתפו'),
+                                      //     //       SizedBox(
+                                      //     //         width: 4,
+                                      //     //       ),
+                                      //     //       Text(
+                                      //     //         widget.datum.customView!.toString(),
+                                      //     //         style: TextStyle(
+                                      //     //           color: Colors.grey,
+                                      //     //           // fontFamily: 'Alef',
+                                      //     //           fontSize: 16,
+                                      //     //         ),
+                                      //     //       ),
+                                      //     //       SizedBox(
+                                      //     //         width: 4,
+                                      //     //       ),
+                                      //     //       Icon(
+                                      //     //         Icons.groups,
+                                      //     //         size: 30,
+                                      //     //         color: Colors.black,
+                                      //     //       ),
+                                      //     //     ],
+                                      //     //   ),
+                                      //     // ),
+                                      //     Padding(
+                                      //       padding: const EdgeInsets.only(
+                                      //           top: 0, right: 8),
+                                      //       child: Row(
+                                      //         textDirection: TextDirection.ltr,
+                                      //         mainAxisSize: MainAxisSize.min,
+                                      //         mainAxisAlignment:
+                                      //             MainAxisAlignment.end,
+                                      //         crossAxisAlignment:
+                                      //             CrossAxisAlignment.center,
+                                      //         children: [
+                                      //           Text(
+                                      //             '(${widget.datum.numberComment})',
+                                      //             style: TextStyle(
+                                      //               color: Colors.grey,
+                                      //               // fontFamily: 'Alef',
+                                      //               fontSize: 12,
+                                      //             ),
+                                      //           ),
+                                      //           RatingBar.builder(
+                                      //             initialRating: widget
+                                      //                 .datum.averageRating!
+                                      //                 .toDouble(),
+                                      //             minRating: 1,
+                                      //             itemSize: 20,
+                                      //             direction: Axis.horizontal,
+                                      //             allowHalfRating: true,
+                                      //             itemCount: 5,
+                                      //             // itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
+                                      //             itemBuilder: (context, _) =>
+                                      //                 Icon(
+                                      //               Icons.star,
+                                      //               // color: MyColors.topOrange,
+                                      //               color:
+                                      //                   Colors.amber.shade700,
+                                      //             ),
+                                      //             ignoreGestures: true,
+                                      //             onRatingUpdate:
+                                      //                 (double value) {},
+                                      //           )
+                                      //         ],
+                                      //       ),
+                                      //     ),
+                                      //   ],
+                                      // ),
+                                    ),
+                                  )
+                                : Padding(
+                                    padding: const EdgeInsets.only(top: 8, right: 8),
+                                    child: SizedBox(
                                       // width: 200,
                                       child: Text('${widget.datum.title}',
                                           textDirection: TextDirection.rtl,
                                           style: ktextStyleBoldMedium),
                                     ),
-                                    // Padding(
-                                    //   padding: const EdgeInsets.only(left: 8.0),
-                                    //   child: Row(
-                                    //     mainAxisAlignment: MainAxisAlignment.end,
-                                    //     children: [
-                                    //       Text('אנשים השתתפו'),
-                                    //       SizedBox(
-                                    //         width: 4,
-                                    //       ),
-                                    //       Text(
-                                    //         widget.datum.customView!.toString(),
-                                    //         style: TextStyle(
-                                    //           color: Colors.grey,
-                                    //           // fontFamily: 'Alef',
-                                    //           fontSize: 16,
-                                    //         ),
-                                    //       ),
-                                    //       SizedBox(
-                                    //         width: 4,
-                                    //       ),
-                                    //       Icon(
-                                    //         Icons.groups,
-                                    //         size: 30,
-                                    //         color: Colors.black,
-                                    //       ),
-                                    //     ],
-                                    //   ),
-                                    // ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 0, right: 8),
-                                      child: Row(
-                                        textDirection: TextDirection.ltr,
-                                        mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            '(${widget.datum.numberComment})',
-                                            style: TextStyle(
-                                              color: Colors.grey,
-                                              // fontFamily: 'Alef',
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                          RatingBar.builder(
-                                            initialRating: widget
-                                                .datum.averageRating!
-                                                .toDouble(),
-                                            minRating: 1,
-                                            itemSize: 20,
-                                            direction: Axis.horizontal,
-                                            allowHalfRating: true,
-                                            itemCount: 5,
-                                            // itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
-                                            itemBuilder: (context, _) => Icon(
-                                              Icons.star,
-                                              // color: MyColors.topOrange,
-                                              color: Colors.amber.shade700,
-                                            ),
-                                            ignoreGestures: true,
-                                            onRatingUpdate: (double value) {},
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                   
-                                  ],
-                                ),
-                              ): 
-                              Padding(
-                                padding: const EdgeInsets.only(right: 7, top: 16),
-                                child: SizedBox(
-                                  // width: 200,
-                                  child: Text('${widget.datum.title}',
-                                      textDirection: TextDirection.rtl,
-                                      style: ktextStyleBoldMedium),
-                                ),
-                                ),
-                              
-                          
+                                  ),
+
                             Padding(
                               padding: const EdgeInsets.only(right: 7, top: 16),
                               child: Row(
@@ -702,7 +771,8 @@ class EventCardState extends State<EventCard> {
                                     child: RichText(
                                       textAlign: TextAlign.end,
                                       text: TextSpan(
-                                          text: "....${dateSplit.day}",
+                                          text:
+                                              "...${dateSplit.day.split(' ').last}",
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               color: Colors.black,
@@ -716,12 +786,13 @@ class EventCardState extends State<EventCard> {
                                                 fontSize: 18,
                                               ),
                                             ),
-                                  
+
                                             // for(int i=0; i< (widget.datum.eventDate.length > 3 ? 3 :widget.datum.eventDate.length) ; i++)
-                                            
+
                                             // if(widget.datum.eventDate.isNotEmpty)
                                             TextSpan(
-                                              text:("${widget.datum.eventDate[0].startDate}"),
+                                              text:
+                                                  ("${widget.datum.eventDate[0].startDate}"),
                                               style: TextStyle(
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.bold,
@@ -736,16 +807,18 @@ class EventCardState extends State<EventCard> {
                                                 fontSize: 18,
                                               ),
                                             ),
-                                            if(widget.datum.eventDate.isNotEmpty)
-                                             TextSpan(
-                                              text: "${widget.datum.eventDate[0].startTime}",
-                                              style: TextStyle(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 18,
+                                            if (widget
+                                                .datum.eventDate.isNotEmpty)
+                                              TextSpan(
+                                                text:
+                                                    "${widget.datum.eventDate[0].startTime}",
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 18,
+                                                ),
                                               ),
-                                            ),
-                                             TextSpan(
+                                            TextSpan(
                                               text: " ובתאריכים נוספים",
                                               style: TextStyle(
                                                 color: Colors.black,
@@ -754,8 +827,7 @@ class EventCardState extends State<EventCard> {
                                               ),
                                             ),
                                             // for(int i=1; i< (widget.datum.eventDate.length > 3 ? 3 :widget.datum.eventDate.length) ; i++)
-                                  
-                                           
+
                                             // // if(widget.datum.eventDate.isNotEmpty && widget.datum.eventDate[1] != null)
                                             // TextSpan(
                                             //   text: '${widget.datum.eventDate[i].startDate} | ',
@@ -876,6 +948,7 @@ class EventCardState extends State<EventCard> {
                                                     TextDirection.rtl,
                                                 text: TextSpan(
                                                     style: TextStyle(
+                                                        fontSize: 16,
                                                         color: Color.fromRGBO(
                                                             0, 0, 0, 1)),
                                                     text: removeIsrael != null
@@ -891,7 +964,6 @@ class EventCardState extends State<EventCard> {
                                                               ? ' | '
                                                               : '',
                                                           style: TextStyle(
-                                                        
                                                               fontSize: 16)),
                                                       TextSpan(
                                                           text: (widget.datum
@@ -901,19 +973,22 @@ class EventCardState extends State<EventCard> {
                                                                           .distance !=
                                                                       0 &&
                                                                   application
-                                                                          .filterAnywhereProvider !=
-                                                                      'עיר מסויימת')
+                                                                          .filterAnywhereProvider
+                                                                          .trim() ==
+                                                                      'קרוב אליי')
                                                               ? 'במרחק ${widget.datum.distance < 1 ? (widget.datum.distance * 1000).round() : widget.datum.distance.toStringAsFixed(2)} ${widget.datum.distance < 1 ? 'מטרים' : 'ק"מ'}'
-                                                              : '',
+                                                              : "",
                                                           style: TextStyle(
-                                                            fontWeight: FontWeight.bold,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
                                                               color:
                                                                   Colors.red)),
                                                     ])),
                                           ),
                                           SizedBox(
-                                    width: 5,
-                                  ),
+                                            width: 5,
+                                          ),
                                           // Expanded(
                                           //   child: Text(
                                           //     removeIsrael.replaceAll(

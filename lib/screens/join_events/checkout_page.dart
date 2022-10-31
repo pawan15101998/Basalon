@@ -610,7 +610,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                               value: 'שנה',
                               child: Text('שנה'),
                             ),
-                            ...cardMonth.map(
+                            ...cardDate.map(
                               (val) {
                                 print('endTime');
                                 print(endTime);

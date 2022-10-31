@@ -190,6 +190,7 @@ class _BookEventPageState extends State<BookEventPage> {
   addCounts() {
     for (int i = 0; i < widget.noOfTicket!.length; i++) {
       ticketCount.add(i == 0 ? 1 : 0);
+       if (widget.noOfTicket![i].priceTicket != "")
       finalPrice.add(
           i == 0 ? int.parse(widget.noOfTicket![i].priceTicket ?? '0') : 0);
       if (widget.noOfTicket![i].priceTicket != "")
