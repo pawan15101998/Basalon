@@ -953,8 +953,8 @@ class EventCardState extends State<EventCard> {
                                                             0, 0, 0, 1)),
                                                     text: removeIsrael != null
                                                         ? removeIsrael
-                                                            .replaceAll(
-                                                                ', ישראל', '')
+                                                            // .replaceAll(
+                                                            //     ', ישראל', '')
                                                         : "",
                                                     children: [
                                                       TextSpan(

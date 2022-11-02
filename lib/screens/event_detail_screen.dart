@@ -112,8 +112,8 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
       }
       setState(() {});
     });
-  print("this is comment data");
-  print(_fetchEventData);
+    print("this is comment data");
+    print(_fetchEventData);
   }
 
   @override
@@ -163,10 +163,14 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
       {required BuildContext context,
       required String text,
       required String number}) async {
+    print("whataap");
+    print(text);
+    print(number);
     var whatsapp = number;
     var whatsappURl_android =
         "whatsapp://send?phone=" + whatsapp + "&text=היי! בקשר לפעילות:${text}";
     var whatappURL_ios = "https://wa.me/$whatsapp?text=${Uri.parse("${text}")}";
+    print(whatsappURl_android);
     if (Platform.isIOS) {
       // for iOS phone only
       if (await canLaunchUrl(Uri.parse(whatappURL_ios))) {
@@ -178,6 +182,8 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
       }
     } else {
       // android , web
+      print("in android");
+      // print(canLaunchUrl(Uri.parse(whatsappURl_android)));
       if (await canLaunchUrl(Uri.parse(whatsappURl_android))) {
         await launchUrl(Uri.parse(whatsappURl_android));
       } else {
@@ -666,7 +672,6 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                           //     ),
                                           //   ),
                                           // ),
-
                                           new Container(
                                             height: 80.0,
                                             child: new ListView(
@@ -688,7 +693,6 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                                         _selectedIndex = index;
                                                       }
                                                       isSelected = true;
-
                                                       dynamicBookingDate =
                                                           _fetchEventData
                                                                   .eventData!
@@ -707,7 +711,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                                                     .shade300)),
                                                     margin:
                                                         EdgeInsets.symmetric(
-                                                            horizontal: 10),
+                                                            horizontal: 3),
                                                     padding: EdgeInsets.all(6),
                                                     child: Column(
                                                       children: [
@@ -879,7 +883,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                             margin: EdgeInsets.symmetric(
                                                 horizontal: 10.0),
                                             width: double.infinity,
-//Button
+                                            //Button
                                             child: ElevatedButton(
                                                 onPressed: () async {
                                                   if (_fetchEventData
@@ -907,7 +911,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                                                   .eventData
                                                                   ?.data
                                                                   ?.thumbnailEvent,
-                                                          title:
+                                                                 title:
                                                               '${_fetchEventData.eventData?.data?.title}',
                                                           date:
                                                               dynamicBookingDate,
@@ -1374,9 +1378,9 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                           stream: streamController.stream,
                           builder: (BuildContext context,
                               AsyncSnapshot<dynamic> snapshot) {
-                                print("sakljklsn");
-                                // print(widget.name);
-                                // print(_fetchEventData.eventData!.data!.comments![0].commentContent);
+                            print("sakljklsn");
+                            // print(widget.name);
+                            // print(_fetchEventData.eventData!.data!.comments![0].commentContent);
                             return SliverList(
                               delegate: SliverChildBuilderDelegate(
                                 (context, index) {
@@ -1396,7 +1400,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                                   .data!
                                                   .comments![index]
                                                   .commentContent!,
-                                                  commentName: _fetchEventData
+                                              commentName: _fetchEventData
                                                   .eventData!
                                                   .data!
                                                   .comments![index]

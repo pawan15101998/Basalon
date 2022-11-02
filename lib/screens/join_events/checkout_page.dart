@@ -75,8 +75,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
   );
   final cardDate = kdateList;
   String? selectCardDate;
-  String? startingTime;
-  String? endTime;
+  String startingTime = 'חודש';
+  String startingTimee = 'חודש';
+  String endTime = 'שנה';
+  String endTimee = 'שנה';
   final cardMonth = kmonthList;
   bool checkBoxValue = true;
   bool saveCard = true;
@@ -464,7 +466,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   String showThisValue = '';
 
-  Widget paymentCard() {
+  Widget paymentCard(){
     return Container(
       decoration: BoxDecoration(
           border: Border.all(color: Colors.grey.shade300, width: 2)),
@@ -595,10 +597,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         child: DropdownButton(
                           isExpanded: true,
                           menuMaxHeight: 300,
-                          hint: const Padding(
+                          hint:  Padding(
                             padding: EdgeInsets.all(8.0),
                             child: Text(
-                              'שנה',
+                              // 'שנה',
+                              endTimee.toString(),
                               style:
                                   TextStyle(color: Colors.black, fontSize: 12),
                               maxLines: 1,
@@ -624,7 +627,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           onChanged: (val) {
                             setState(
                               () {
-                                endTime = val as String?;
+                                endTime = val.toString();
+                                endTimee = val.toString();
                               },
                             );
                           },
@@ -655,10 +659,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             child: DropdownButton(
                               isExpanded: true,
                               menuMaxHeight: 300,
-                              hint: const Padding(
+                              hint:  Padding(
                                 padding: EdgeInsets.all(8.0),
                                 child: Text(
-                                  'חודש',
+                                  // 'חודש',
+                                  "$startingTimee",
                                   style: TextStyle(
                                       color: Colors.black, fontSize: 12),
                                 ),
@@ -681,7 +686,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                               onChanged: (val) {
                                 setState(
                                   () {
-                                    startingTime = val as String?;
+                                    startingTime = val.toString();
+                                    startingTimee = val.toString();
                                   },
                                 );
                               },
