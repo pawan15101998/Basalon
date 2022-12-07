@@ -792,7 +792,7 @@ class EventCardState extends State<EventCard> {
                                             // if(widget.datum.eventDate.isNotEmpty)
                                             TextSpan(
                                               text:
-                                                  ("${widget.datum.eventDate[0].startDate}"),
+                                              ("${(widget.datum.date1.split(",")[1]).split("-")[2]+ "."+ (widget.datum.date1.split(",")[1]).split("-")[1]}"),
                                               style: TextStyle(
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.bold,

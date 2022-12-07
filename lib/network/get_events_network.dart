@@ -152,7 +152,7 @@ class FetchEventData {
       keyword,
       startDate,
       endDate,
-      BuildContext context) async {
+      BuildContext context) async{
     var filteer = [];
     var searchLoc = [];
     if (filterByAnyWhere == 'קרוב אליי') {
@@ -180,7 +180,8 @@ class FetchEventData {
       "show_featured": "",
       "keyword": keyword != "" || keyword != null ? "$keyword" : "",
       "cat": "${filterByCategory ?? ''}",
-      "map_lat": loc == 'קרוב אליי' ? mapLat : null,
+      "map_lat": filterByAnyWhere == 'קרוב אליי' ? mapLat: null,
+                  // loc == 'קרוב אליי' ? mapLat : null,
       // filterByAnyWhere == 'עיר מסויימת'
       //     ? mapLat
       //     : filterByAnyWhere == 'בכל מקום'
@@ -190,7 +191,8 @@ class FetchEventData {
       //             : filterByAnyWhere == 'קרוב אליי'
       //                 ? mapLat
       //                 : null,
-      "map_lng": loc == 'קרוב אליי' ? mapLng : null,
+      "map_lng": filterByAnyWhere == 'קרוב אליי' ? mapLng: null,
+                //  loc == 'קרוב אליי' ? mapLng : null,
       // filterByAnyWhere == 'עיר מסויימת'
       //     ? mapLng
       //     : filterByAnyWhere == 'בכל מקום'
@@ -201,14 +203,19 @@ class FetchEventData {
       "start_date": "$startDate",
       "end_date": "$endDate",
       "time": "${filterByTime}",
-      "sort": (isNear == 'קרוב אליי' && timeValue == filterByTime)
-          ? 'near'
-          : (isNear =='קרוב אליי' && filterByTime == null)
-              ? 'near'
-              : (isNear == 'בכל הארץ' && filterByTime == null)
-              ? 'start-date'
-              :(isNear == 'בכל הארץ' && filterByTime == timeValue)
-              ? "": mapLng == null? "": "",
+      "sort": ((filterByAnyWhere == 'השפלה והדרום') || (filterByAnyWhere == 'בכל הארץ') 
+      ||(filterByAnyWhere == 'מחוז חיפה והצפון') || (filterByAnyWhere == 'ירושלים והסביבה') ||
+      (filterByAnyWhere == 'מרכז' || filterByAnyWhere == 'שרון והסביבה')
+       ) ? 'start-date' : 'near',
+      //  (isNear == 'קרוב אליי' && timeValue == filterByTime)
+      //     ? 'near'
+      //     : (isNear =='קרוב אליי' && filterByTime == null)
+      //         ? 'near'
+      //         : (isNear == 'בכל הארץ' && filterByTime == null)
+      //         ? 'start-date'
+      //         :(isNear == 'בכל הארץ' && filterByTime == timeValue)
+      //         ? "": mapLng == null? "": "",
+
       // (filterByAnyWhere == 'עיר מסויימת' ||
       //         filterByAnyWhere == 'קרוב אליי' ||
       //         application.filterAnywhereProvider == 'קרוב אליי')
@@ -219,6 +226,10 @@ class FetchEventData {
       "type": "type5",
       "paged": "$page"
     };
+    print("this is body");
+    print(body);
+    print("printing filter value");
+    print(filterByAnyWhere);
     try {
       configLoading();
       final response =
@@ -227,16 +238,20 @@ class FetchEventData {
               
       final result = HomeData.fromJson(response['body']);
       if (response['body']['success'] == 401) {
-        if (!isAlertOpened) {
+        if (!isAlertOpened){
         isAlertOpened = true;
         page == 1 ? errorAlertMessage('no event found', '', context): "";
         }else {
+
         }
       } else {
         if (page > 1) {
           data = [...data, ...?result.data];
         } else {
+          print("is conyroller hear");
+          // data.clear();
           data = result.data!;
+          // data = data;
         }
     // EasyLoading.dismiss();
       }
@@ -247,6 +262,8 @@ class FetchEventData {
       }
       data = [];
     }
+    print("this is dara length");
+    print(data.length);
     return data;
   }
 

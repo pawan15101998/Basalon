@@ -1384,9 +1384,11 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                             return SliverList(
                               delegate: SliverChildBuilderDelegate(
                                 (context, index) {
-                                  return widget.name == null
-                                      ? SizedBox()
-                                      : _fetchEventData
+                                  return 
+                                  // widget.name == null
+                                  //     ? SizedBox()
+                                  //     :
+                                       _fetchEventData
                                                   .eventData!.data!.comments !=
                                               null
                                           ? CommentCard(
